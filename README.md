@@ -1,4 +1,8 @@
 # Capstone-Peralta
 
-Nick: Tested
-Don: Tested
+Nick: Tested ✅<br> 
+Don: Tested ✅<br>
+Jared: Tested ✅<br>
+Sana: Not Tested<br> 
+Jeric: Not Tested<br>
+Elie: - <br>
