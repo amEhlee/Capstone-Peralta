@@ -1,16 +1,33 @@
 package com.capstone.peralta.controllers;
 
+import com.capstone.peralta.models.Cart;
+import com.capstone.peralta.models.Category;
 import com.capstone.peralta.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/category")
-@CrossOrigin
+@CrossOrigin(origins = "3000")
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @GetMapping("/{categoryId}")
+    Category getById(@PathVariable Integer categoryId) {
+        return categoryService.getCategoryById(categoryId);
+    }
+
+    @GetMapping("/all")
+    List<Category> getAll() {
+        return categoryService.getAll();
+    }
+
+    @PostMapping
+    Category createCategory(@RequestBody Category category) {
+        return categoryService.addCategory(category);
+    }
 }
