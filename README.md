@@ -3,6 +3,6 @@
 Nick: Tested ✅<br> 
 Don: Tested ✅<br>
 Jared: Tested ✅<br>
-Sana: Not Tested<br> 
+Sana: Tested<br> 
 Jeric: Not Tested<br>
 Elie: - <br>
