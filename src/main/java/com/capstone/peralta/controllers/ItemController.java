@@ -13,7 +13,11 @@ import java.util.List;
 public class ItemController {
 
     @Autowired
-    private ItemService itemService;
+    private final ItemService itemService;
+
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
 
     @GetMapping("/{itemId}")
     Item getById(@PathVariable Integer itemId) {
@@ -25,8 +29,16 @@ public class ItemController {
         return itemService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/add")
     Item createItem(@RequestBody Item item) {
         return itemService.addItem(item);
     }
+
+    @PostMapping("/addMultiple")
+    List<Item> addMultiple(@RequestBody List<Item> itemList) {
+        return itemService.addMultiple(itemList);
+
+    }
+
+
 }

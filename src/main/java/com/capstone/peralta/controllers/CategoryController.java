@@ -1,7 +1,7 @@
 package com.capstone.peralta.controllers;
 
-import com.capstone.peralta.models.Cart;
 import com.capstone.peralta.models.Category;
+import com.capstone.peralta.models.Item;
 import com.capstone.peralta.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,11 @@ import java.util.List;
 public class CategoryController {
 
     @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @GetMapping("/{categoryId}")
     Category getById(@PathVariable Integer categoryId) {
@@ -26,8 +30,14 @@ public class CategoryController {
         return categoryService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/add")
     Category createCategory(@RequestBody Category category) {
         return categoryService.addCategory(category);
+    }
+
+    @PostMapping("/addMultiple")
+    List<Category> addMultiple(@RequestBody List<Category> categoryList) {
+        return categoryService.addMultiple(categoryList);
+
     }
 }

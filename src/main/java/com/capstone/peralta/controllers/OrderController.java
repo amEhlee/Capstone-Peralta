@@ -1,5 +1,6 @@
 package com.capstone.peralta.controllers;
 
+import com.capstone.peralta.models.Item;
 import com.capstone.peralta.models.Order;
 import com.capstone.peralta.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,11 @@ import java.util.List;
 public class OrderController {
 
     @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @GetMapping("/{orderId}")
     Order getById(@PathVariable Integer orderId) {
@@ -25,8 +30,14 @@ public class OrderController {
         return orderService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/add")
     Order createOrder(@RequestBody Order order) {
         return orderService.addOrder(order);
+    }
+
+    @PostMapping("/addMultiple")
+    List<Order> addMultiple(@RequestBody List<Order> orderList) {
+        return orderService.addMultiple(orderList);
+
     }
 }

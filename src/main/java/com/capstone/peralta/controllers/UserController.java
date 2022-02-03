@@ -1,5 +1,6 @@
 package com.capstone.peralta.controllers;
 
+import com.capstone.peralta.models.Item;
 import com.capstone.peralta.models.User;
 import com.capstone.peralta.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,11 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/{userId}")
     User getById(@PathVariable Integer userId) {
@@ -25,8 +30,14 @@ public class UserController {
         return userService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/add")
     User createUser(@RequestBody User user) {
         return userService.addUser(user);
+    }
+
+    @PostMapping("/addMultiple")
+    List<User> addMultiple(@RequestBody List<User> userList) {
+        return userService.addMultiple(userList);
+
     }
 }
