@@ -13,7 +13,11 @@ import java.util.List;
 public class CartController {
 
     @Autowired
-    private CartService cartService;
+    private final CartService cartService;
+
+    public CartController(CartService cartService) {
+        this.cartService = cartService;
+    }
 
     @GetMapping("/{cartId}")
     Cart getById(@PathVariable Integer cartId) {
@@ -25,8 +29,13 @@ public class CartController {
         return cartService.getAll();
     }
 
-    @PostMapping
+    @PostMapping("/add")
     Cart createCart(@RequestBody Cart cart) {
         return cartService.addCart(cart);
+    }
+
+    @PostMapping("/addMultiple")
+    List<Cart> addMultiple(@RequestBody List<Cart> cartList) {
+        return cartService.addMultiple(cartList);
     }
 }

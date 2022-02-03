@@ -1,8 +1,7 @@
 package com.capstone.peralta.models;
 
-import javax.naming.Name;
+
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,7 +18,7 @@ public class Item {
     private Double itemVolume;
     private Integer itemQuantity;
     private Boolean itemAvailable;
-    private Integer categoryId;
+
 
     @ManyToMany(mappedBy = "itemList")
     private List<Order> orders;
@@ -33,6 +32,16 @@ public class Item {
     private List<Category> categoryList;
 
     public Item() {
+    }
+
+    public Item(String itemName, Double itemPrice, Double itemWeight, Double itemVolume, Integer itemQuantity, Boolean itemAvailable) {
+        this.itemName = itemName;
+        this.itemPrice = itemPrice;
+        this.itemWeight = itemWeight;
+        this.itemVolume = itemVolume;
+        this.itemQuantity = itemQuantity;
+        this.itemAvailable = itemAvailable;
+
     }
 
     public Integer getItemId() {
