@@ -1,22 +1,12 @@
-import './App.css';
+import "./App.css";
+import TestGetComponent from "./components/TestGetComponent";
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit App's My Dudes :P
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <TestGetComponent/>
+    </>
   );
 }
 
