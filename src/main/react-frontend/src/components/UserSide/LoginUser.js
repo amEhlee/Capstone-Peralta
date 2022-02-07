@@ -1,20 +1,41 @@
 import React from "react";
-import {Form, FormGroup, Button} from "react-bootstrap";
+import {Form, FormGroup, InputGroup, Button} from "react-bootstrap";
 import  {Link}  from "react-router-dom";
+import { useRef } from "react";
+import axios from "axios";
+
 export default function  LoginUser() {
+
+
+        const emailRef = useRef();
+        const passwordRef = useRef();
+
+    function submitHandler() {
+        const returnedEmail = emailRef.current.value;
+        const returnedPassword = passwordRef.current.value;
+
+        const user = {
+            email: returnedEmail,
+            password: returnedPassword,
+        };
+
+        const POST_URL = "http://localhost:8080/user/authenticate"; // fetch url
+        axios.post(POST_URL, user).then((res) => {
+            console.log(res);
+        });
+    }
+
     return (
-
-        <Form>
-
+        <Form onSubmit={submitHandler}>
             <FormGroup className="mb-3" controlId="emailForm">
                 <Form.Label>Email Address</Form.Label>
-                <Form.Control type="email" placeholder="Enter Email"/>
+                <Form.Control type="email" placeholder="Enter Email" ref={emailRef}/>
             </FormGroup>
 
 
             <FormGroup className="mb-3" controlId="passwordForm">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Enter your password"/>
+                <Form.Control type="password" placeholder="Enter your password" ref={passwordRef}/>
             </FormGroup>
 
 

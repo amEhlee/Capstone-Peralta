@@ -1,10 +1,12 @@
 package com.capstone.peralta.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.capstone.peralta.models.Role;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collection;
 
 
 @Entity
@@ -28,6 +30,8 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Cart cart;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles = new ArrayList<>();
 
     public User() {
     }
@@ -75,6 +79,10 @@ public class User {
     public String getAddress() {
         return address;
     }
+
+    public Collection<Role> getRoles() { return roles; }
+
+    public void setRoles(Collection<Role> roles) { this.roles = roles; }
 
     public void setAddress(String address) {
         this.address = address;
