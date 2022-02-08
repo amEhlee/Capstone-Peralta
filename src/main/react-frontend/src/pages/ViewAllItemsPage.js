@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ItemList from "../components/items/ItemList";
 
-function TestGetComponent() {
-  const FETCH_URL = "http://localhost:8080//all"; // fetch url
+function ViewAllItemsPage() {
+  const FETCH_URL = "http://localhost:8080/item/all"; // fetch url
   var [datajson, setDataJson] = useState([]); // used to store data
 
   // function that will be called when the page loads purpose is to handle and process the axios get request
@@ -28,7 +28,7 @@ function TestGetComponent() {
 
   console.log(datajson);
 
-  if (datajson == "no data returned") {
+  if (datajson === "no data returned") {
     return <section><p>{datajson}</p></section>;
   } else {
     return (
@@ -39,4 +39,4 @@ function TestGetComponent() {
     );
   }
 }
-export default TestGetComponent;
+export default ViewAllItemsPage;

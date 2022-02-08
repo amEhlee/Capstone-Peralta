@@ -5,7 +5,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import AdminPage from "./pages/AdminPage";
 import CartPage from './pages/CartPage';
-import TestGetComponent from "./pages/TestGetComponent";
+import ViewAllItemsPage from "./pages/ViewAllItemsPage";
 import AdminLayout from "./components/layout/AdminLayout";
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
                 <Route index element={<HomePage/>}/>
                 <Route path='/cart' element={<CartPage/>}/>
                 <Route path='/login' element={<LoginPage/>}/>
-                <Route path='/TestGet' element={<TestGetComponent/>}/>
+                <Route path='/allItems' element={<ViewAllItemsPage/>}/>
             </Route>
 
             <Route path='/admin' element={<AdminLayout/>}>
