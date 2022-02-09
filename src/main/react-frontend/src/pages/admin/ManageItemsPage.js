@@ -1,9 +1,13 @@
+// import dependencies
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import ItemList from "../components/items/ItemList";
 
-function ViewAllItemsPage() {
+// import components
+import ItemList from "../../components/items/ItemList";
+import Heading from "./Heading";
+
+export default function ManageItemsPage() {
   const FETCH_URL = "http://localhost:8080/item/all"; // fetch url
   var [datajson, setDataJson] = useState([]); // used to store data
 
@@ -33,10 +37,10 @@ function ViewAllItemsPage() {
   } else {
     return (
       <div>
-        <h1>Get All Items</h1>
-        <ItemList items={datajson} target="regularList" />
+        <h1>Manage Items Page</h1>
+        <Heading/>
+        <ItemList items={datajson} target="adminList" />
       </div>
     );
   }
 }
-export default ViewAllItemsPage;

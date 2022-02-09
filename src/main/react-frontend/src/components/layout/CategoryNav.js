@@ -8,16 +8,16 @@ function CategoryNav() {
         <nav className={style.categoryNav}>
             <ul>
                 {/* Proper redirect will be added in future update */}
-                <li className={style.catButton} onClick={() => { history('/TestGet') }}>
+                <li className={style.catButton} onClick={() => { history('/AllItems') }}>
                     <p>Bags</p>
                 </li>
-                <li className={style.catButton} onClick={() => { history('/TestGet') }}>
+                <li className={style.catButton} onClick={() => { history('/AllItems') }}>
                     <p>Clothings</p>
                 </li>
-                <li className={style.catButton} onClick={() => { history('/TestGet') }}>
+                <li className={style.catButton} onClick={() => { history('/AllItems') }}>
                     <p>Wallets</p>
                 </li>
-                <li className={style.catButton} onClick={() => { history('/TestGet') }}>
+                <li className={style.catButton} onClick={() => { history('/AllItems') }}>
                     <p>Accessories</p>
                 </li>
             </ul>
