@@ -7,8 +7,7 @@ export default function Item(props) {
   return (
     <div>
       <li>
-        <h1>{props.id}</h1>
-        <h3>{props.name}</h3>
+        <h2>#{props.id} {props.name}</h2>
         <Link to={"/admin/edit/" + props.id}>
           <button>Edit Item</button>
         </Link>
