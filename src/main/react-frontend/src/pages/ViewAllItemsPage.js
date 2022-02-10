@@ -4,7 +4,7 @@ import axios from "axios";
 import ItemList from "../components/items/ItemList";
 
 function ViewAllItemsPage() {
-  const FETCH_URL = "http://localhost:8080/item/all"; // fetch url
+  const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
   var [datajson, setDataJson] = useState([]); // used to store data
 
   // function that will be called when the page loads purpose is to handle and process the axios get request
