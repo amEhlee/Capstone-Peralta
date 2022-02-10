@@ -1,6 +1,8 @@
 package com.capstone.peralta.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -19,9 +21,13 @@ public class Item {
     private Integer itemQuantity;
     private Boolean itemAvailable;
 
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "itemList")
     private List<Order> orders;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "cartItems")
+    private List<Cart> carts;
 
     @ManyToMany
     @JoinTable(
