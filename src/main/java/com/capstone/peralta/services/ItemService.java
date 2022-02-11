@@ -32,4 +32,12 @@ public class ItemService {
     public List<Item> addMultiple(List<Item> itemList) {
         return itemRepo.saveAll(itemList);
     }
+
+    public Item updateItem(Item item) {
+        return itemRepo.save(item);
+    }
+
+//    public void deleteItem(Item item) {
+//        itemRepo.delete(item);
+//    }
 }
