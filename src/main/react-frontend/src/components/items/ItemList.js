@@ -25,7 +25,7 @@ export default function ItemList(props) {
   
   function adminList() {
     return (
-      <ul>
+      <tbody>
         {props.items.map((i) => (
           <ManageItems
             key={i.itemId}
@@ -37,8 +37,8 @@ export default function ItemList(props) {
             quantity={i.itemQuantity}
             available={i.itemAvailable}
           />
-        ))}
-      </ul>
+          ))}
+      </tbody>
     );
   }
 
