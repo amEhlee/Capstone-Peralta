@@ -1,5 +1,7 @@
 package com.capstone.peralta.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,6 +15,7 @@ public class Category {
     private String categoryName;
     private Boolean active;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "categoryList")
     private List<Item> categoryItems;
 
