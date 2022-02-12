@@ -1,18 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Button } from 'react-bootstrap';
 
 export default function Item(props) {
 
 
   return (
-    <div>
-      <li>
-        <h2>#{props.id} {props.name}</h2>
-        <Link to={"/admin/edit/" + props.id}>
-          <button>Edit Item</button>
-        </Link>
-        <button>Delete Item</button>
-      </li>
-    </div>
+        <tr>
+          <td>{props.id}</td>
+          <td>{props.name}</td>
+          <td>${props.price}</td>
+          <td>{props.weight}kg</td>
+          <td>{props.quantity}</td>
+          <td>{props.available}</td>
+          <td>
+            <Link to={"/admin/edit/" + props.id}>
+              <Button variant="primary" size="sm">Edit</Button>
+            </Link>
+          </td>
+        </tr>
   );
 }

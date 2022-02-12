@@ -6,6 +6,7 @@ import axios from "axios";
 // import components
 import ItemList from "../../components/items/ItemList";
 import Heading from "./Heading";
+import { Table } from "react-bootstrap";
 
 export default function ManageItemsPage() {
   const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
@@ -39,7 +40,20 @@ export default function ManageItemsPage() {
       <div>
         <h1>Manage Items Page</h1>
         <Heading/>
-        <ItemList items={datajson} target="adminList" />
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Weight</th>
+            <th>Quantity</th>
+            <th>Available</th>
+            <th></th>
+            </tr>
+          </thead>
+            <ItemList items={datajson} target="adminList" />
+        </Table>
       </div>
     );
   }
