@@ -6,11 +6,15 @@ import axios from "axios";
 // import components
 import ItemList from "../../components/items/ItemList";
 import Heading from "./Heading";
-import { Table } from "react-bootstrap";
+import { Table, Modal, Button, Form } from "react-bootstrap";
+import AddItem from "../../components/InventoryManagement/AddItem";
 
 export default function ManageItemsPage() {
   const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
   var [datajson, setDataJson] = useState([]); // used to store data
+  const [show, setShow] = useState(false);
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
 
   // function that will be called when the page loads purpose is to handle and process the axios get request
   function gatherData() {
@@ -37,9 +41,13 @@ export default function ManageItemsPage() {
     return <section><p>{datajson}</p></section>;
   } else {
     return (
+      <>
       <div>
         <h1>Manage Items Page</h1>
-        <Heading/>
+        <Button variant="primary" onClick={handleShow}>
+          Add Item
+        </Button>
+
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -55,6 +63,16 @@ export default function ManageItemsPage() {
             <ItemList items={datajson} target="adminList" />
         </Table>
       </div>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Item</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AddItem/>
+        </Modal.Body>
+      </Modal>
+    </>
     );
   }
 }

@@ -4,14 +4,12 @@ import {Link} from "react-router-dom";
 import {Form, FormGroup, InputGroup, Button} from "react-bootstrap";
 import axios from "axios";
 
-export default function AddItem() {
+export default function AddItem({ onSubmit }) {
     const itemNameRef = useRef();
     const itemPriceRef = useRef();
     const itemWeightRef = useRef();
 
     function submitHandler(event) { 
-        // PREVENT PAGE RELOAD
-        event.preventDefault();
 
         const returnedName = itemNameRef.current.value;
         const returnedPrice = itemPriceRef.current.value;
@@ -78,9 +76,6 @@ export default function AddItem() {
             <Button type="submit" className="btn btn-success">
                 Add
             </Button>
-            <Link to="/" className="btn btn-light ml-2">
-                Cancel
-            </Link>
         </Form>
     );
 }
