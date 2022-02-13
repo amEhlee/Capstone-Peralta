@@ -19,12 +19,12 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @GetMapping("/{itemId}")
+    @GetMapping("/get/{itemId}")
     Item getById(@PathVariable Integer itemId) {
         return itemService.getItemById(itemId);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/get/all")
     List<Item> getAll() {
         return itemService.getAll();
     }
@@ -37,8 +37,15 @@ public class ItemController {
     @PostMapping("/addMultiple")
     List<Item> addMultiple(@RequestBody List<Item> itemList) {
         return itemService.addMultiple(itemList);
-
     }
 
+    @PutMapping("/update")
+    Item updateItem(@RequestBody Item item) {
+        return itemService.updateItem(item);
+    }
 
+//    @DeleteMapping("/delete")
+//    void deleteItem(@RequestBody Item item) {
+//        itemService.deleteItem(item);
+//    }
 }
