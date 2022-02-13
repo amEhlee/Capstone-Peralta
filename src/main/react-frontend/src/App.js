@@ -10,8 +10,6 @@ import AdminLayout from "./components/layout/AdminLayout";
 import AddItem from "./components/InventoryManagement/AddItem";
 import EditItem from "./components/InventoryManagement/EditItem";
 import ManageItemsPage from "./pages/admin/ManageItemsPage";
-import LoginUser from "./components/UserSide/LoginUser";
-import SignUpUser from "./components/UserSide/SignUpUser";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -22,12 +20,9 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="/cart" element={<CartPage />} />
-
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/allItems" element={<ViewAllItemsPage />} />
       </Route>
-
-        <Route path="/login" element={<LoginUser />} />
-        <Route path="/signUp" element={<SignUpUser/>}/>
 
       {/* Example Path Would Be e.g /admin/inventory */}
       <Route path="/admin" element={<AdminLayout />}>

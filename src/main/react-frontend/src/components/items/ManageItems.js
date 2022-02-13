@@ -14,7 +14,7 @@ export default function Item(props) {
           <td>{props.quantity}</td>
           <td>{props.available}</td>
           <td>
-            <Link to={"/admin/editItem/"}>
+            <Link to={"/admin/edit/" + props.id}>
               <Button variant="primary" size="sm">Edit</Button>
             </Link>
           </td>
