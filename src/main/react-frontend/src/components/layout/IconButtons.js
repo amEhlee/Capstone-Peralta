@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import style from './IconButtons.module.css';
+import {Button} from "react-bootstrap";
 
 function IconButtons(props) {
     const history = useNavigate();
@@ -8,10 +8,10 @@ function IconButtons(props) {
         history(props.redirectURL)
     }
     return (
-        <div className={style.iconEffect}>
-            <button className={style.buttonStyle} onClick={clickHandler}>
-                <i class="material-icons">{props.iconName}</i>
-            </button>
+        <div>
+            <Button variant={props.buttonVariant} onClick={clickHandler}>
+                {props.iconElement}
+            </Button>
         </div>
     );
 }

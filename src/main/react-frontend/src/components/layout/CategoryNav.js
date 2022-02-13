@@ -1,27 +1,26 @@
 import style from './CategoryNav.module.css';
 import { useNavigate } from 'react-router';
+import {Button} from "react-bootstrap";
 
 function CategoryNav() {
     const history = useNavigate();
     return (
         <body>
-        <nav className={style.categoryNav}>
-            <ul>
-                {/* Proper redirect will be added in future update */}
-                <li className={style.catButton} onClick={() => { history('/AllItems') }}>
-                    <p>Bags</p>
-                </li>
-                <li className={style.catButton} onClick={() => { history('/AllItems') }}>
-                    <p>Clothings</p>
-                </li>
-                <li className={style.catButton} onClick={() => { history('/AllItems') }}>
-                    <p>Wallets</p>
-                </li>
-                <li className={style.catButton} onClick={() => { history('/AllItems') }}>
-                    <p>Accessories</p>
-                </li>
-            </ul>
-        </nav>
+        {/* Proper redirect will be added in future update */}
+        <div className={style.categoryNav}>
+            <Button variant="outline-secondary" onClick={() => { history('/AllItems')}}>
+                Bags
+            </Button>
+            <Button variant="outline-secondary" onClick={() => { history('/AllItems')}}>
+                Clothing
+            </Button>
+            <Button variant="outline-secondary" onClick={() => { history('/AllItems')}}>
+                Wallets
+            </Button>
+            <Button variant="outline-secondary" onClick={() => { history('/AllItems')}}>
+                Accessories
+            </Button>
+        </div>
         </body>
     );
 }

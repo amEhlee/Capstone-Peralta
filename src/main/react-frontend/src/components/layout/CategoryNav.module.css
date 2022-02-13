@@ -1,31 +1,11 @@
 .categoryNav {
     background-color: #e2e2e2;
     align-items: center;
-}
-
-.categoryNav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
     display: flex;
-    align-items: baseline;
+    justify-content: center;
 }
 
-.categoryNav li {
-    margin: auto;
-    width: 20%;
-    padding: 10px;
+.categoryNav Button {
+    margin-right: 20px;
 }
 
-.catButton {
-    background-color: #d4cecb;
-    border: none;
-    color: black;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 16px;
-}
