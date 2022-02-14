@@ -26,7 +26,14 @@ export default function ItemList(props) {
   function adminList() {
     return (
       <tbody>
-        {props.items.map((i) => (
+        {props.items.filter((val) => {
+          if (props.search == "") {
+            return val;
+          } else if (val.itemName.toLowerCase().includes(props.search.toLowerCase())) {
+            return val;
+          }
+        }
+        ).map((i) => (
           <ManageItems
             key={i.itemId}
             id={i.itemId}
