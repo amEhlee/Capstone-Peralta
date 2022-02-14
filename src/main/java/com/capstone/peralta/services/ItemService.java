@@ -37,6 +37,10 @@ public class ItemService {
         return itemRepo.save(item);
     }
 
+    public List<Item> searchItems(String searchString) {
+        return itemRepo.findItemsByItemNameContaining(searchString);
+    }
+
 //    public void deleteItem(Item item) {
 //        itemRepo.delete(item);
 //    }

@@ -1,0 +1,20 @@
+.searchwrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #999897;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    color: #000000;
+    box-shadow: 0.25rem 0.25rem 0rem #d4cecb;
+    width: 65%;
+}
+
+.searchBar{
+    margin: 0 0.5rem 0 0.5rem;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: #999897;
+    color: black;
+}
