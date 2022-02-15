@@ -1,13 +1,18 @@
+.manageItems {
+    background-color: white;
+}
+
 .searchwrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #999897;
+    background-color: #e2e2e2;
     padding: 0.5rem;
     border-radius: 0.5rem;
     color: #000000;
-    box-shadow: 0.25rem 0.25rem 0rem #d4cecb;
     width: 65%;
+    float: left;
+    margin-bottom: 25px;
 }
 
 .searchBar{
@@ -15,6 +20,20 @@
     width: 100%;
     border: none;
     outline: none;
-    background: #999897;
+    background-color: #e2e2e2;
     color: black;
+}
+
+.addBtn{
+    float: left;
+    margin-left: 18%;
+    flex-direction: column;
+    background: #0d6efd;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+    border-radius: 16px;
 }
