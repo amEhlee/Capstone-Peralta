@@ -1,5 +1,6 @@
 package com.capstone.peralta.security;
 import com.capstone.peralta.filters.AuthenticationFilter;
+import com.capstone.peralta.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final UserService userService;
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 

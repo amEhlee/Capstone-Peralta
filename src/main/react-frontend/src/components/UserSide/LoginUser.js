@@ -10,7 +10,8 @@ export default function  LoginUser() {
         const emailRef = useRef();
         const passwordRef = useRef();
 
-    function submitHandler() {
+    function submitHandler(event) {
+        event.preventDefault();
         const returnedEmail = emailRef.current.value;
         const returnedPassword = passwordRef.current.value;
 

@@ -2,6 +2,8 @@ package com.capstone.peralta;
 
 import com.capstone.peralta.models.Item;
 import com.capstone.peralta.services.ImageService;
+import com.capstone.peralta.services.UserService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -49,4 +51,10 @@ public class PeraltaApplication {
 		return new BCryptPasswordEncoder();
 	}
 
+	//Just a test function NOTE: Comment out later
+	CommandLineRunner run (UserService userService) {
+		return args -> {
+			userService.getAll();
+		};
+	}
 }
