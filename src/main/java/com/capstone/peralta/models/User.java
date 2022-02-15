@@ -2,6 +2,9 @@ package com.capstone.peralta.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.capstone.peralta.models.Role;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +13,9 @@ import java.util.Collection;
 
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "USERS")
 public class User {
     @Id
@@ -32,9 +38,6 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
-
-    public User() {
-    }
 
     public Integer getUserId() {
         return userId;
