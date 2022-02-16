@@ -1,0 +1,7 @@
+.cute{
+    border: 1px solid gray;
+    box-shadow: 2px 2px 12px darkgray;
+    background-color: lightskyblue;
+    border-radius: 8px;
+    padding: 10px;
+}

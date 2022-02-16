@@ -1,6 +1,7 @@
 import React from "react";
 import { useRef } from "react";
 import { Form, FormGroup, InputGroup, Button} from "react-bootstrap";
+import Style from "./ItemStyle.module.css"
 import axios from "axios";
 
 export default function AddItem() {
@@ -43,7 +44,7 @@ export default function AddItem() {
   }
 
   return (
-    <Form onSubmit={submitHandler}>
+    <Form onSubmit={submitHandler} className={Style.cute}>
       <FormGroup className="mb-3" controlId="formItemName">
         <Form.Label>Item Name</Form.Label>
         <Form.Control
@@ -88,7 +89,6 @@ export default function AddItem() {
             aria-label="Amount (to the nearest dollar)"
             ref={itemPriceRef}
           />
-          <InputGroup.Text>.00</InputGroup.Text>
         </InputGroup>
       </FormGroup>
 
@@ -99,25 +99,31 @@ export default function AddItem() {
           placeholder="Enter Item Quantity"
           ref={itemQuantityRef}
         />
+
       </FormGroup>
 
       <FormGroup className="mb-3" controlId="formItemWeight">
         <Form.Label>Item Weight</Form.Label>
+          <InputGroup className="mb-3">
+
         <Form.Control
           type="number"
           placeholder="Enter Item Weight"
           ref={itemWeightRef}
+
         />
+              <InputGroup.Text>kg</InputGroup.Text>
+          </InputGroup>
       </FormGroup>
 
-      <FormGroup className="mb-3" controlId="formItemVolume">
-        <Form.Label>Item Volume</Form.Label>
-        <Form.Control
-          type="number"
-          placeholder="Enter Item Volume"
-          ref={itemVolumeRef}
-        />
-      </FormGroup>
+      {/*<FormGroup className="mb-3" controlId="formItemVolume">*/}
+      {/*  <Form.Label>Item Volume</Form.Label>*/}
+      {/*  <Form.Control*/}
+      {/*    type="number"*/}
+      {/*    placeholder="Enter Item Volume"*/}
+      {/*    ref={itemVolumeRef}*/}
+      {/*  />*/}
+      {/*</FormGroup>*/}
 
       <Button type="submit" className="btn btn-success">
         Edit Item
