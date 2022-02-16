@@ -10,6 +10,8 @@ export default function AddItem() {
     const itemVolumeRef = useRef();
     const itemQuantityRef = useRef();
     const itemAvailableRef = useRef();
+    const imageRef = useRef();
+    let formData = new FormData();
 
     function submitHandler() {
         const returnedName = itemNameRef.current.value;
@@ -18,6 +20,7 @@ export default function AddItem() {
         const returnedVolume = itemVolumeRef.current.value;
         const returnedQuantity = itemQuantityRef.current.value;
         let returnedAvailable = itemAvailableRef.current.checked;
+        const imageData = imageRef.current;
 
         // parse checkbox result e.g if checkbox_clicked true = 1 if checkbox_clicked false = 0
         returnedAvailable === true ? (returnedAvailable = 1) : (returnedAvailable = 0);
@@ -37,6 +40,16 @@ export default function AddItem() {
         axios.post(POST_URL, item).then((res) => {
             console.log(res);
         });
+
+        const UPLOAD_URL = "http://localhost:8080/upload";
+        formData.append('image', imageData.files[0]);
+        axios.post(UPLOAD_URL, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        }).then((res) => {
+            console.log(res);
+        });
     }
 
     return (
@@ -50,10 +63,12 @@ export default function AddItem() {
                 />
             </FormGroup>
 
-            <Form.Group controlId="formFileMultiple" className="mb-3">
-                <Form.Label>Item Images</Form.Label>
-                <Form.Control type="file" multiple />
-            </Form.Group>
+            <FormGroup controlId="formFile" className="mb-3">
+                <Form.Label>Item Image</Form.Label>
+                <Form.Control type="file"
+                    ref={imageRef}
+                />
+            </FormGroup>
 
             <FormGroup className="mb-3" controlId="formItemDescription">
                 <Form.Label>Item Description</Form.Label>
