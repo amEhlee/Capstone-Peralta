@@ -4,7 +4,6 @@ import { Button } from 'react-bootstrap';
 
 export default function Item(props) {
 
-
   return (
         <tr>
           <td>{props.id}</td>
@@ -12,7 +11,7 @@ export default function Item(props) {
           <td>${props.price}</td>
           <td>{props.weight}kg</td>
           <td>{props.quantity}</td>
-          <td>{props.available}</td>
+            <td><input type="checkbox" checked={props.available} readOnly={"readonly"} /></td>
           <td>
             <Link to={"/admin/editItem"}>
               <Button variant="primary" size="sm">Edit</Button>
