@@ -39,13 +39,11 @@ export default function ManageItemsPage() {
 			setDataJson(data || "no data returned"); // store returned data in a variable
 		});
 	}, []);
-    
-	console.log(datajson);
 
 	// pagination
 	const indexOfLastPost = currentPage * itemsPerPage;
 	const indexOfFirstPost = indexOfLastPost - itemsPerPage;
-	const currentPosts = datajson.slice(indexOfFirstPost, indexOfLastPost);
+	const currentDataChunk = datajson.slice(indexOfFirstPost, indexOfLastPost);
 
     // change page
     function paginate(pageNumber) {
@@ -93,7 +91,7 @@ export default function ManageItemsPage() {
                             </tr>
                         </thead>
                         <ItemList
-                            items={currentPosts}
+                            items={currentDataChunk}
                             target="adminList"
                             search={searchName}
                         />

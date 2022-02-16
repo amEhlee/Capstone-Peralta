@@ -8,8 +8,6 @@ export default function PaginationNav(props) {
 		pageNumbers.push(i);
 	}
 
-	console.log("pnum:" + pageNumbers);
-
 	return (
 		<nav>
 			<Pagination>
