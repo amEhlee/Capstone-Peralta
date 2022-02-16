@@ -11,6 +11,7 @@ import EditItem from "./components/InventoryManagement/EditItem";
 import ManageItemsPage from "./pages/admin/ManageItemsPage";
 import LoginUser from "./components/UserSide/LoginUser";
 import SignUpUser from "./components/UserSide/SignUpUser";
+import AddCategory from "./components/categories/AddCategory";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="addItem" element={<AddItem />} />
         <Route path="editItem" element={<EditItem />} />
         <Route path="manageItems" element={<ManageItemsPage />}/>
+        <Route path="addCategory" element={<AddCategory />} />
     
       </Route>
     </Routes>
