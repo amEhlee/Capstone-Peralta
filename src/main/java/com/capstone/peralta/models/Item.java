@@ -50,6 +50,16 @@ public class Item {
 
     }
 
+    public Item(String itemName, Double itemPrice, Double itemWeight, Double itemVolume, Integer itemQuantity) {
+        this.itemName = itemName;
+        this.itemPrice = itemPrice;
+        this.itemWeight = itemWeight;
+        this.itemVolume = itemVolume;
+        this.itemQuantity = itemQuantity;
+        this.itemAvailable = (itemQuantity > 0);
+
+    }
+
     public Integer getItemId() {
         return itemId;
     }

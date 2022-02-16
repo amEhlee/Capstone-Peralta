@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 
 import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
 import ViewAllItemsPage from "./pages/ViewAllItemsPage";
@@ -12,6 +11,7 @@ import EditItem from "./components/InventoryManagement/EditItem";
 import ManageItemsPage from "./pages/admin/ManageItemsPage";
 import LoginUser from "./components/UserSide/LoginUser";
 import SignUpUser from "./components/UserSide/SignUpUser";
+import AddCategory from "./components/categories/AddCategory";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -22,7 +22,6 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="/cart" element={<CartPage />} />
-
         <Route path="/allItems" element={<ViewAllItemsPage />} />
       </Route>
 
@@ -35,6 +34,7 @@ function App() {
         <Route path="addItem" element={<AddItem />} />
         <Route path="editItem" element={<EditItem />} />
         <Route path="manageItems" element={<ManageItemsPage />}/>
+        <Route path="addCategory" element={<AddCategory />} />
     
       </Route>
     </Routes>
