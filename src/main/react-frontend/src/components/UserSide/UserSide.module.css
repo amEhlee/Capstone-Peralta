@@ -1,0 +1,15 @@
+.centrize{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border: 1px solid gray;
+    box-shadow: 2px 2px 12px darkgray;
+    width: 370px;
+    min-width: 470px;
+    padding: 20px;
+    margin-bottom: 10px;
+    background-color: whitesmoke;
+    border-radius: 8px;
+}
+

@@ -1,37 +1,36 @@
 import React from "react";
 import {Form, FormGroup, Button} from "react-bootstrap";
 import  {Link}  from "react-router-dom";
+import userStyle from "./UserSide.module.css";
+import shopBag from "../videos/shoppingBag.mp4";
+import LoginForm from "./LoginForm";
+
 export default function  LoginUser() {
     return (
+    <div className="test">
+        <video autoPlay loop muted
+        style={{
+            position:"absolute",
+            width:"100%",
+            top:"50%",
+            left:"50%",
+            objectFit:"cover",
+            height:"100%",
+            transform:"translate(-50%,-50%)",
+            zIndex:"-1"
+        }}
+        >
+        <source src={shopBag} type="video/mp4"/>
+        </video>
 
-        <Form>
-
-            <FormGroup className="mb-3" controlId="emailForm">
-                <Form.Label>Email Address</Form.Label>
-                <Form.Control type="email" placeholder="Enter Email"/>
-            </FormGroup>
-
-
-            <FormGroup className="mb-3" controlId="passwordForm">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Enter your password"/>
-            </FormGroup>
-
-
-
-            <FormGroup className="mb-3" controlId="noAccount">
-                <Form.Text className="text-muted">
-                    Don't have an account yet?
-                </Form.Text>
-                <Link to="/signUp" className="btn btn-light ml-2">Sign Up</Link>
-            </FormGroup>
-
-            <Button type="submit" variant="primary">Login</Button>
+        <div className={userStyle.centrize}>
+            <LoginForm/>
+        </div>
 
 
+    </div>
 
 
-        </Form>
     )
 
 

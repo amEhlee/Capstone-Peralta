@@ -1,9 +1,28 @@
 import React from "react";
 import {Form, FormGroup, Button} from "react-bootstrap";
 import  {Link}  from "react-router-dom";
+import userStyle from "./UserSide.module.css";
+import cartE from "../videos/cart.mp4";
+
 export default function  SignUpUser() {
     return (
-        <Form>
+        <div className="test">
+            <video autoPlay loop muted
+                   style={{
+                       position:"absolute",
+                       width:"100%",
+                       top:"50%",
+                       left:"50%",
+                       objectFit:"cover",
+                       height:"100%",
+                       transform:"translate(-50%,-50%)",
+                       zIndex:"-1"
+                   }}
+            >
+                <source src={cartE} type="video/mp4"/>
+            </video>
+
+        <Form className={userStyle.centrize}>
             <FormGroup className="mb-3" controlId="firstnameForm">
                 <Form.Label>First Name: </Form.Label>
                 <Form.Control type="text" placeholder="Input firstname"/>
@@ -30,15 +49,14 @@ export default function  SignUpUser() {
                 <Form.Text className="text-muted">
                     Already have an account?
                 </Form.Text>
-                <Link to="/login" className="btn btn-light ml-2">Login</Link>
+                <Link to="/login" className="ml-2">Login</Link>
             </FormGroup>
 
-            <Button type="submit" variant="warning">Signup</Button>
-
-
+            <Button type="submit" variant="warning">Sign Up</Button>
 
 
         </Form>
+        </div>
     )
 
 
