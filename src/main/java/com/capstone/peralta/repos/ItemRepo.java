@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ItemRepo  extends JpaRepository<Item, Integer> {
+public interface ItemRepo extends JpaRepository<Item, Integer> {
 
     List<Item> findItemsByItemNameContaining(String name);
 }
