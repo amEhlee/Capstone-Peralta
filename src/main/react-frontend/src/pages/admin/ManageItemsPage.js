@@ -1,20 +1,21 @@
 // import dependencies
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Table, Modal, Button } from "react-bootstrap";
+import { BsSearch } from "react-icons/bs";
 import axios from "axios";
 
 // import components
 import PaginationNav from '../../components/layout/Pagination';
 import ItemList from "../../components/items/ItemList";
-import { Table, Modal, Button } from "react-bootstrap";
 import AddItem from "../../components/InventoryManagement/AddItem";
-import { BsSearch } from "react-icons/bs";
+
+// import css
 import style from "./ManageItemsPage.module.css";
 
 export default function ManageItemsPage() {
 	const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
 	const [currentPage, setCurrentPage] = useState(1);
-	const [itemsPerPage, setItemsPerPage] = useState(10);
+	const [itemsPerPage, setItemsPerPage] = useState(10); // initalize at 10 items per page change as required
 	var [datajson, setDataJson] = useState([]); // used to store data
 	var [searchName, setSearchName] = useState("");
 	const [show, setShow] = useState(false);
@@ -22,9 +23,8 @@ export default function ManageItemsPage() {
 	const handleClose = () => setShow(false);
 
 	// function that will be called when the page loads purpose is to handle and process the axios get request
-	async function gatherData() {
-        
-		return await axios
+	function gatherData() {
+		return axios
 			.get(FETCH_URL) // preform get request
 			.then((res) => {
 				return res.data; // return response
@@ -52,17 +52,17 @@ export default function ManageItemsPage() {
         setCurrentPage(pageNumber);
     }
 
-	if (datajson === "no data returned") {
-		return (
-			<section>
-				<p>{datajson}</p>
-			</section>
-		);
-	} else {
-		return (
-			<>
-				<div>
-					<h1>Manage Items Page</h1>
+    if (datajson === "no data returned") {
+        return (
+            <section>
+                <p>{datajson}</p>
+            </section>
+        );
+    } else {
+        return (
+            <>
+                <div className={style.manageItems}>
+                    <h1>Inventory</h1>
 
 					<div className={style.searchwrapper}>
 						<input
@@ -76,26 +76,30 @@ export default function ManageItemsPage() {
 						<BsSearch></BsSearch>
 					</div>
 
-					<Button variant="primary" onClick={handleShow}>
-						Add Item
-					</Button>
+                    <Button className={style.addBtn} bsPrefix="addBtn" variant="primary" onClick={handleShow}>
+                        Add Item
+                    </Button>
 
-					<Table striped bordered hover>
-						<thead>
-							<tr>
-								<th>Id</th>
-								<th>Name</th>
-								<th>Price</th>
-								<th>Weight</th>
-								<th>Quantity</th>
-								<th>Available</th>
-								<th>Edit</th>
-							</tr>
-						</thead>
-						<ItemList items={currentPosts} target="adminList" search={searchName} />
-					</Table>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Weight</th>
+                                <th>Quantity</th>
+                                <th>Available</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <ItemList
+                            items={currentPosts}
+                            target="adminList"
+                            search={searchName}
+                        />
+                    </Table>
                     <PaginationNav itemsPerPage={itemsPerPage} totalItems={datajson.length} paginate={paginate} currentPage={currentPage}/>
-				</div>
+                </div>
 
 				<Modal show={show} onHide={handleClose}>
 					<Modal.Header closeButton>
