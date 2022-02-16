@@ -2,6 +2,10 @@ package com.capstone.peralta.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,13 +18,14 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.AlgorithmMethod;
+
 import java.io.IOException;
-import java.security.AlgorithmParameterGenerator;
 import java.sql.Date;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -33,6 +38,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        log.info("Email is: {}", email); log.info("Password is: {}", password);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -41,19 +47,24 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         User user = (User)authResult.getPrincipal(); //Accesses the User that is authenticated
         Algorithm algorithm = Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()); //Creates a hashing algorithm
-        String accessToken = JWT.create() //Initial Access token
+        String access_token = JWT.create() //Initial Access token
                 .withSubject(user.getUsername()) //Subject of JWT must be unique so I chose Username which is technically email
                 .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) //Ten minute expiry
                 .withIssuer(request.getRequestURI().toString()) //Displays Issuer as the Request Url
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())) //Collects authorities from the user
                 .sign(algorithm); //Uses previously created hasing algorithm
-        String refreshToken = JWT.create() //Token that "refreshes" the access token
+        String refresh_token = JWT.create() //Token that "refreshes" the access token
                 .withSubject(user.getUsername()) //Subject of JWT must be unique so I chose Username which is technically email
                 .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) //1 hour expiry
                 .withIssuer(request.getRequestURI().toString()) //Displays Issuer as the Request Url
                 .sign(algorithm); //Uses previously created hasing algorithm
-        response.setHeader("access_token", accessToken);
-        response.setHeader("refresh_token", refreshToken);
+/*        response.setHeader("access_token", access_token);
+        response.setHeader("refresh_token", refresh_token);*/
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("access_token", access_token);
+        tokens.put("refresh_token", refresh_token);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }
 
 

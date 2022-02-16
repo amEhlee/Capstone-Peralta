@@ -49,8 +49,8 @@ export default function ManageItemsPage() {
     } else {
         return (
             <>
-                <div>
-                    <h1>Manage Items Page</h1>
+                <div className={style.manageItems}>
+                    <h1>Inventory</h1>
 
                     <div className={style.searchwrapper}>
                         <input
@@ -64,15 +64,15 @@ export default function ManageItemsPage() {
                         <BsSearch></BsSearch>
                     </div>
 
-                    <Button variant="primary" onClick={handleShow}>
+                    <Button className={style.addBtn} bsPrefix="addBtn" variant="primary" onClick={handleShow}>
                         Add Item
                     </Button>
 
                     <Table striped bordered hover>
                         <thead>
                             <tr>
-                                <th>Id</th>
-                                <th>Name</th>
+                                <th>ID</th>
+                                <th>Product Name</th>
                                 <th>Price</th>
                                 <th>Weight</th>
                                 <th>Quantity</th>
