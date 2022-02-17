@@ -31,7 +31,7 @@ public class ImageService {
             Path path = Paths.get("src/main/react-frontend/src/images");
             Files.copy(image.getInputStream(), path.resolve(itemId + "_" +
                     (loadItemPhotos(itemId) + 1) +
-                    image.getOriginalFilename().substring(image.getOriginalFilename().indexOf("."), image.getOriginalFilename().length())));
+                    image.getOriginalFilename().substring(image.getOriginalFilename().indexOf("."))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,11 +54,12 @@ public class ImageService {
 
     public long loadItemPhotos(Integer id) {
         try {
-            return  Files.walk(this.root, 1)
-                    .filter(path -> !path.equals(this.root))
-                    .map(this.root::relativize)
-                    .filter(str -> toString()
-                            .matches("^" + id.toString() + "[_]\\d+[\\.]")).count();
+            long count = Files.walk(this.root, 1)
+                    .filter(Files::isRegularFile)
+                    .filter(str -> str.getFileName().toString()
+                            .matches("^" + id + "[_]\\d+[.]\\S+$")).count();
+            System.out.println(count);
+            return count;
         } catch (IOException e) {
             throw new RuntimeException("Could not load the files");
         }

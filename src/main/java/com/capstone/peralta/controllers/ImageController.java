@@ -23,7 +23,6 @@ public class ImageController {
         ResponseEntity<String> res = ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not save file");
         try {
             imageService.save(image, Integer.parseInt(itemId));
-            System.out.println(itemId);
             res = ResponseEntity.status(HttpStatus.OK).body("File Saved");
         } catch (Exception e) {
             return res;
