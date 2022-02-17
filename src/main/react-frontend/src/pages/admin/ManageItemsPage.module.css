@@ -1,5 +1,19 @@
 .manageItems {
     background-color: white;
+    position: static;
+    right: 0rem;
+    top: 0rem;
+}
+
+@media screen and (min-width: 1400px) {
+    .manageItems {
+        background-color: white;
+        position: absolute;
+        right: 12rem;
+        top: 7rem;
+        margin-left:auto;
+        margin-right:auto;
+    }
 }
 
 .searchwrapper {
