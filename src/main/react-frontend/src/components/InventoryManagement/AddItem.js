@@ -58,7 +58,7 @@ export default function AddItem() {
 
 
     function submitHandler(event) {
-        //event.preventDefault();
+        event.preventDefault();
         const returnedName = itemNameRef.current.value;
         const returnedPrice = itemPriceRef.current.value;
         const returnedWeight = itemWeightRef.current.value;
@@ -93,26 +93,37 @@ export default function AddItem() {
             itemWeight: returnedWeight,
         };
 
+        const UPLOAD_URL = "http://localhost:8080/upload/";
+        formData.append('image', imageData.files[0]);
+        const imagePost = async(itemId) => {
+            try {
+                const res = await axios.post(UPLOAD_URL + itemId, formData);
+                console.log("image itemId: " + itemId);
+                formData.delete('image');
+                window.location.reload(false);
+            } catch (err) {
+                console.error(err);
+            }
+        }
 
         const POST_URL = "http://localhost:8080/item/add"; // fetch url
-        axios.post(POST_URL, item).then((res) => {
-            console.log(res);
-        });
-
-        const UPLOAD_URL = "http://localhost:8080/upload";
-        formData.append('image', imageData.files[0]);
-        axios.post(UPLOAD_URL, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data"
+        const itemPost = async () => {
+            try {
+                const res = await axios.post(POST_URL, item);
+                    console.log(res.data);
+                    console.log("Response itemId: " + res.data.itemId);
+                    // setResItemId(res.data.itemId);
+                    imagePost(res.data.itemId);
+                    // console.log(resItemId);
+            } catch (err) {
+                console.error(err);
             }
-        }).then((res) => {
-            console.log(res);
-        });
+        };
+
+        itemPost();
     }
 
     return (
-
-
         <Form onSubmit={submitHandler}>
             <FormGroup className="mb-3" controlId="formItemName">
                 <Form.Label>Item Name</Form.Label>
@@ -124,11 +135,11 @@ export default function AddItem() {
             </FormGroup>
 
 
-            {/* TODO idk if this is correct im just doing ecause its here :)    
+            {/* TODO idk if this is correct im just doing ecause its here :)
             <Form.Group controlId="formFileMultiple" className="mb-3">
             <Form.Label>Item Images</Form.Label>
             <Form.Control type="file" multiple/>
-            </Form.Group> 
+            </Form.Group>
             */}
 
             <FormGroup controlId="formFile" className="mb-3">
