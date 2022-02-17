@@ -16,7 +16,7 @@ export default function Item(props) {
           <td>${props.price}</td>
           <td>{props.weight}kg</td>
           <td>{props.quantity}</td>
-          <td>{props.available}</td>
+          <td><input type="checkbox" checked={props.available} readOnly={"readonly"} /></td>
           <td>
               <Button onClick={handleShow} variant="primary" data-toggle="modal"  size="sm">Edit</Button>
 
