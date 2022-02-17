@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
 import EditForm from "../InventoryManagement/EditItem";
 
-export default function Item(props) {
+export default function ManageItems(props) {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
@@ -19,7 +19,6 @@ export default function Item(props) {
           <td><input type="checkbox" checked={props.available} readOnly={"readonly"} /></td>
           <td>
               <Button onClick={handleShow} variant="primary" data-toggle="modal"  size="sm">Edit</Button>
-
           </td>
         </tr>
 
@@ -30,7 +29,7 @@ export default function Item(props) {
         </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <EditForm/>
+              <EditForm item={props.item}/>
           </Modal.Body>
           <Modal.Footer>
               <Button onClick={handleClose} varient="secondary">

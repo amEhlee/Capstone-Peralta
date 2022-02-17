@@ -13,6 +13,8 @@ import AddItem from "../../components/InventoryManagement/AddItem";
 import style from "./ManageItemsPage.module.css";
 
 export default function ManageItemsPage() {
+	const [categoryjson, setCategoryJson] = useState([]);
+
 	const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage, setItemsPerPage] = useState(10); // initalize at 10 items per page change as required
