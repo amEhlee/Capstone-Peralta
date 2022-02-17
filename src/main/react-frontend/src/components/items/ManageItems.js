@@ -8,9 +8,6 @@ export default function ManageItems(props) {
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
-    var itemGiven = props.item;
-    console.log("ig:" + itemGiven);
-
   return (
       <>
         <tr>
@@ -32,7 +29,7 @@ export default function ManageItems(props) {
         </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <EditForm item={itemGiven}/>
+              <EditForm item={props.item}/>
           </Modal.Body>
           <Modal.Footer>
               <Button onClick={handleClose} varient="secondary">

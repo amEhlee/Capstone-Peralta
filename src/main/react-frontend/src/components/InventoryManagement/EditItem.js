@@ -13,9 +13,6 @@ export default function EditItem(props) {
 	const itemAvailableRef = useRef();
 
 	function submitHandler(event) {
-    event.preventDefault();
-
-    console.log("updating item id: " + props.item.itemId);
 		const returnedName = itemNameRef.current.value;
 		const returnedPrice = itemPriceRef.current.value;
 		const returnedWeight = itemWeightRef.current.value;
