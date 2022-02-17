@@ -82,6 +82,7 @@ export default function ManageItemsPage() {
                         <thead>
                             <tr>
                                 <th>ID</th>
+								<th>Image</th>
                                 <th>Product Name</th>
                                 <th>Price</th>
                                 <th>Weight</th>
