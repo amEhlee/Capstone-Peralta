@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
 import EditForm from "../InventoryManagement/EditItem";
+import Image from './Image'
 
 export default function ManageItems(props) {
     const [show, setShow] = useState(false);
@@ -12,6 +13,11 @@ export default function ManageItems(props) {
       <>
         <tr>
           <td>{props.id}</td>
+          <td>
+            <Image
+              itemId={props.id}
+            />
+          </td>
           <td>{props.name}</td>
           <td>${props.price}</td>
           <td>{props.weight}kg</td>
