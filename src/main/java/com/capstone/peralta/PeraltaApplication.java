@@ -1,17 +1,27 @@
 package com.capstone.peralta;
 
 import com.capstone.peralta.models.Item;
+import com.capstone.peralta.services.ImageService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.*;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.annotation.Resource;
+
 @SpringBootApplication
 public class PeraltaApplication {
 
+	@Resource
+	ImageService imageService;
+
 	public static void main(String[] args) {
 		SpringApplication.run(PeraltaApplication.class, args);
+	}
+
+	public void run(String... arg) throws Exception{
+		imageService.init();
 	}
 
 	@Bean
