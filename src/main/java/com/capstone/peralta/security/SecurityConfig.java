@@ -29,13 +29,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
-        authenticationFilter.setFilterProcessesUrl("/user/login");
+        authenticationFilter.setFilterProcessesUrl("/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/user/login/*").permitAll();
+        //TODO:Fix Authentication and normalize URL's
+        //This block of code activates the filters and if active will not let you do anything atm....
+/*      http.authorizeRequests().antMatchers("/login/*").permitAll();
         http.authorizeRequests().antMatchers(GET, "/**").hasAnyAuthority("USER");
         http.authorizeRequests().antMatchers(GET, "/admin/**").hasAnyAuthority("ADMIN");
-        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests().anyRequest().authenticated();*/
+        http.authorizeRequests().anyRequest().permitAll();
         http.addFilter(authenticationFilter);
     }
 

@@ -58,8 +58,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) //1 hour expiry
                 .withIssuer(request.getRequestURI().toString()) //Displays Issuer as the Request Url
                 .sign(algorithm); //Uses previously created hasing algorithm
+
+        //This block of code attaches tokens to header body of POST Request
 /*        response.setHeader("access_token", access_token);
         response.setHeader("refresh_token", refresh_token);*/
+
+        //This block of code below maps the tokens to a hash map and encrypts them for more protection
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);
