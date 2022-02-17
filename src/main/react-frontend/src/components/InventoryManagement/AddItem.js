@@ -225,7 +225,7 @@ export default function AddItem() {
                 Add Item
             </Button>
 
-            <Button className="btn btn-success" onClick={getCategories}>console </Button>
+            {/* <Button className="btn btn-success" onClick={getCategories}>console </Button> */}
         </Form>
     );
 }

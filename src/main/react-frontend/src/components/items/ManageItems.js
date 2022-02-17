@@ -37,14 +37,6 @@ export default function ManageItems(props) {
           <Modal.Body>
               <EditForm item={props.item}/>
           </Modal.Body>
-          <Modal.Footer>
-              <Button onClick={handleClose} varient="secondary">
-                  Close
-              </Button>
-          </Modal.Footer>
-
-
-
       </Modal>
       </>
   );
