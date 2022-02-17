@@ -1,6 +1,5 @@
 package com.capstone.peralta.services;
 
-import antlr.StringUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 @Service
@@ -25,13 +23,9 @@ public class ImageService {
         }
     }
 
-    public void save(MultipartFile image, int itemId) {
-
+    public void save(MultipartFile image) {
         try {
-            Path path = Paths.get("src/main/react-frontend/src/images");
-            Files.copy(image.getInputStream(), path.resolve(itemId + "_" +
-                    (loadItemPhotos(itemId) + 1) +
-                    image.getOriginalFilename().substring(image.getOriginalFilename().indexOf("."), image.getOriginalFilename().length())));
+            Files.copy(image.getInputStream(), this.root.resolve(image.getOriginalFilename()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,18 +43,6 @@ public class ImageService {
             }
         } catch (MalformedURLException e) {
             throw new RuntimeException("Error: " + e.getMessage());
-        }
-    }
-
-    public long loadItemPhotos(Integer id) {
-        try {
-            return  Files.walk(this.root, 1)
-                    .filter(path -> !path.equals(this.root))
-                    .map(this.root::relativize)
-                    .filter(str -> toString()
-                            .matches("^" + id.toString() + "[_]\\d+[\\.]")).count();
-        } catch (IOException e) {
-            throw new RuntimeException("Could not load the files");
         }
     }
 

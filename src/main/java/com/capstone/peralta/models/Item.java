@@ -48,8 +48,7 @@ public class Item {
         this.itemQuantity = itemQuantity;
         this.itemAvailable = itemAvailable;
     }
-
-    public Item(String itemName, Double itemPrice, Double itemWeight, Double itemVolume, Integer itemQuantity ) {
+    public Item(String itemName, Double itemPrice, Double itemWeight, Double itemVolume, Integer itemQuantity) {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.itemWeight = itemWeight;
@@ -105,6 +104,7 @@ public class Item {
     public void setItemQuantity(Integer itemQuantity) {
         this.itemQuantity = itemQuantity;
     }
+
     public Boolean getItemAvailable() {
         return itemAvailable;
     }
