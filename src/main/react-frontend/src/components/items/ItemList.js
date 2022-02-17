@@ -34,6 +34,7 @@ export default function ItemList(props) {
           }
         }
         ).map((i) => (
+          
           <ManageItems
             key={i.itemId}
             id={i.itemId}
@@ -43,6 +44,7 @@ export default function ItemList(props) {
             volume={i.itemVolume}
             quantity={i.itemQuantity}
             available={i.itemAvailable}
+            item={i}
           />
           ))}
       </tbody>

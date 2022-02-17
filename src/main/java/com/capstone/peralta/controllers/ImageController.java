@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,13 +18,17 @@ public class ImageController {
     @Autowired
     ImageService imageService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image) {
+    @PostMapping("/upload/{itemId}")
+    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image, @PathVariable("itemId") String itemId) {
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not save file");
         try {
-            imageService.save(image);
-            return ResponseEntity.status(HttpStatus.OK).body("File Saved");
+            imageService.save(image, Integer.parseInt(itemId));
+            System.out.println(itemId);
+            res = ResponseEntity.status(HttpStatus.OK).body("File Saved");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not save file");
+            return res;
         }
+
+        return res;
     }
 }

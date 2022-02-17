@@ -1,22 +1,45 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
-import { Button } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
+import EditForm from "../InventoryManagement/EditItem";
 
-export default function Item(props) {
+export default function ManageItems(props) {
+    const [show, setShow] = useState(false);
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
 
-    return (
+  return (
+      <>
         <tr>
           <td>{props.id}</td>
           <td>{props.name}</td>
           <td>${props.price}</td>
           <td>{props.weight}kg</td>
           <td>{props.quantity}</td>
-          <td>{props.available}</td>
+          <td><input type="checkbox" checked={props.available} readOnly={"readonly"} /></td>
           <td>
-            <Link to={"/admin/editItem"}>
-              <Button variant="primary" size="sm">Edit</Button>
-            </Link>
+              <Button onClick={handleShow} variant="primary" data-toggle="modal"  size="sm">Edit</Button>
           </td>
         </tr>
+
+      <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+        <Modal.Title>
+            Edit Item
+        </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+              <EditForm item={props.item}/>
+          </Modal.Body>
+          <Modal.Footer>
+              <Button onClick={handleClose} varient="secondary">
+                  Close
+              </Button>
+          </Modal.Footer>
+
+
+
+      </Modal>
+      </>
   );
 }

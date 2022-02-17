@@ -9,7 +9,7 @@ import {
 } from "react-icons/bs";
 import style from "./NavBar.module.css";
 import { Modal, Button } from "react-bootstrap";
-import LoginUser from "../UserSide/LoginUser"
+import LoginForm from "../UserSide/LoginForm"
 import SignUpUser from "../UserSide/SignUpUser"
 import { useState, useEffect} from "react";
 
@@ -57,7 +57,7 @@ function NavBar() {
                     <Modal.Title>Login</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <LoginUser />
+                    <LoginForm />
                 </Modal.Body>
             </Modal>
         </>
