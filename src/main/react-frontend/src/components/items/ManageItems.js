@@ -25,6 +25,7 @@ export default function ManageItems(props) {
           <td><input type="checkbox" checked={props.available} readOnly={"readonly"} /></td>
           <td>
               <Button onClick={handleShow} variant="primary" data-toggle="modal"  size="sm">Edit</Button>
+
           </td>
         </tr>
 
