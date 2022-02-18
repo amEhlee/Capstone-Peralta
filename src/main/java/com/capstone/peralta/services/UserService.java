@@ -34,12 +34,16 @@ public class UserService implements UserDetailsService {
     private final RoleRepo roleRepo;
 
     private final PasswordEncoder passwordEncoder;
-
     public User addUser(User user) {
         log.info("Saving new User into Database");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
+
+/*    public void deleteUser(User user) {
+        log.info("User deleted");
+        userRepo.remove(user);
+    }*/
 
     public Role addRole(Role role) {
         log.info("Saving new Role into Database");
@@ -69,9 +73,9 @@ public class UserService implements UserDetailsService {
 
     public List<User> addMultiple(List<User> userList) { return userRepo.saveAll(userList); } //TODO: Make this return sets of pages instead of ALL items
 
-    public UserDetails loadUserByUsername(String userInfo) throws EmailNotFoundException {
-        System.out.println(userInfo);
-        User userDbResult = userRepo.findUserByEmail(userInfo);
+    public UserDetails loadUserByUsername(String userEmail) throws EmailNotFoundException {
+        log.info(userEmail);
+        User userDbResult = userRepo.findUserByEmail(userEmail);
         if (userDbResult == null) {
             log.info("Email does not exist in database");
             throw new EmailNotFoundException("Email does not exist in database");

@@ -1,8 +1,10 @@
 package com.capstone.peralta;
 
-import com.capstone.peralta.models.Item;
+import com.capstone.peralta.models.*;
 import com.capstone.peralta.services.ImageService;
 import com.capstone.peralta.services.UserService;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.boot.CommandLineRunner;
 import com.capstone.peralta.models.Item;
 import com.capstone.peralta.services.ImageService;
@@ -15,12 +17,16 @@ import org.springframework.web.cors.*;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @SpringBootApplication
 public class PeraltaApplication {
 
 	@Resource
 	ImageService imageService;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(PeraltaApplication.class, args);
@@ -54,9 +60,21 @@ public class PeraltaApplication {
 	}
 
 	//Just a test function NOTE: Comment out later
+	@Bean
 	CommandLineRunner run (UserService userService) {
 		return args -> {
-			userService.getAll();
+			userService.addRole(new Role(1, "ROLE_USER"));
+			userService.addRole(new Role(2, "ROLE_ADMIN"));
+			userService.addRole(new Role(3, "ROLE_OWNER"));
+
+
+			userService.addUser(new User(1,"admin@gmail.com", "password", "Mister", "Admin", "someplace", "T3J2Y9", "403678123") );
+			userService.addUser(new User(2,"john@gmail.com", "t100", "John", "Connor", "someplace", "T1K4V7", "403789123") );
+
+			userService.addRoleToUser("admin@gmail.com", "ROLE_USER");
+			userService.addRoleToUser("admin@gmail.com", "ROLE_ADMIN");
+
+			userService.addRoleToUser("john@gmail.com", "ROLE_USER");
 		};
 	}
 }

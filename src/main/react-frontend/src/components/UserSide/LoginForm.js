@@ -1,6 +1,5 @@
 import React from "react";
 import {Form, FormGroup, Button} from "react-bootstrap";
-import userStyle from "./UserSide.module.css";
 import {Link} from "react-router-dom";
 import { useRef } from "react";
 import axios from "axios";
@@ -17,11 +16,12 @@ export default function LoginForm() {
 
         const user = {
             email: returnedEmail,
-            password: returnedPassword,
+            password: returnedPassword
         };
 
         const POST_URL = "http://localhost:8080/user/authenticate"; // fetch url
-        axios.post(POST_URL, user).then((res) => {
+        axios.post(POST_URL, user,{headers:{'content-type': 'text/json'}}).then((res) => {
+
             console.log(res);
         });
     }

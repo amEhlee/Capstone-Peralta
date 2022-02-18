@@ -1,6 +1,9 @@
 package com.capstone.peralta.models;
 
+import lombok.RequiredArgsConstructor;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +25,6 @@ public class Cart {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
-
 
     public Integer getCartId() {
         return cartId;

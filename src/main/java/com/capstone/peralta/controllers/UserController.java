@@ -36,6 +36,11 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.addUser(user));
     }
 
+/*    @PostMapping("/user/delete")
+    public void deleteUser(@RequestBody User user) {
+        userService.deleteUser(user);
+    }*/
+
     //Saves role to java object from React
     @PostMapping("/role/save")
     public ResponseEntity<Role>saveRole(@RequestBody Role role) {
@@ -55,15 +60,19 @@ public class UserController {
         return userService.getUserById(userId);
     }
 
+    //Grabs user details by email, mostly useless for now
     @PostMapping("/authenticate")
-    UserDetails getUserDetails(@RequestBody String userInfo) { return userService.loadUserByUsername(userInfo); } //Grabs user details by email
+    UserDetails getUserDetails(@RequestBody String userEmail) {
+        return userService.loadUserByUsername(userEmail);
+    }
 
     @GetMapping("/all")
     List<User> getAll() {
         return userService.getAll();
     }
 
-    @PostMapping("/add")
+    //Currently incompatible with security
+/*    @PostMapping("/add")
     User createUser(@RequestBody User user) {
         return userService.addUser(user);
     }
@@ -72,7 +81,7 @@ public class UserController {
     List<User> addMultiple(@RequestBody List<User> userList) {
         return userService.addMultiple(userList);
 
-    }
+    }*/
 
     @Data
     class RoleToUserForm {

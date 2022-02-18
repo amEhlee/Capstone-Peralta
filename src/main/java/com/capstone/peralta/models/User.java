@@ -1,7 +1,5 @@
 package com.capstone.peralta.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.capstone.peralta.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +18,9 @@ import java.util.Collection;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_Id", nullable = false)
+    @Column(name = "user_Id", nullable = false,unique = true)
     private Integer userId;
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false,unique = true)
     private String email;
     private String password;
     private String firstName;
@@ -34,11 +32,40 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Order> userOrders;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
     private Cart cart;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     private Collection<Role> roles = new ArrayList<>();
+
+    //Constructor for creating a User with Auto Gen ID, and lists
+    public User(Integer userId, String email, String password, String firstName, String lastName, String address, String postalCode, String phoneNumber) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+        this.userOrders = new ArrayList<>();
+        this.cart = new Cart();
+        this.roles = new ArrayList<>();
+    }
+
+    //Constructor for creating a User with Auto Gen ID, and lists
+    public User(String email, String password, String firstName, String lastName, String address, String postalCode, String phoneNumber) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+        this.userOrders = new ArrayList<>();
+        this.cart = new Cart();
+        this.roles = new ArrayList<>();
+    }
 
     public Integer getUserId() {
         return userId;
