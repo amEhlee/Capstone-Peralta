@@ -2,6 +2,7 @@ import React from "react";
 import {useRef, useState, useEffect} from "react";
 import {Form, FormGroup, InputGroup, Button, FormControl} from "react-bootstrap";
 import axios from "axios";
+import Style from "./ItemStyle.module.css"
 
 import Item from "../items/Item";
 
@@ -124,7 +125,7 @@ export default function AddItem() {
     }
 
     return (
-        <Form onSubmit={submitHandler}>
+        <Form onSubmit={submitHandler} className={Style.cute}>
             <FormGroup className="mb-3" controlId="formItemName">
                 <Form.Label>Item Name</Form.Label>
                 <Form.Control
@@ -190,7 +191,7 @@ export default function AddItem() {
                         aria-label="Amount (to the nearest dollar)"
                         ref={itemPriceRef}
                     />
-                    <InputGroup.Text>.00</InputGroup.Text>
+
                 </InputGroup>
             </FormGroup>
 
@@ -205,27 +206,29 @@ export default function AddItem() {
 
             <FormGroup className="mb-3" controlId="formItemWeight">
                 <Form.Label>Item Weight</Form.Label>
+                <InputGroup className="mb-3">
                 <Form.Control
                     type="number"
                     placeholder="Enter Item Weight"
                     ref={itemWeightRef}
                 />
+                <InputGroup.Text>kg</InputGroup.Text>
+                    </InputGroup>
             </FormGroup>
 
-            <FormGroup className="mb-3" controlId="formItemVolume">
-                <Form.Label>Item Volume</Form.Label>
-                <Form.Control
-                    type="number"
-                    placeholder="Enter Item Volume"
-                    ref={itemVolumeRef}
-                />
-            </FormGroup>
+            {/*<FormGroup className="mb-3" controlId="formItemVolume">*/}
+            {/*    <Form.Label>Item Volume</Form.Label>*/}
+            {/*    <Form.Control*/}
+            {/*        type="number"*/}
+            {/*        placeholder="Enter Item Volume"*/}
+            {/*        ref={itemVolumeRef}*/}
+            {/*    />*/}
+            {/*</FormGroup>*/}
 
             <Button type="submit" className="btn btn-success">
                 Add Item
             </Button>
 
-            {/* <Button className="btn btn-success" onClick={getCategories}>console </Button> */}
         </Form>
     );
 }
