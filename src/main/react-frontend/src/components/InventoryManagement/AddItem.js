@@ -4,16 +4,10 @@ import {Form, FormGroup, InputGroup, Button, FormControl} from "react-bootstrap"
 import axios from "axios";
 
 import Item from "../items/Item";
+import CategoryChecklist from "../categories/SelectCategory";
+import SelectCategory from "../categories/SelectCategory";
 
 export default function AddItem() {
-    //grabs the categories
-    var [categoryjson, setcategoryjson] = useState([]);
-    const FETCH_URL = "http://localhost:8080/category/all";
-
-    //to check the state of checkbox for each category also updates the state n stuff
-    const [checkedState, setCheckedState] = useState(
-        new Array(categoryjson.length).fill(false)
-    );
 
     const itemNameRef = useRef();
     const itemPriceRef = useRef();
@@ -22,61 +16,21 @@ export default function AddItem() {
     const itemQuantityRef = useRef();
     const itemAvailableRef = useRef();
 
-    //initializing array of checked categories
-    const checkedCategories = [];
-
-
-    function getCategories() {
-        return axios
-            .get(FETCH_URL) // preform get request
-            .then((res) => {
-                return res.data; // return response
-            })
-            .catch((err) => console.error(err));
-    }
-
-    useEffect(() => {
-        getCategories().then((data) => {
-            console.log(data); // log returned data
-
-            setcategoryjson(data || "no data returned"); // store returned data in a variable
-        });
-    }, []);
-
-    console.log(categoryjson);
-
-
-    // const handleOnChange = (position) => {
-    //     const updatedCheckedState = checkedState.map((item, index) =>
-    //         index === position ? !item : item
-    //     );
-    //
-    //     setCheckedState(updatedCheckedState);
-    // }
+    const itemCategoryRef = useRef();
 
 
     function submitHandler(event) {
-        //event.preventDefault();
+        event.preventDefault();
         const returnedName = itemNameRef.current.value;
         const returnedPrice = itemPriceRef.current.value;
         const returnedWeight = itemWeightRef.current.value;
         const returnedVolume = itemVolumeRef.current.value;
         const returnedQuantity = itemQuantityRef.current.value;
-        let returnedAvailable = itemAvailableRef.current.checked;
+        let returnedAvailable = itemAvailableRef.current.value;
 
-        //parses through the checked categories and adds the category_id to an array
-        // const itemCategories = updatedCheckedState.reduce(
-        //     (currentState, index) => {
-        //         if(currentState === true){
-        //             checkedCategories.push(categoryjson[index].category_id);
-        //         }
-        //     }
-        // )
+        const returnedCategories = itemCategoryRef.current.value;
 
-        // const returnedItemCategories = checkedCategories;
-
-
-        // parse checkbox result e.g if checkbox_clicked true = 1 if checkbox_clicked false = 0
+  
         returnedAvailable === true ? (returnedAvailable = 1) : (returnedAvailable = 0);
 
         const item = {
@@ -125,27 +79,16 @@ export default function AddItem() {
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="formItemCategory">
-                {/* checkbox */}
 
                 <Form.Label>Item Category</Form.Label>
-
-                {categoryjson.map((i) => (
-                    <Form.Check type="checkbox" name="category" value={i.category_id} label={i.categoryName}
-                                // checked={checkedState[index]} onChange={handleOnChange(index)}  <- attempted to put items in array
-                    />
-                ))}
-
-
-                {/*the following will allow you to create a checkbox with custom text....*/}
-                {/*<InputGroup className="mb-3">*/}
-                {/*    <InputGroup.Checkbox aria-label="Checkbox for following text input" />*/}
-                {/*    <FormControl aria-label="Text input with checkbox" />*/}
-                {/*</InputGroup>*/}
+                
+                <SelectCategory ref={itemCategoryRef}/>
+        
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="formItemAvailable">
                 <Form.Label>Available</Form.Label>
-                <Form.Check type="checkbox" label="Available" ref={itemAvailableRef}/>
+                <Form.Check type="switch" ref={itemAvailableRef}/>
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="formItemPrice">
@@ -156,7 +99,7 @@ export default function AddItem() {
                         aria-label="Amount (to the nearest dollar)"
                         ref={itemPriceRef}
                     />
-                    <InputGroup.Text>.00</InputGroup.Text>
+                  
                 </InputGroup>
             </FormGroup>
 
@@ -164,6 +107,7 @@ export default function AddItem() {
                 <Form.Label>Item Quantity</Form.Label>
                 <Form.Control
                     type="number"
+                    min="0"
                     placeholder="Enter Item Quantity"
                     ref={itemQuantityRef}
                 />
@@ -171,17 +115,21 @@ export default function AddItem() {
 
             <FormGroup className="mb-3" controlId="formItemWeight">
                 <Form.Label>Item Weight</Form.Label>
+                <InputGroup className="mb-3">
                 <Form.Control
                     type="number"
                     placeholder="Enter Item Weight"
                     ref={itemWeightRef}
                 />
+                <InputGroup.Text>kg</InputGroup.Text>
+                </InputGroup>
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="formItemVolume">
                 <Form.Label>Item Volume</Form.Label>
                 <Form.Control
                     type="number"
+                    min="0"
                     placeholder="Enter Item Volume"
                     ref={itemVolumeRef}
                 />
@@ -191,7 +139,6 @@ export default function AddItem() {
                 Add Item
             </Button>
 
-            <Button className="btn btn-success" onClick={getCategories}>console </Button>
         </Form>
     );
 }
