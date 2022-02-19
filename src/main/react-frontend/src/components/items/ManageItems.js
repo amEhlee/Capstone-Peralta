@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap';
 import EditForm from "../InventoryManagement/EditItem";
+import Image from './Image'
 
-export default function Item(props) {
+export default function ManageItems(props) {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
@@ -12,11 +13,16 @@ export default function Item(props) {
       <>
         <tr>
           <td>{props.id}</td>
+          <td>
+            <Image
+              itemId={props.id}
+            />
+          </td>
           <td>{props.name}</td>
           <td>${props.price}</td>
           <td>{props.weight}kg</td>
           <td>{props.quantity}</td>
-          <td>{props.available}</td>
+          <td><input type="checkbox" checked={props.available} readOnly={"readonly"} /></td>
           <td>
               <Button onClick={handleShow} variant="primary" data-toggle="modal"  size="sm">Edit</Button>
 
@@ -30,16 +36,8 @@ export default function Item(props) {
         </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <EditForm/>
+              <EditForm item={props.item}/>
           </Modal.Body>
-          <Modal.Footer>
-              <Button onClick={handleClose} varient="secondary">
-                  Close
-              </Button>
-          </Modal.Footer>
-
-
-
       </Modal>
       </>
   );

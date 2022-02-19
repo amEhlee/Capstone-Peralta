@@ -2,6 +2,7 @@ import React from "react";
 import {useRef, useState, useEffect} from "react";
 import {Form, FormGroup, InputGroup, Button, FormControl} from "react-bootstrap";
 import axios from "axios";
+import Style from "./ItemStyle.module.css"
 
 import Item from "../items/Item";
 import CategoryChecklist from "../categories/SelectCategory";
@@ -44,17 +45,38 @@ export default function AddItem() {
             itemWeight: returnedWeight,
         };
 
+        const UPLOAD_URL = "http://localhost:8080/upload/";
+        formData.append('image', imageData.files[0]);
+        const imagePost = async(itemId) => {
+            try {
+                const res = await axios.post(UPLOAD_URL + itemId, formData);
+                console.log("image itemId: " + itemId);
+                formData.delete('image');
+                window.location.reload(false);
+            } catch (err) {
+                console.error(err);
+            }
+        }
 
         const POST_URL = "http://localhost:8080/item/add"; // fetch url
-        axios.post(POST_URL, item).then((res) => {
-            console.log(res);
-        });
+        const itemPost = async () => {
+            try {
+                const res = await axios.post(POST_URL, item);
+                    console.log(res.data);
+                    console.log("Response itemId: " + res.data.itemId);
+                    // setResItemId(res.data.itemId);
+                    imagePost(res.data.itemId);
+                    // console.log(resItemId);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        itemPost();
     }
 
     return (
-
-
-        <Form onSubmit={submitHandler}>
+        <Form onSubmit={submitHandler} className={Style.cute}>
             <FormGroup className="mb-3" controlId="formItemName">
                 <Form.Label>Item Name</Form.Label>
                 <Form.Control
@@ -99,7 +121,6 @@ export default function AddItem() {
                         aria-label="Amount (to the nearest dollar)"
                         ref={itemPriceRef}
                     />
-                  
                 </InputGroup>
             </FormGroup>
 
