@@ -12,6 +12,7 @@ import ManageItemsPage from "./pages/admin/ManageItemsPage";
 import LoginUser from "./components/UserSide/LoginUser";
 import SignUpUser from "./components/UserSide/SignUpUser";
 import AddCategory from "./components/categories/AddCategory";
+import SelectCategory from "./components/categories/SelectCategory";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -35,6 +36,7 @@ function App() {
         <Route path="editItem" element={<EditItem />} />
         <Route path="manageItems" element={<ManageItemsPage />}/>
         <Route path="addCategory" element={<AddCategory />} />
+        <Route path="selectCategory" element={<SelectCategory />} />
     
       </Route>
     </Routes>
