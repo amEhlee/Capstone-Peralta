@@ -1,6 +1,6 @@
 import React from "react";
 import {Form, FormGroup, Button} from "react-bootstrap";
-import userStyle from "./UserSide.module.css";
+import userStyle from "../../styles/UserSide.module.css";
 import {Link} from "react-router-dom";
 
 export default function LoginForm() {

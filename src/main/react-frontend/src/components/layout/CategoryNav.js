@@ -1,4 +1,4 @@
-import style from './CategoryNav.module.css';
+import style from '../../styles/CategoryNav.module.css';
 import { useNavigate } from 'react-router';
 import {Button} from "react-bootstrap";
 

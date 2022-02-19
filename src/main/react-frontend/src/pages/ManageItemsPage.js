@@ -5,12 +5,12 @@ import { BsSearch } from "react-icons/bs";
 import axios from "axios";
 
 // import components
-import PaginationNav from '../../components/layout/Pagination';
-import ItemList from "../../components/items/ItemList";
-import AddItem from "../../components/InventoryManagement/AddItem";
+import PaginationNav from '../components/layout/Pagination';
+import ItemList from "../components/items/ItemList";
+import AddItem from "../components/items/AddItem";
 
 // import css
-import style from "./ManageItemsPage.module.css";
+import style from "../styles/ManageItemsPage.module.css";
 
 export default function ManageItemsPage() {
 	const [categoryjson, setCategoryJson] = useState([]);

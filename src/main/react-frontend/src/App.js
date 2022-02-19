@@ -6,11 +6,11 @@ import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
 import ViewAllItemsPage from "./pages/ViewAllItemsPage";
 import AdminLayout from "./components/layout/AdminLayout";
-import AddItem from "./components/InventoryManagement/AddItem";
-import EditItem from "./components/InventoryManagement/EditItem";
-import ManageItemsPage from "./pages/admin/ManageItemsPage";
-import LoginUser from "./components/UserSide/LoginUser";
-import SignUpUser from "./components/UserSide/SignUpUser";
+import AddItem from "./components/items/AddItem";
+import EditItem from "./components/items/EditItem";
+import ManageItemsPage from "./pages/ManageItemsPage";
+import LoginUserPage from "./pages/LoginUserPage";
+import SignUpUserPage from "./pages/SignUpUserPage";
 import AddCategory from "./components/categories/AddCategory";
 import SelectCategory from "./components/categories/SelectCategory";
 
@@ -26,8 +26,8 @@ function App() {
         <Route path="/allItems" element={<ViewAllItemsPage />} />
       </Route>
 
-        <Route path="/login" element={<LoginUser />} />
-        <Route path="/signUp" element={<SignUpUser/>}/>
+        <Route path="/login" element={<LoginUserPage />} />
+        <Route path="/signUp" element={<SignUpUserPage/>}/>
 
       {/* Example Path Would Be e.g /admin/inventory */}
       <Route path="/admin" element={<AdminLayout />}>

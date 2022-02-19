@@ -7,10 +7,10 @@ import {
     BsFillPersonFill,
     BsFillCartFill,
 } from "react-icons/bs";
-import style from "./NavBar.module.css";
+import style from "../../styles/NavBar.module.css";
 import { Modal, Button } from "react-bootstrap";
-import LoginForm from "../UserSide/LoginForm"
-import SignUpUser from "../UserSide/SignUpUser"
+import LoginForm from "../users/LoginForm"
+import SignUpUserPage from "../../pages/SignUpUserPage"
 import { useState, useEffect} from "react";
 
 function NavBar() {

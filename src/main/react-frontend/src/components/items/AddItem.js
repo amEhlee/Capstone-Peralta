@@ -2,9 +2,9 @@ import React from "react";
 import {useRef, useState, useEffect} from "react";
 import {Form, FormGroup, InputGroup, Button, FormControl} from "react-bootstrap";
 import axios from "axios";
-import Style from "./ItemStyle.module.css"
+import Style from "../../styles/ItemStyle.module.css"
 
-import Item from "../items/Item";
+import Item from "./Item";
 import CategoryChecklist from "../categories/SelectCategory";
 import SelectCategory from "../categories/SelectCategory";
 

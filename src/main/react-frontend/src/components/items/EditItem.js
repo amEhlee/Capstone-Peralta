@@ -1,7 +1,7 @@
 import React from "react";
 import { useRef } from "react";
 import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
-import Style from "./ItemStyle.module.css";
+import Style from "../../styles/ItemStyle.module.css";
 import axios from "axios";
 
 export default function EditItem(props) {

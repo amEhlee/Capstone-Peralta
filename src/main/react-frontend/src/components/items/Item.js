@@ -1,5 +1,5 @@
 import React from "react";
-import style from './ItemCardLayout.module.css'
+import style from '../../styles/ItemCardLayout.module.css'
 
 export default function Item(props) {
     return (

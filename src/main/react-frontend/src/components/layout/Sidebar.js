@@ -1,4 +1,4 @@
-import style from './Sidebar.module.css';
+import style from '../../styles/Sidebar.module.css';
 import {SidebarData} from "./SidebarData";
 
 function Sidebar(){

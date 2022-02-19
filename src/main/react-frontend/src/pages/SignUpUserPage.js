@@ -1,10 +1,10 @@
 import React from "react";
 import {Form, FormGroup, Button} from "react-bootstrap";
 import  {Link}  from "react-router-dom";
-import userStyle from "./UserSide.module.css";
-import cartE from "../videos/cart.mp4";
+import userStyle from "../styles/UserSide.module.css";
+import cartE from "../assets/videos/cart.mp4";
 
-export default function  SignUpUser() {
+export default function  SignUpUserPage() {
     return (
         <div className="test">
             <video autoPlay loop muted
