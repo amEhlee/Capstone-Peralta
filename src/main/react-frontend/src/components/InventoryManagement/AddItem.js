@@ -16,9 +16,10 @@ export default function AddItem() {
     const itemVolumeRef = useRef();
     const itemQuantityRef = useRef();
     const itemAvailableRef = useRef();
+    const imageRef = useRef();
+    let formData = new FormData();
 
     const itemCategoryRef = useRef();
-
 
     function submitHandler(event) {
         event.preventDefault();
@@ -28,9 +29,8 @@ export default function AddItem() {
         const returnedVolume = itemVolumeRef.current.value;
         const returnedQuantity = itemQuantityRef.current.value;
         let returnedAvailable = itemAvailableRef.current.value;
-
-        const returnedCategories = itemCategoryRef.current.value;
-
+        const imageData = imageRef.current;
+        //const returnedCategories = itemCategoryRef.current.value;
   
         returnedAvailable === true ? (returnedAvailable = 1) : (returnedAvailable = 0);
 
@@ -47,6 +47,7 @@ export default function AddItem() {
 
         const UPLOAD_URL = "http://localhost:8080/upload/";
         formData.append('image', imageData.files[0]);
+
         const imagePost = async(itemId) => {
             try {
                 const res = await axios.post(UPLOAD_URL + itemId, formData);
@@ -88,7 +89,9 @@ export default function AddItem() {
 
             <Form.Group controlId="formFileMultiple" className="mb-3">
                 <Form.Label>Item Images</Form.Label>
-                <Form.Control type="file" multiple/>
+                <Form.Control type="file"
+                multiple
+                ref={imageRef}/>
             </Form.Group>
 
             <FormGroup className="mb-3" controlId="formItemDescription">
