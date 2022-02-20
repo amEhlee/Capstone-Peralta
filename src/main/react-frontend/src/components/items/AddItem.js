@@ -56,7 +56,7 @@ export default function AddItem() {
         const imagePost = async(itemId) => {
             try {
                 const res = await axios.post(UPLOAD_URL + itemId, formData);
-                console.log("image itemId: " + itemId);
+                console.log("response image add: " + res);
                 formData.delete('image');
                 window.location.reload(false);
             } catch (err) {
@@ -68,8 +68,7 @@ export default function AddItem() {
         const itemPost = async () => {
             try {
                 const res = await axios.post(POST_URL, item);
-                    console.log(res.data);
-                    console.log("Response itemId: " + res.data.itemId);
+                    console.log("response item add: " + res.data);
                     // setResItemId(res.data.itemId);
                     imagePost(res.data.itemId);
                     // console.log(resItemId);

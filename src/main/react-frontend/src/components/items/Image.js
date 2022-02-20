@@ -1,9 +1,9 @@
 export default function Image(props) {
     const DEFAULT_IMAGE="../../assets/images/default-image-620x600.jpg"
     const IMAGE_URL="../../assets/images/" + props.itemId + "_1.png"
-    console.log(IMAGE_URL);
+    console.log("IMAGE_url: " + IMAGE_URL);
 
-    const tryRequire = () => {
+    function tryRequire() {
         try {
             return require("../../assets/images/" + props.itemId + "_1.png");
         } catch (err) {

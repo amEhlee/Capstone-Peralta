@@ -7,7 +7,7 @@ import ItemList from "../components/items/ItemList";
 
 export default function HomePage() {
     const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
-    var [datajson, setDataJson] = useState([]); // used to store data
+    var [datajson, setDataJson] = useState([]); // used to store data TODO rename var
 
     // function that will be called when the page loads purpose is to handle and process the axios get request
     async function gatherData() {
@@ -22,7 +22,7 @@ export default function HomePage() {
     // runs the gatherdata function when the page loads
     useEffect(() => {
         gatherData().then((data) => {
-            console.log(data); // log returned data
+            console.log("response allItem get:" + data); // log returned data
 
             setDataJson(data || "no data returned"); // store returned data in a variable
         });

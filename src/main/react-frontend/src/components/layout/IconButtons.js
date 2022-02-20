@@ -5,7 +5,7 @@ import {Button} from "react-bootstrap";
 function IconButtons(props) {
     const history = useNavigate();
     {/* TODO CRUD methods will be added in future update */}
-    const clickHandler = () => {
+    function clickHandler() {
         history(props.redirectURL)
     }
     return (
