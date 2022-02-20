@@ -1,5 +1,8 @@
+// Import Dependencies
 import React from "react";
-import style from '../../styles/ItemCardLayout.module.css'
+
+// Import Styles
+import style from '../../assets/styles/ItemCardLayout.module.css'
 
 export default function Item(props) {
     return (

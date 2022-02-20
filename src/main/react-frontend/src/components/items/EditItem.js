@@ -1,8 +1,12 @@
-import React from "react";
-import { useRef } from "react";
-import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
-import Style from "../../styles/ItemStyle.module.css";
+// Import Dependencies
+import React, { useRef } from "react";
 import axios from "axios";
+
+// Import Components
+import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
+
+// Import Styles
+import Style from "../../assets/styles/ItemStyle.module.css";
 
 export default function EditItem(props) {
 	const itemNameRef = useRef();

@@ -1,5 +1,8 @@
-import style from '../../styles/Sidebar.module.css';
+// Import Components
 import {SidebarData} from "./SidebarData";
+
+// Import Styles
+import style from '../../assets/styles/Sidebar.module.css';
 
 function Sidebar(){
     return (

@@ -1,7 +1,9 @@
-import React from "react";
-import {Form, FormGroup, Button} from "react-bootstrap";
-import  {Link}  from "react-router-dom";
-import userStyle from "../styles/UserSide.module.css";
+// Import Dependencies
+import React, {Form, FormGroup, Button} from "react-bootstrap";
+import {Link} from "react-router-dom";
+
+// Import Styling
+import userStyle from "../assets/styles/UserSide.module.css";
 import cartE from "../assets/videos/cart.mp4";
 
 export default function  SignUpUserPage() {

@@ -1,5 +1,7 @@
+// Import Dependencies
 import React, {useState} from "react";
-import { Link } from "react-router-dom";
+
+// Import Components
 import { Modal, Button } from 'react-bootstrap';
 import EditForm from "./EditItem";
 import Image from './Image'

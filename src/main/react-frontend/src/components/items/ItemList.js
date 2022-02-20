@@ -1,4 +1,7 @@
+// Import Dependencies
 import React from 'react';
+
+// Import Components
 import Item from './Item';
 import ManageItems from './ManageItems';
 

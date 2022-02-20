@@ -1,6 +1,9 @@
-import style from '../../styles/CategoryNav.module.css';
+// Import Components
 import { useNavigate } from 'react-router';
 import {Button} from "react-bootstrap";
+
+// Import Styles
+import style from '../../assets/styles/CategoryNav.module.css';
 
 function CategoryNav() {
     const history = useNavigate();

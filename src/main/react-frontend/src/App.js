@@ -1,6 +1,7 @@
+
+// Import Components
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
-
 import HomePage from "./pages/HomePage";
 import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
@@ -14,12 +15,14 @@ import SignUpUserPage from "./pages/SignUpUserPage";
 import AddCategory from "./components/categories/AddCategory";
 import SelectCategory from "./components/categories/SelectCategory";
 
+// Import Styling
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+export default function App() {
   return (
     <Routes>
 
+      {/*TODO Change path to be under /home or smth*/}
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="/cart" element={<CartPage />} />
@@ -32,15 +35,14 @@ function App() {
       {/* Example Path Would Be e.g /admin/inventory */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminPage />} />
-        <Route path="addItem" element={<AddItem />} />
-        <Route path="editItem" element={<EditItem />} />
+
+        <Route path="addItem" element={<AddItem />} /> {/* TODO remove path?*/}
+        <Route path="editItem" element={<EditItem />} /> {/* TODO remove path?*/}
         <Route path="manageItems" element={<ManageItemsPage />}/>
-        <Route path="addCategory" element={<AddCategory />} />
+        <Route path="addCategory" element={<AddCategory />} /> 
         <Route path="selectCategory" element={<SelectCategory />} />
     
       </Route>
     </Routes>
   );
 }
-
-export default App;

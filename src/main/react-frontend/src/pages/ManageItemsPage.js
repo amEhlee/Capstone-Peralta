@@ -1,16 +1,16 @@
-// import dependencies
+// Import Dependencies
 import React, { useState, useEffect } from "react";
-import { Table, Modal, Button } from "react-bootstrap";
-import { BsSearch } from "react-icons/bs";
 import axios from "axios";
 
-// import components
+// Import Components
+import { Table, Modal, Button } from "react-bootstrap";
+import { BsSearch } from "react-icons/bs";
 import PaginationNav from '../components/layout/Pagination';
 import ItemList from "../components/items/ItemList";
 import AddItem from "../components/items/AddItem";
 
-// import css
-import style from "../styles/ManageItemsPage.module.css";
+// Import Styling
+import style from "../assets/styles/ManageItemsPage.module.css";
 
 export default function ManageItemsPage() {
 	const [categoryjson, setCategoryJson] = useState([]);
@@ -72,8 +72,8 @@ export default function ManageItemsPage() {
 							onChange={(event) => {
 								setSearchName(event.target.value);
 							}}
-						></input>
-						<BsSearch></BsSearch>
+						/>
+						<BsSearch/>
 					</div>
 
                     <Button className={style.addBtn} bsPrefix="addBtn" variant="primary" onClick={handleShow}>

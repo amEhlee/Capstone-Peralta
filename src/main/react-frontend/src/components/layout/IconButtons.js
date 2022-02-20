@@ -1,9 +1,10 @@
+// Import Components
 import { useNavigate } from 'react-router';
 import {Button} from "react-bootstrap";
 
 function IconButtons(props) {
     const history = useNavigate();
-    {/* CRUD methods will be added in future update */}
+    {/* TODO CRUD methods will be added in future update */}
     const clickHandler = () => {
         history(props.redirectURL)
     }

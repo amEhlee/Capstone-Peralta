@@ -1,7 +1,9 @@
-import React from "react";
-import { useRef, useState, useEffect } from "react";
-import Select from "react-select";
+// Import Dependencies
+import React, { useRef, useState, useEffect } from "react";
+
+// Import Components TODO revise imports and commented code
 import { Form, FormGroup, InputGroup, Button, FormControl } from "react-bootstrap";
+import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import Creatable, {useCreatable} from "react-select/creatable";
 import CreatableSelect from 'react-select/creatable';

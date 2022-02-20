@@ -1,9 +1,14 @@
+// Import Dependencies
 import React from "react";
+
+// Import Components
 import {Form, FormGroup, Button} from "react-bootstrap";
 import  {Link}  from "react-router-dom";
-import userStyle from "../styles/UserSide.module.css";
-import shopBag from "../assets/videos/shoppingBag.mp4";
 import LoginForm from "../components/users/LoginForm";
+
+// Import Styling
+import userStyle from "../assets/styles/UserSide.module.css";
+import shopBag from "../assets/videos/shoppingBag.mp4";
 
 export default function  LoginUserPage() {
     return (

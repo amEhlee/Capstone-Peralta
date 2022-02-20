@@ -1,12 +1,17 @@
-import React from "react";
-import {useRef, useState, useEffect} from "react";
-import {Form, FormGroup, InputGroup, Button, FormControl} from "react-bootstrap";
+// Import Dependencies
+import React, {useRef, useState, useEffect} from "react";
 import axios from "axios";
-import Style from "../../styles/ItemStyle.module.css"
 
+// Import Components
+import {Form, FormGroup, InputGroup, Button, FormControl} from "react-bootstrap";
 import Item from "./Item";
 import CategoryChecklist from "../categories/SelectCategory";
 import SelectCategory from "../categories/SelectCategory";
+
+// Import Styles
+import Style from "../../assets/styles/ItemStyle.module.css"
+
+
 
 export default function AddItem() {
 
