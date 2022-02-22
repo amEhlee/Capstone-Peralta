@@ -1,8 +1,12 @@
-import React from "react";
-import { useRef } from "react";
-import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
-import Style from "./ItemStyle.module.css";
+// Import Dependencies
+import React, { useRef } from "react";
 import axios from "axios";
+
+// Import Components
+import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
+
+// Import Styles
+import Style from "../../assets/styles/ItemStyle.module.css";
 
 export default function EditItem(props) {
 	const itemNameRef = useRef();
@@ -41,12 +45,13 @@ export default function EditItem(props) {
 		};
 
 
+		// TODO possible modifications as this is for edit item NOT SURE THO :L
 		const UPLOAD_URL = "http://localhost:8080/upload/";
         formData.append('image', imageData.files[0]);
         const imagePost = async(itemId) => {
             try {
-                const res = await axios.post(UPLOAD_URL + itemId, formData);
-                console.log("image itemId: " + itemId);
+                const res = await axios.post(UPLOAD_URL + itemId, formData); // TODO should be a put request 
+                console.log("response image post: " + res);
                 formData.delete('image');
                 window.location.reload(false);
             } catch (err) {
@@ -58,8 +63,7 @@ export default function EditItem(props) {
         const itemPost = async () => {
             try {
                 const res = await axios.put(PUT_URL, item);
-                    console.log(res.data);
-                    console.log("Response itemId: " + res.data.itemId);
+                    console.log("response item put: " + res.data);
                     // setResItemId(res.data.itemId);
                     imagePost(res.data.itemId);
                     // console.log(resItemId);

@@ -1,8 +1,9 @@
-import React from "react";
-import {useRef, useState, useEffect} from "react";
-import {Form, FormGroup, InputGroup, Button, FormControl} from "react-bootstrap";
+// Import Dependencies
+import React, {useRef, useState, useEffect} from "react";
 import axios from "axios";
 
+// Import Components
+import {Form, FormGroup, InputGroup, Button, FormControl} from "react-bootstrap";
 
 export default function CategoryChecklist(){
 

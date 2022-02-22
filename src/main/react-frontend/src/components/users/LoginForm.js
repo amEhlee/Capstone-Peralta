@@ -1,8 +1,14 @@
+// Import Dependencies
 import React from "react";
+
+// Import Components
 import {Form, FormGroup, Button} from "react-bootstrap";
-import userStyle from "./UserSide.module.css";
 import {Link} from "react-router-dom";
 
+// Import Styles
+import userStyle from "../../assets/styles/UserSide.module.css";
+
+// TODO: revise neccessity
 export default function LoginForm() {
     return(
         <Form>

@@ -1,4 +1,5 @@
-function LoginPage(){
+// TODO: Neccessity?
+export default function LoginPage(){
     return(
         <div>
             <h1>Successful Login</h1> 
@@ -6,4 +7,3 @@ function LoginPage(){
     );
 }
 
-export default LoginPage;

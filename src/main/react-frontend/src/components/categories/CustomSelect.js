@@ -1,7 +1,10 @@
+// Import Dependencies
 import React from 'react';
+
+// Import Components
 import Select from 'react-select';
 
-
+// TODO: expect export defualt?
 function CustomSelect({style,label,options,onChange,defaultValue,isMulti}) {
     return (
         <Form.Group>

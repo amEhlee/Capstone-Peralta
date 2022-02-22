@@ -1,9 +1,11 @@
-import React from "react";
-import { useState, useEffect } from "react";
+// Import Dependencies
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+
+// Import Components
 import ItemList from "../components/items/ItemList";
 
-function ViewAllItemsPage() {
+export default function ViewAllItemsPage() {
   const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
   var [datajson, setDataJson] = useState([]); // used to store data
 
@@ -20,7 +22,7 @@ function ViewAllItemsPage() {
   // runs the gatherdata function when the page loads
   useEffect(() => {
     gatherData().then((data) => {
-      console.log(data); // log returned data
+      console.log("response allItem get: " + data); // log returned data
 
       setDataJson(data || "no data returned"); // store returned data in a variable
     });
@@ -39,4 +41,3 @@ function ViewAllItemsPage() {
     );
   }
 }
-export default ViewAllItemsPage;

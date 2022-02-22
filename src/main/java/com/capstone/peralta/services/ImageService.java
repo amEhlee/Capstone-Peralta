@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 @Service
 public class ImageService {
 
-    private final Path root = Paths.get("src/main/react-frontend/src/images");
+    private final Path root = Paths.get("src/main/react-frontend/src/assets/images");
 
     public void init() {
         try {
@@ -28,7 +28,7 @@ public class ImageService {
     public void save(MultipartFile image, int itemId) {
 
         try {
-            Path path = Paths.get("src/main/react-frontend/src/images");
+            Path path = Paths.get("src/main/react-frontend/src/assets/images");
             Files.copy(image.getInputStream(), path.resolve(itemId + "_" +
                     (loadItemPhotos(itemId) + 1) +
                     image.getOriginalFilename().substring(image.getOriginalFilename().indexOf("."))));
@@ -39,7 +39,7 @@ public class ImageService {
 
     public Resource load(String filename) {
         Path image = root.resolve(filename);
-        Resource resource = null;
+        Resource resource;
         try {
             resource = new UrlResource(image.toUri());
             if (resource.exists() || resource.isReadable()) {

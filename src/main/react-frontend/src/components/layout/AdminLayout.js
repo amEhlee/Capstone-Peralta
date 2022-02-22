@@ -1,8 +1,11 @@
-import style from './Layout.module.css';
-import NavBar from './NavBar';
+// Import Components
 import { Outlet } from "react-router-dom";
+import NavBar from './NavBar';
 import Sidebar from "./Sidebar";
 import AdminBar from "./AdminBar";
+
+// Import Styles
+import style from '../../assets/styles/Layout.module.css';
 
 function AdminLayout() {
     return (

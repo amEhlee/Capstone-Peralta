@@ -1,11 +1,16 @@
+// Import Dependencies
 import React from "react";
+
+// Import Components
 import {Form, FormGroup, Button} from "react-bootstrap";
 import  {Link}  from "react-router-dom";
-import userStyle from "./UserSide.module.css";
-import shopBag from "../videos/shoppingBag.mp4";
-import LoginForm from "./LoginForm";
+import LoginForm from "../components/users/LoginForm";
 
-export default function  LoginUser() {
+// Import Styling
+import userStyle from "../assets/styles/UserSide.module.css";
+import shopBag from "../assets/videos/shoppingBag.mp4";
+
+export default function  LoginUserPage() {
     return (
     <div className="test">
         <video autoPlay loop muted
@@ -24,7 +29,7 @@ export default function  LoginUser() {
         </video>
 
         <div className={userStyle.centrize}>
-            <LoginForm/>
+            <LoginForm/>{/* TODO POSSIBLE MOVE THE ENTIRE FORM HERE removes need for extra component*/}
         </div>
 
 
