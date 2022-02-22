@@ -6,14 +6,50 @@ import axios from "axios";
 import {Form, FormGroup, InputGroup, Button, FormControl} from "react-bootstrap";
 import Item from "./Item";
 import CategoryChecklist from "../categories/SelectCategory";
-import SelectCategory from "../categories/SelectCategory";
+//import SelectCategory from "../categories/SelectCategory";
 
 // Import Styles
 import Style from "../../assets/styles/ItemStyle.module.css"
+import CreatableSelect from "react-select/creatable";
 
 
 
 export default function AddItem() {
+
+    var [categoryjson, setcategoryjson] = useState([]);
+    const FETCH_URL = "http://localhost:8080/category/all";
+    var CategoryList = [...categoryjson.map((i) => (
+        {value: i.category_id, label: i.categoryName}))];
+
+    function getCategories() {
+        return axios
+            .get(FETCH_URL) // preform get request
+            .then((res) => {
+                return res.data; // return response
+            })
+            .catch((err) => console.error(err));
+    }
+
+    function PopulateList(){
+        var CategoryList = [...categoryjson.map((i) => (
+            {value: i.category_id, label: i.categoryName}))];
+
+    }
+
+    useEffect(() => {PopulateList()}, []);
+
+    useEffect(() => {
+        getCategories().then((data) => {
+            console.log("categories" + data); // log returned data
+
+            setcategoryjson(data || "no data returned"); // store returned data in a variable
+
+            CategoryList = [...categoryjson.map((i) => (
+                {value: i.category_id, label: i.categoryName}))];
+
+
+        });
+    }, []);
 
     const itemNameRef = useRef();
     const itemPriceRef = useRef();
@@ -33,7 +69,7 @@ export default function AddItem() {
         const returnedWeight = itemWeightRef.current.value;
         const returnedVolume = itemVolumeRef.current.value;
         const returnedQuantity = itemQuantityRef.current.value;
-        let returnedAvailable = itemAvailableRef.current.value;
+        let returnedAvailable = itemAvailableRef.current.checked;
         const imageData = imageRef.current;
         //const returnedCategories = itemCategoryRef.current.value;
   
@@ -109,10 +145,18 @@ export default function AddItem() {
 
             <FormGroup className="mb-3" controlId="formItemCategory">
 
-                <Form.Label>Item Category</Form.Label>
-                
-                <SelectCategory ref={itemCategoryRef}/>
-        
+                <CreatableSelect
+                    options={CategoryList}
+
+                    placeholder="Select Categories"
+                    isSearchable
+                    isClearable
+
+                    onChange={PopulateList}
+
+                    ref={itemCategoryRef}
+                />
+
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="formItemAvailable">
