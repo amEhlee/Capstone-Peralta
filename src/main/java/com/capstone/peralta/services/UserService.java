@@ -34,6 +34,7 @@ public class UserService implements UserDetailsService {
     private final RoleRepo roleRepo;
 
     private final PasswordEncoder passwordEncoder;
+
     public User addUser(User user) {
         log.info("Saving new User into Database");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -71,7 +72,7 @@ public class UserService implements UserDetailsService {
         return userRepo.findAll();
     }
 
-    public List<User> addMultiple(List<User> userList) { return userRepo.saveAll(userList); } //TODO: Make this return sets of pages instead of ALL items
+    public List<User> addMultiple(List<User> userList) { return userRepo.saveAll(userList); }
 
     public UserDetails loadUserByUsername(String userEmail) throws EmailNotFoundException {
         log.info(userEmail);
@@ -83,6 +84,8 @@ public class UserService implements UserDetailsService {
         else {
             log.info("User Loaded!");
         }
+
+
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         userDbResult.getRoles().forEach(role -> { //grabs all role fields for user
             authorities.add(new SimpleGrantedAuthority(role.getRoleName())); //adds them to authorities list

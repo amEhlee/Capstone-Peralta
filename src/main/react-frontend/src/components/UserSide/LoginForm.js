@@ -14,14 +14,12 @@ export default function LoginForm() {
         const returnedEmail = emailRef.current.value;
         const returnedPassword = passwordRef.current.value;
 
-        const user = {
-            email: returnedEmail,
-            password: returnedPassword
-        };
+        const user = new URLSearchParams()
+        user.append('email', returnedEmail);
+        user.append('password', returnedPassword);
 
-        const POST_URL = "http://localhost:8080/user/authenticate"; // fetch url
-        axios.post(POST_URL, user,{headers:{'content-type': 'text/json'}}).then((res) => {
-
+        const POST_URL = "http://localhost:8080/user/login"; // fetch url
+        axios.post(POST_URL, user, {header:{"content-type": "application/x-www-form-urlencoded", "Access-Control-Allow-Origin": "http://localhost:3000"}}).then((res) => {
             console.log(res);
         });
     }
