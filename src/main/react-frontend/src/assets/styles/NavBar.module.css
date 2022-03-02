@@ -1,24 +1,8 @@
-.header {
-    width: 100%;
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #e2e2e2;
-    padding: 0 10%;
-}
-
-.logo {
-    font-size: 2rem;
-    color: black;
-    font-weight: bold;
-}
-
 .searchwrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #999897;
+    background-color: #e2e2e2;
     padding: 0.5rem;
     border-radius: 0.5rem;
     color: #000000;
@@ -31,6 +15,6 @@
     width: 100%;
     border: none;
     outline: none;
-    background: #999897;
+    background-color: #e2e2e2;
     color: black;
 }
