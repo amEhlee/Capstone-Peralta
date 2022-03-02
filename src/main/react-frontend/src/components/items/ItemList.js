@@ -5,11 +5,14 @@ import React from 'react';
 import Item from './Item';
 import ManageItems from './ManageItems';
 
+// Import Styles
+import style from '../../assets/styles/ItemCardLayout.module.css'
+
 export default function ItemList(props) {
 
   function regularList() {
     return (
-      <ul>
+      <ul className={style.unorderedList}>
         {props.items.map((i) => (
           <Item
             key={i.itemId}
