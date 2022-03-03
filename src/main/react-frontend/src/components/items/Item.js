@@ -7,6 +7,7 @@ import {Card, Button} from "react-bootstrap";
 // Import Styles
 import style from '../../assets/styles/ItemCardLayout.module.css'
 
+// Future update: add item id for dynamic navigation
 export default function Item(props) {
     return (
         <div className={style.card}>
