@@ -1,6 +1,9 @@
 // Import Dependencies
 import React from "react";
 
+// Import Components
+import {Card, Button} from "react-bootstrap";
+
 // Import Styles
 import style from '../../assets/styles/ItemCardLayout.module.css'
 
@@ -8,11 +11,17 @@ export default function Item(props) {
     return (
         <div className={style.card}>
             <li>
-                <h3>{props.name}</h3>
-                <p>Item ID:{props.id}</p>
-                <p>Price ${props.price}</p>
-                <p>Quantity: {props.quantity}</p>
-                <button>Add To Cart</button>
+                <Card style={{width: '18rem'}}>
+                    {/* Temporary Image Placeholder: Add dynamic image import from DB in future update*/}
+                    <Card.Img variant="top" src="https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png" />
+                    <Card.Body>
+                        <Card.Title>{props.name}</Card.Title>
+                        <Card.Text>
+                            Price ${props.price}
+                        </Card.Text>
+                        <Button variant="outline-secondary">Add To Cart</Button>
+                    </Card.Body>
+                </Card>
             </li>
         </div>
     );
