@@ -37,11 +37,11 @@ export default function ItemList(props) {
           }
         }
         ).map((i) => (
-          
           <ManageItems
             key={i.itemId}
             id={i.itemId}
             name={i.itemName}
+            category={i.category}
             price={i.itemPrice}
             weight={i.itemWeight}
             volume={i.itemVolume}
