@@ -3,3 +3,9 @@
     width: 90%;
     max-width: 40rem;
 }
+
+.homepage {
+    position: absolute;
+    left: 50px;
+    top: 110px;
+}
