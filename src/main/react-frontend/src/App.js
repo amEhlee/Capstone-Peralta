@@ -15,9 +15,11 @@ import SignUpUserPage from "./pages/SignUpUserPage";
 import AddCategory from "./components/categories/AddCategory";
 import SelectCategory from "./components/categories/SelectCategory";
 import ManageUsersPage from "./pages/ManageUsersPage";
+import ProductPage from "./pages/ProductPage";
 
 // Import Styling
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export default function App() {
   return (
@@ -27,12 +29,17 @@ export default function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/allItems" element={<ViewAllItemsPage />} />
+        <Route path="/items" element={<ViewAllItemsPage />} />
+          <Route path="/item/:itemid" element={<ProductPage />} />
+
       </Route>
 
         <Route path="/login" element={<LoginUserPage />} />
         <Route path="/signUp" element={<SignUpUserPage/>}/>
 
+        <Route path="/item" element={}>
+
+        </Route>
       {/* Example Path Would Be e.g /admin/inventory */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminPage />} />

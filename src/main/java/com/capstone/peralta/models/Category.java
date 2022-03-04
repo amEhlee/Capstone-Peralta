@@ -16,9 +16,8 @@ public class Category {
     private Boolean active;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "categoryList")
+    @OneToMany(mappedBy = "category")
     private List<Item> categoryItems;
-
 
 
     public Integer getCategoryId() {

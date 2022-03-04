@@ -3,14 +3,14 @@ import React, {useRef, useState, useEffect} from "react";
 import axios from "axios";
 
 // Import Components
-import {Form, FormGroup, InputGroup, Button, FormControl} from "react-bootstrap";
+import {Form, FormGroup, InputGroup, Button, FormControl, Col, Row} from "react-bootstrap";
 import Item from "./Item";
 import CategoryChecklist from "../categories/SelectCategory";
 //import SelectCategory from "../categories/SelectCategory";
 
 // Import Styles
 import Style from "../../assets/styles/ItemStyle.module.css"
-import CreatableSelect from "react-select/creatable";
+import Select from 'react-select'
 
 
 
@@ -19,36 +19,20 @@ export default function AddItem() {
     var [categoryjson, setcategoryjson] = useState([]);
     const FETCH_URL = "http://localhost:8080/category/all";
     var CategoryList = [...categoryjson.map((i) => (
-        {value: i.category_id, label: i.categoryName}))];
+        {value: i.categoryId, label: i.categoryName}))];
 
     function getCategories() {
         return axios
             .get(FETCH_URL) // preform get request
             .then((res) => {
-                return res.data; // return response
+                setcategoryjson(res.data || "no data returned");
+                console.log(res.data); // return response
             })
             .catch((err) => console.error(err));
     }
 
-    function PopulateList(){
-        var CategoryList = [...categoryjson.map((i) => (
-            {value: i.category_id, label: i.categoryName}))];
-
-    }
-
-    useEffect(() => {PopulateList()}, []);
-
     useEffect(() => {
-        getCategories().then((data) => {
-            console.log("categories" + data); // log returned data
-
-            setcategoryjson(data || "no data returned"); // store returned data in a variable
-
-            CategoryList = [...categoryjson.map((i) => (
-                {value: i.category_id, label: i.categoryName}))];
-
-
-        });
+        getCategories();
     }, []);
 
     const itemNameRef = useRef();
@@ -57,10 +41,32 @@ export default function AddItem() {
     const itemVolumeRef = useRef();
     const itemQuantityRef = useRef();
     const itemAvailableRef = useRef();
+    const itemDescriptionRef = useRef();
     const imageRef = useRef();
+    const addCategoryRef = useRef();
     let formData = new FormData();
 
     const itemCategoryRef = useRef();
+
+    function submitCategory() {
+        const returnedCategory = addCategoryRef.current.value;
+
+        const category = {
+            categoryName: returnedCategory 
+        }
+
+        const CATEGORY_URL = "http://localhost:8080/category/add"
+        const categoryPost = async() => {
+            try {
+                await axios.post(CATEGORY_URL, category)
+                getCategories();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        categoryPost();
+    }
 
     function submitHandler(event) {
         event.preventDefault();
@@ -69,9 +75,10 @@ export default function AddItem() {
         const returnedWeight = itemWeightRef.current.value;
         const returnedVolume = itemVolumeRef.current.value;
         const returnedQuantity = itemQuantityRef.current.value;
+        const returnedDescription = itemDescriptionRef.current.value;
         let returnedAvailable = itemAvailableRef.current.checked;
         const imageData = imageRef.current;
-        //const returnedCategories = itemCategoryRef.current.value;
+        const returnedCategoriesValue = itemCategoryRef.current.props.value.value;
   
         returnedAvailable === true ? (returnedAvailable = 1) : (returnedAvailable = 0);
 
@@ -80,6 +87,7 @@ export default function AddItem() {
             category_id: null,
             itemAvailable: returnedAvailable,
             itemName: returnedName,
+            itemDescription: returnedDescription,
             itemPrice: returnedPrice,
             itemQuantity: returnedQuantity,
             itemVolume: returnedVolume,
@@ -100,14 +108,16 @@ export default function AddItem() {
             }
         }
 
-        const POST_URL = "http://localhost:8080/item/add"; // fetch url
+        const POST_URL = "http://localhost:8080/item/add/" + returnedCategoriesValue; // fetch url
         const itemPost = async () => {
             try {
                 const res = await axios.post(POST_URL, item);
-                    console.log("response item add: " + res.data);
+                    // console.log("response item add: " + res.data);
                     // setResItemId(res.data.itemId);
-                    imagePost(res.data.itemId);
-                    // console.log(resItemId);
+                    if (imageData.files[0]){
+                        imagePost(res.data.itemId);
+                    }
+                    console.log(returnedCategoriesValue);
             } catch (err) {
                 console.error(err);
             }
@@ -140,19 +150,36 @@ export default function AddItem() {
                     as="textarea"
                     rows="3"
                     placeholder="Enter Item Description"
+                    ref={itemDescriptionRef}
                 />
             </FormGroup>
 
+            
+            <FormGroup className="mb-3" controlId="formAddCategory">
+                <Form.Label>Add Category</Form.Label>
+                <Row>
+                    <Col>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter Category Name"
+                            ref={addCategoryRef}
+                        />
+                    </Col>
+                    <Col lg={4}>
+                        <Button variant="primary" onClick={submitCategory}>Add Category</Button>
+                    </Col>
+                </Row>
+            </FormGroup>
+
             <FormGroup className="mb-3" controlId="formItemCategory">
+                <Form.Label>Category</Form.Label>
+                <Select
+                    options={categoryjson.map((i) => (
+        {value: i.categoryId, label: i.categoryName}))}
 
-                <CreatableSelect
-                    options={CategoryList}
-
-                    placeholder="Select Categories"
+                    placeholder="Select Category"
                     isSearchable
                     isClearable
-
-                    onChange={PopulateList}
 
                     ref={itemCategoryRef}
                 />
