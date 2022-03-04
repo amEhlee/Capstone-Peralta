@@ -9,9 +9,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.http.HttpMethod.GET;
 
@@ -30,16 +33,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
         authenticationFilter.setFilterProcessesUrl("/user/login");
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        //TODO:Fix Authentication and normalize URL's
+
+
+        http.csrf().disable().authorizeRequests()
+                .and().sessionManagement().sessionCreationPolicy(STATELESS)
+                //TODO:Fix Authentication and normalize URL's
+                .and().authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .and().authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                .and().authorizeRequests().anyRequest().authenticated().and()
+                .httpBasic();
+        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         //This block of code activates the filters and if active will not let you do anything atm....
-/*      http.authorizeRequests().antMatchers("/login/*").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/**").hasAnyAuthority("USER");
-        http.authorizeRequests().antMatchers(GET, "/admin/**").hasAnyAuthority("ADMIN");
-        http.authorizeRequests().anyRequest().authenticated();*/
-        http.authorizeRequests().anyRequest().permitAll();
-        http.addFilter(authenticationFilter);
+/*        http.authorizeRequests().antMatchers("/**").permitAll();
+        http.authorizeRequests().anyRequest().permitAll();*/
+
     }
 
     @Bean

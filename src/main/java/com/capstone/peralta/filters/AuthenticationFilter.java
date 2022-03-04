@@ -64,8 +64,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .withIssuer(request.getRequestURI().toString()) //Displays Issuer as the Request Url
                 .sign(algorithm); //Uses previously created hasing algorithm
 
-        //This block of code attaches tokens to header body of POST Request
-/*        response.setHeader("access_token", access_token);
+        //This block of code attaches tokens to header body of POST Request NOTE: Is deprecated now, should remove on full release. I only kept it for testing - Don
+/*      response.setHeader("access_token", access_token);
         response.setHeader("refresh_token", refresh_token);*/
 
         //This block of code below maps the tokens to a hash map and encrypts them for more protection
@@ -80,7 +80,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
 
 
-    //Might use for brute force prevention with timeouts but TBD for now
+    //TODO:Might use for brute force prevention with timeouts but TBD for now
 /*    @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         super.unsuccessfulAuthentication(request, response, failed);

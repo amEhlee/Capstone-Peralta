@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import javax.xml.bind.SchemaOutputResolver;
 import java.net.URI;
 import java.util.List;
@@ -20,10 +21,16 @@ import java.util.List;
 @RequestMapping("/user")
 @CrossOrigin(origins = "3000")
 @RequiredArgsConstructor
+@RolesAllowed("USER")
 public class UserController {
 
     @Autowired
     private final UserService userService;
+
+
+    public void filter() {
+
+    }
 
     //Returns all Users
     @GetMapping("/users")
@@ -61,10 +68,10 @@ public class UserController {
     }
 
     //Grabs user details by email, mostly useless for now
-    @PostMapping("/authenticate")
+/*    @PostMapping("/authenticate")
     UserDetails getUserDetails(@RequestBody String userEmail) {
         return userService.loadUserByUsername(userEmail);
-    }
+    } */
 
     @GetMapping("/all")
     List<User> getAll() {
