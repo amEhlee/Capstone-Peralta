@@ -14,6 +14,7 @@ import LoginUserPage from "./pages/LoginUserPage";
 import SignUpUserPage from "./pages/SignUpUserPage";
 import AddCategory from "./components/categories/AddCategory";
 import SelectCategory from "./components/categories/SelectCategory";
+import ManageUsersPage from "./pages/ManageUsersPage";
 
 // Import Styling
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -35,13 +36,12 @@ export default function App() {
       {/* Example Path Would Be e.g /admin/inventory */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminPage />} />
-
         <Route path="addItem" element={<AddItem />} /> {/* TODO remove path?*/}
         <Route path="editItem" element={<EditItem />} /> {/* TODO remove path?*/}
         <Route path="manageItems" element={<ManageItemsPage />}/>
         <Route path="addCategory" element={<AddCategory />} /> 
         <Route path="selectCategory" element={<SelectCategory />} />
-    
+        <Route path="manageUsers" element={<ManageUsersPage />}/>
       </Route>
     </Routes>
   );
