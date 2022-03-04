@@ -1,6 +1,5 @@
-
 // Import Components
-import { Route, Routes } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import HomePage from "./pages/HomePage";
 import AdminPage from "./pages/AdminPage";
@@ -22,34 +21,31 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export default function App() {
-  return (
-    <Routes>
+    return (
+        <Routes>
 
-      {/*TODO Change path to be under /home or smth*/}
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/items" element={<ViewAllItemsPage />} />
-          <Route path="/item/:itemid" element={<ProductPage />} />
+            {/*TODO Change path to be under /home or smth*/}
+            <Route path="/" element={<Layout/>}>
+                <Route index element={<HomePage/>}/>
+                <Route path="/cart" element={<CartPage/>}/>
+                <Route path="/items" element={<ViewAllItemsPage/>}/>
+                <Route path="/item/:itemid" element={<ProductPage/>}/>
 
-      </Route>
+            </Route>
 
-        <Route path="/login" element={<LoginUserPage />} />
-        <Route path="/signUp" element={<SignUpUserPage/>}/>
+            <Route path="/login" element={<LoginUserPage/>}/>
+            <Route path="/signUp" element={<SignUpUserPage/>}/>
 
-        <Route path="/item" element={}>
-
-        </Route>
-      {/* Example Path Would Be e.g /admin/inventory */}
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminPage />} />
-        <Route path="addItem" element={<AddItem />} /> {/* TODO remove path?*/}
-        <Route path="editItem" element={<EditItem />} /> {/* TODO remove path?*/}
-        <Route path="manageItems" element={<ManageItemsPage />}/>
-        <Route path="addCategory" element={<AddCategory />} /> 
-        <Route path="selectCategory" element={<SelectCategory />} />
-        <Route path="manageUsers" element={<ManageUsersPage />}/>
-      </Route>
-    </Routes>
-  );
+            {/* Example Path Would Be e.g /admin/inventory */}
+            <Route path="/admin" element={<AdminLayout/>}>
+                <Route index element={<AdminPage/>}/>
+                <Route path="addItem" element={<AddItem/>}/> {/* TODO remove path?*/}
+                <Route path="editItem" element={<EditItem/>}/> {/* TODO remove path?*/}
+                <Route path="manageItems" element={<ManageItemsPage/>}/>
+                <Route path="addCategory" element={<AddCategory/>}/>
+                <Route path="selectCategory" element={<SelectCategory/>}/>
+                <Route path="manageUsers" element={<ManageUsersPage/>}/>
+            </Route>
+        </Routes>
+    );
 }

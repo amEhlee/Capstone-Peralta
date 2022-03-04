@@ -3,14 +3,16 @@ import React from "react";
 
 // Import Components
 import {Card, Button} from "react-bootstrap";
+import {useNavigate} from "react-router";
 
 // Import Styles
 import style from '../../assets/styles/ItemCardLayout.module.css'
 
 // Future update: add item id for dynamic navigation
 export default function Item(props) {
+    const history = useNavigate();
     return (
-        <div className={style.card} >
+        <div className={style.card} onClick={() => { history('/item/' + props.id)}}>
             <li>
                 <Card style={{width: '18rem'}}>
                     {/* Temporary Image Placeholder: Add dynamic image import from DB in future update*/}
