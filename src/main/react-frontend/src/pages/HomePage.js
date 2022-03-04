@@ -5,6 +5,9 @@ import axios from "axios";
 // Import Components
 import ItemList from "../components/items/ItemList";
 
+// Import Styling
+import style from "../assets/styles/Layout.module.css";
+
 export default function HomePage() {
     const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
     var [datajson, setDataJson] = useState([]); // used to store data TODO rename var
@@ -34,7 +37,7 @@ export default function HomePage() {
         return <section><p>{datajson}</p></section>;
     } else {
         return (
-            <div>
+            <div className={style.homepage}>
                 <h1>Homepage</h1>
                 <ItemList items={datajson} target="regularList" />
             </div>
