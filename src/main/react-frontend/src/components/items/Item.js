@@ -9,7 +9,7 @@ import style from '../../assets/styles/ItemCardLayout.module.css'
 
 export default function Item(props) {
     return (
-        <div className={style.card}>
+        <div className={style.card} >
             <li>
                 <Card style={{width: '18rem'}}>
                     {/* Temporary Image Placeholder: Add dynamic image import from DB in future update*/}
