@@ -10,6 +10,10 @@ export default function ManageItems(props) {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
+    let category = null;
+    if (props.category != null) {
+        category = props.category.categoryName;
+    }
 
   return (
       <>
@@ -21,6 +25,7 @@ export default function ManageItems(props) {
             />
           </td>
           <td>{props.name}</td>
+          <td>{category}</td>
           <td>${props.price}</td>
           <td>{props.weight}kg</td>
           <td>{props.quantity}</td>

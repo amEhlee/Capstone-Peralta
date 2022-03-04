@@ -1,6 +1,8 @@
 package com.capstone.peralta.services;
 
+import com.capstone.peralta.models.Category;
 import com.capstone.peralta.models.Item;
+import com.capstone.peralta.repos.CategoryRepo;
 import com.capstone.peralta.repos.ItemRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,19 +15,27 @@ public class ItemService {
     @Autowired
     private final ItemRepo itemRepo;
 
-    public ItemService(ItemRepo itemRepo) {
+    @Autowired
+    private final CategoryRepo categoryRepo;
+
+    public ItemService(ItemRepo itemRepo, CategoryRepo categoryRepo) {
+        this.categoryRepo = categoryRepo;
         this.itemRepo = itemRepo;
     }
 
     public Item getItemById(int id) {
-        return itemRepo.getById(id);
+        return itemRepo.findById(id).get();
     }
 
     public List<Item> getAll() {
         return itemRepo.findAll();
     }
 
-    public Item addItem(Item item) {
+    public Item addItem(Item item, int categoryId) {
+        Category category = categoryRepo.findById(categoryId).orElse(null);
+        if (category != null) {
+            item.setCategory(category);
+        }
         return itemRepo.save(item);
     }
 

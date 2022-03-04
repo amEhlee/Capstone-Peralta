@@ -15,6 +15,7 @@ public class Item {
     @Column(name = "item_Id", nullable = false)
     private Integer itemId;
     private String itemName;
+    private String itemDescription;
     private Double itemPrice;
     private Double itemWeight;
     private Double itemVolume;
@@ -29,15 +30,21 @@ public class Item {
     @ManyToMany(mappedBy = "cartItems")
     private List<Cart> carts;
 
-    @ManyToMany
-    @JoinTable(
-            name = "category_item",
-            joinColumns = @JoinColumn(name = "item_Id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> categoryList;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="category_id", referencedColumnName = "category_id")
+    private Category category;
 
     public Item() {
+    }
+
+    public Item(String itemName, String itemDescription, Double itemPrice, Double itemWeight, Double itemVolume, Integer itemQuantity, Boolean itemAvailable) {
+        this.itemName = itemName;
+        this.itemDescription = itemDescription;
+        this.itemPrice = itemPrice;
+        this.itemWeight = itemWeight;
+        this.itemVolume = itemVolume;
+        this.itemQuantity = itemQuantity;
+        this.itemAvailable = itemAvailable;
     }
 
     public Item(String itemName, Double itemPrice, Double itemWeight, Double itemVolume, Integer itemQuantity, Boolean itemAvailable) {
@@ -47,7 +54,6 @@ public class Item {
         this.itemVolume = itemVolume;
         this.itemQuantity = itemQuantity;
         this.itemAvailable = itemAvailable;
-
     }
 
     public Item(String itemName, Double itemPrice, Double itemWeight, Double itemVolume, Integer itemQuantity) {
@@ -118,5 +124,21 @@ public class Item {
 
     public List<Order> getOrders() {
         return orders;
+    }
+
+    public String getItemDescription() {
+        return itemDescription;
+    }
+
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
