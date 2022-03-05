@@ -90,7 +90,7 @@ export default function ManageUsersPage() {
 						</thead>
 						<ManageUsers paginateUserList={currentDataChunk} fullUserList={datajson} search={searchName}/>
 					</Table>
-					<PaginationNav itemsPerPage={itemsPerPage} totalItems={datajson.length} paginate={paginate} currentPage={currentPage}/>
+					<PaginationNav itemsPerPage={usersPerPage} totalItems={datajson.length} paginate={paginate} currentPage={currentPage}/>
 				</div>
 			</>
 		);
