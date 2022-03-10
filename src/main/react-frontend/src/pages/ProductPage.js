@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Image, Container, Col, Row, Carousel} from "react-bootstrap";
+import { Container, Col, Row, Carousel} from "react-bootstrap";
 import {useParams} from "react-router-dom";
+import Image from '../components/items/Image';
 
 
 export default function ProductPage() {
     let {itemid} = useParams();
     // const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
+    //Fetches the item using item ID
     const FETCH_URL = "http://localhost:8080/item/get/" + itemid;
     var [datajson, setDataJson] = useState([]); // used to store data TODO rename var
 
@@ -46,8 +48,10 @@ export default function ProductPage() {
                 <Container>
                     <Row className="justify-content-md-center">
                         <Col md="auto">
+                            <Image
+                                itemId={itemid}
+                            />
 
-                            <img src="https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png"/>
                         </Col>
 
                         <Col md="auto">
