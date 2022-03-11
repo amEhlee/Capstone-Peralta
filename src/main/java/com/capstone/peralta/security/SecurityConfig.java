@@ -1,5 +1,6 @@
 package com.capstone.peralta.security;
 import com.capstone.peralta.filters.AuthenticationFilter;
+import com.capstone.peralta.filters.AuthorizationFilter;
 import com.capstone.peralta.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,23 +27,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder); //Loads password encoder to encode and decode passwords
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
-        authenticationFilter.setFilterProcessesUrl("/user/login");
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean()); //Creates authentication filter NOTE: Refer to Authentication Filter class
+        authenticationFilter.setFilterProcessesUrl("/user/login"); //Sets the login page for the filter so it bypasses and allows logging in
 
 
+        /*
+        This section of code is a giant nested http method call. It is setting which URLs should be filtered and which ones should not, given the role arguments stated.
+        Edit as needed but for the record it works very similarly to how are React front end works with the URL routing.
+         */
         http.csrf().disable().authorizeRequests()
                 .and().sessionManagement().sessionCreationPolicy(STATELESS)
                 //TODO:Fix Authentication and normalize URL's
-                .and().authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                .and().authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                .and().authorizeRequests().antMatchers("/user/login", "/user/auth/refreshtoken", "/user/save").permitAll()
+                .and().authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER")
+                .and().authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_OWNER")
                 .and().authorizeRequests().anyRequest().authenticated().and()
                 .httpBasic();
-        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilter(authenticationFilter); //Sets the filter of all the above addresses to be the authentication filter created above
+        http.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class); //Makes a difference with the order of filters in the filter chain but at the moment we are only operating on one filter. Think Web Dev Semester 3
+
 
         //This block of code activates the filters and if active will not let you do anything atm....
 /*        http.authorizeRequests().antMatchers("/**").permitAll();

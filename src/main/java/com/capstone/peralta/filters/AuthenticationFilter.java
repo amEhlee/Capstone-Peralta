@@ -35,22 +35,25 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         this.authenticationManager = authenticationManager;
     }
 
+    //Method is called on every request sent to server
     @CrossOrigin(origins = "http://localhost:3000")
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        System.out.println(request);
+        String email = request.getParameter("email"); //Grabs email from request body
+        String password = request.getParameter("password"); //Grabs password from request body
+        log.info(String.valueOf(request)); //For debugging, should be commented out as necessary
         log.info("Email is: {}", email); log.info("Password is: {}", password);
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-        return authenticationManager.authenticate(authenticationToken);
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password); //formats username and password into a token
+        return authenticationManager.authenticate(authenticationToken); //Authenticates token Note: at the end of the method it will call successfulAuthentication()
     }
 
+    //On successful authentication Note: See above
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         User user = (User)authResult.getPrincipal(); //Accesses the User that is authenticated
 
-        Algorithm algorithm = Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()); //Creates a hashing algorithm
+        Algorithm algorithm = Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()); //Creates a hashing algorithm TODO: Put this into a utility class to remove redundancy
 
         String access_token = JWT.create() //Initial Access token
                 .withSubject(user.getUsername()) //Subject of JWT must be unique so I chose Username which is technically email
