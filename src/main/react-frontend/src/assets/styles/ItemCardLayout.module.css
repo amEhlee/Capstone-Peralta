@@ -1,0 +1,33 @@
+.card li {
+    display: inline-block;
+    vertical-align: top;
+}
+
+@media screen and (min-width: 700px) {
+    .unorderedList {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 60px;
+    }
+}
+
+@media screen and (min-width: 1050px) {
+    .unorderedList {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 50px;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .unorderedList {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 50px;
+    }
+}
+
+.unorderedList :hover {
+    box-shadow: 0 0 11px rgba(33, 33, 33, .2);
+    transition: ease-in-out 0.5s;
+}

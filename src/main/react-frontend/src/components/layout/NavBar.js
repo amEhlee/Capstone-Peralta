@@ -1,17 +1,21 @@
-import IconButtons from "./IconButtons";
-import CategoryNav from "./CategoryNav";
+// Import Dependencies
+import {useState, useEffect} from "react";
+
+// Import Components
 import {
-    BsFillBagFill,
     BsSearch,
     BsFillBellFill,
     BsFillPersonFill,
-    BsFillCartFill,
+    BsFillCartFill, BsShop,
 } from "react-icons/bs";
-import style from "./NavBar.module.css";
-import { Modal, Button } from "react-bootstrap";
-import LoginForm from "../UserSide/LoginForm"
-import SignUpUser from "../UserSide/SignUpUser"
-import { useState, useEffect} from "react";
+import {Modal, Button, Container, Navbar} from "react-bootstrap";
+import IconButtons from "./IconButtons";
+import CategoryNav from "./CategoryNav";
+import LoginForm from "../users/LoginForm";
+import SignUpUserPage from "../../pages/SignUpUserPage";
+
+// Import Styles
+import style from "../../assets/styles/NavBar.module.css";
 
 function NavBar() {
     const [show, setShow] = useState(false);
@@ -20,44 +24,42 @@ function NavBar() {
 
     return (
         <>
-        <div>
-            <header className={style.header}>
-                <div className={style.logo}>
-                    <BsFillBagFill />
-                    Peralta Shop
-                </div>
-                {/* Search Functionality will be added in future update */}
-                <div className={style.searchwrapper}>
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        className={style.searchBar}
-                    ></input>
-                    <BsSearch></BsSearch>
-                </div>
-                <IconButtons
-                    iconElement={BsFillBellFill()}
-                    buttonVariant="light"
-                    redirectURL="/"
-                />
-                <Button variant="light" onClick={handleShow}>
-                    {BsFillPersonFill()}
-                </Button>
-                <IconButtons
-                    iconElement={BsFillCartFill()}
-                    buttonVariant="light"
-                    redirectURL="/cart"
-                />
-            </header>
-            <CategoryNav />
-
-        </div>
+            <div>
+                <Navbar bg="light" variant="light">
+                    <Container>
+                        <Navbar.Brand><BsShop/> Peralta Shop</Navbar.Brand>
+                        {/* Search Functionality will be added in future update */}
+                        <div className={style.searchwrapper}>
+                            <input
+                                type="text"
+                                placeholder="Search"
+                                className={style.searchBar}
+                            ></input>
+                            <BsSearch></BsSearch>
+                        </div>
+                        <IconButtons
+                            iconElement={BsFillBellFill()}
+                            buttonVariant="light"
+                            redirectURL="/"
+                        />
+                        <Button variant="light" onClick={handleShow}>
+                            {BsFillPersonFill()}
+                        </Button>
+                        <IconButtons
+                            iconElement={BsFillCartFill()}
+                            buttonVariant="light"
+                            redirectURL="/cart"
+                        />
+                    </Container>
+                </Navbar>
+                <CategoryNav/>
+            </div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Login</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <LoginForm />
+                    <LoginForm/>
                 </Modal.Body>
             </Modal>
         </>

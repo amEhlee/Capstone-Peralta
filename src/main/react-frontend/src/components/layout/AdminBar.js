@@ -1,23 +1,27 @@
-import style from "./AdminBar.module.css";
-import {BsFillBagFill} from "react-icons/bs";
-import {Nav, Navbar, NavDropdown} from "react-bootstrap";
+// Import Components
+import {BsShop} from "react-icons/bs";
+import {Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 
 function AdminBar() {
     return (
-            <div className={style.navBar}>
-            <Navbar>
-                <Nav className="container-fluid">
-                    <Navbar.Brand className={style.logo} bsPrefix="logo">
-                        <BsFillBagFill/> Peralta Shop
-                    </Navbar.Brand>
-                    <Nav.Item className="ml-auto">
-                        <Nav.Link>
-                        <NavDropdown title="ADMIN">
+            <div>
+            <Navbar bg="light" variant="light">
+                <Container>
+                    <Navbar.Brand><BsShop/> Peralta Shop</Navbar.Brand>
+                    <Nav>
+                        <NavDropdown title="Navigation">
+                            <NavDropdown.Item href="/">Home</NavDropdown.Item>
+                            <NavDropdown.Item href="/admin/manageitems">Inventory</NavDropdown.Item>
+                            <NavDropdown.Item href="/orders">Orders</NavDropdown.Item>
+                            <NavDropdown.Item href="/admin/useraccounts">User Accounts</NavDropdown.Item>
+                            <NavDropdown.Item href="/admin/sales">Sales</NavDropdown.Item>
+                            <NavDropdown.Item href="/admin/settings">Settings</NavDropdown.Item>
+                        </NavDropdown>
+                        <NavDropdown title="Account">
                             <NavDropdown.Item>Log out</NavDropdown.Item>
                         </NavDropdown>
-                        </Nav.Link>
-                    </Nav.Item>
-                </Nav>
+                    </Nav>
+                </Container>
             </Navbar>
             </div>
     );

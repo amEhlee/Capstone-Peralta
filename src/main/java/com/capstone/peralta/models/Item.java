@@ -5,19 +5,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 
 @Entity
 @Table(name = "ITEMS")
 public class Item {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "item_Id", nullable = false)
     private Integer itemId;
     private String itemName;
+    private String itemDescription;
     private Double itemPrice;
     private Double itemWeight;
     private Double itemVolume;
+    private String description;
+    private String size;
     private Integer itemQuantity;
     private Boolean itemAvailable;
 
@@ -29,33 +33,13 @@ public class Item {
     @ManyToMany(mappedBy = "cartItems")
     private List<Cart> carts;
 
-    @ManyToMany
-    @JoinTable(
-            name = "category_item",
-            joinColumns = @JoinColumn(name = "item_Id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> categoryList;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="category_id", referencedColumnName = "category_id")
+    private Category category;
 
     public Item() {
     }
 
-    public Item(String itemName, Double itemPrice, Double itemWeight, Double itemVolume, Integer itemQuantity, Boolean itemAvailable) {
-        this.itemName = itemName;
-        this.itemPrice = itemPrice;
-        this.itemWeight = itemWeight;
-        this.itemVolume = itemVolume;
-        this.itemQuantity = itemQuantity;
-        this.itemAvailable = itemAvailable;
-    }
-    public Item(String itemName, Double itemPrice, Double itemWeight, Double itemVolume, Integer itemQuantity) {
-        this.itemName = itemName;
-        this.itemPrice = itemPrice;
-        this.itemWeight = itemWeight;
-        this.itemVolume = itemVolume;
-        this.itemQuantity = itemQuantity;
-        this.itemAvailable = itemQuantity > 0;
-    }
 
     public Integer getItemId() {
         return itemId;
@@ -115,5 +99,37 @@ public class Item {
 
     public List<Order> getOrders() {
         return orders;
+    }
+
+    public String getItemDescription() {
+        return itemDescription;
+    }
+
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 }

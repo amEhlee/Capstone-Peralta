@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CartService {
@@ -17,7 +18,7 @@ public class CartService {
         this.cartRepo = cartRepo;
     }
 
-    public Cart getCart(int userId) {
+    public Cart getCart(Integer userId) {
         return cartRepo.getById(userId);
     }
 

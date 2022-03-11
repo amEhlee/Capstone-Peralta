@@ -1,16 +1,16 @@
-// import dependencies
+// Import Dependencies
 import React, { useState, useEffect } from "react";
-import { Table, Modal, Button } from "react-bootstrap";
-import { BsSearch } from "react-icons/bs";
 import axios from "axios";
 
-// import components
-import PaginationNav from '../../components/layout/Pagination';
-import ItemList from "../../components/items/ItemList";
-import AddItem from "../../components/InventoryManagement/AddItem";
+// Import Components
+import { Table, Modal, Button } from "react-bootstrap";
+import { BsSearch } from "react-icons/bs";
+import PaginationNav from '../components/layout/Pagination';
+import ItemList from "../components/items/ItemList";
+import AddItem from "../components/items/AddItem";
 
-// import css
-import style from "./ManageItemsPage.module.css";
+// Import Styling
+import style from "../assets/styles/ManageItemsPage.module.css";
 
 export default function ManageItemsPage() {
 	const [categoryjson, setCategoryJson] = useState([]);
@@ -37,7 +37,7 @@ export default function ManageItemsPage() {
 	// runs the gatherdata function when the page loads
 	useEffect(() => {
 		gatherData().then((data) => {
-			console.log(data); // log returned data
+			console.log("response allitem get: " + data); // log returned data
 			setDataJson(data || "no data returned"); // store returned data in a variable
 		});
 	}, []);
@@ -72,8 +72,8 @@ export default function ManageItemsPage() {
 							onChange={(event) => {
 								setSearchName(event.target.value);
 							}}
-						></input>
-						<BsSearch></BsSearch>
+						/>
+						<BsSearch/>
 					</div>
 
                     <Button className={style.addBtn} bsPrefix="addBtn" variant="primary" onClick={handleShow}>
@@ -86,6 +86,7 @@ export default function ManageItemsPage() {
                                 <th>ID</th>
 								<th>Image</th>
                                 <th>Product Name</th>
+								<th>Category</th>
                                 <th>Price</th>
                                 <th>Weight</th>
                                 <th>Quantity</th>

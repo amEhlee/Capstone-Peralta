@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.Collection;
 
 
@@ -17,7 +18,7 @@ import java.util.Collection;
 @Table(name = "USERS")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_Id", nullable = false,unique = true)
     private Integer userId;
     @Column(name = "email", nullable = false,unique = true)
@@ -53,7 +54,7 @@ public class User {
         this.roles = new ArrayList<>();
     }
 
-    //Constructor for creating a User with Auto Gen ID, and lists
+    //Constructor for creating a User with an Auto Gen ID, and lists. This was for testing purposes and not necessary
     public User(String email, String password, String firstName, String lastName, String address, String postalCode, String phoneNumber) {
         this.email = email;
         this.password = password;

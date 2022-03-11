@@ -1,7 +1,10 @@
-import React from "react";
-import { useRef } from "react";
-import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
+// Import Dependencies
+import React, { useRef } from "react";
 import axios from "axios";
+
+// Import Componenets
+import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
+
 
 export default function AddCategory() {
     const categoryNameRef = useRef();

@@ -1,4 +1,7 @@
+// Import Dependencies
 import React from "react";
+
+// Import Components
 import { Pagination} from "react-bootstrap";
 
 export default function PaginationNav(props) {

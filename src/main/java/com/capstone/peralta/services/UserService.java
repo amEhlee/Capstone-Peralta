@@ -3,6 +3,7 @@ package com.capstone.peralta.services;
 import ch.qos.logback.core.CoreConstants;
 import com.capstone.peralta.exceptions.EmailNotFoundException;
 import com.capstone.peralta.models.Role;
+import com.capstone.peralta.models.Item;
 import com.capstone.peralta.models.User;
 import com.capstone.peralta.repos.RoleRepo;
 import com.capstone.peralta.repos.UserRepo;
@@ -25,15 +26,29 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.Map;
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
 public class UserService implements UserDetailsService {
 
+    @Autowired
     private final UserRepo userRepo;
     private final RoleRepo roleRepo;
-
     private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
+
+    public User getUserById(Integer id) {
+        return userRepo.getById(id);
+    }
+
+    public List<User> getAll() {
+        return userRepo.findAll();
+    }
+
 
     public User addUser(User user) {
         log.info("Saving new User into Database");

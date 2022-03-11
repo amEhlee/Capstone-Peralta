@@ -1,9 +1,16 @@
+// Import Dependencies
 import React from "react";
+
+// Import Components
 import {Form, FormGroup, Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import { useRef } from "react";
 import axios from "axios";
 
+// Import Styles
+import userStyle from "../../assets/styles/UserSide.module.css";
+
+// TODO: revise neccessity
 export default function LoginForm() {
 
     const emailRef = useRef();
