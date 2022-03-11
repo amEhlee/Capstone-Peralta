@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ItemService {
@@ -23,15 +24,15 @@ public class ItemService {
         this.itemRepo = itemRepo;
     }
 
-    public Item getItemById(int id) {
-        return itemRepo.findById(id).get();
+    public Item getItemById(Integer itemId) {
+        return itemRepo.findById(itemId).get();
     }
 
     public List<Item> getAll() {
         return itemRepo.findAll();
     }
 
-    public Item addItem(Item item, int categoryId) {
+    public Item addItem(Item item, Integer categoryId) {
         Category category = categoryRepo.findById(categoryId).orElse(null);
         if (category != null) {
             item.setCategory(category);

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CategoryService {
@@ -18,8 +19,8 @@ public class CategoryService {
         this.categoryRepo = categoryRepo;
     }
 
-    public Category getCategoryById(int id) {
-        return categoryRepo.getById(id);
+    public Category getCategoryById(Integer categoryId) {
+        return categoryRepo.getById(categoryId);
     }
 
     public List<Category> getAll() {

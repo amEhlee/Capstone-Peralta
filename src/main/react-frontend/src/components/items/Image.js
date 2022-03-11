@@ -14,7 +14,7 @@ export default function Image(props) {
     return (
         <img
             src={tryRequire()}
-            width="50px"
+            width={props.size}
         />
     )
 }
