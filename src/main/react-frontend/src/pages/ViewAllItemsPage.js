@@ -22,8 +22,6 @@ export default function ViewAllItemsPage() {
   // runs the gatherdata function when the page loads
   useEffect(() => {
     gatherData().then((data) => {
-      console.log("response allItem get: " + data); // log returned data
-
       setDataJson(data || "no data returned"); // store returned data in a variable
     });
   }, []);
