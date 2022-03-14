@@ -18,7 +18,7 @@ import java.util.Collection;
 @Table(name = "USERS")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_Id", nullable = false,unique = true)
     private Integer userId;
     @Column(name = "email", nullable = false,unique = true)

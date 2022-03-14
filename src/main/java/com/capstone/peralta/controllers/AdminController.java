@@ -30,6 +30,12 @@ public class AdminController {
         return ResponseEntity.ok().body(userService.getAll());
     }
 
+    //Add a user
+    @PostMapping("/adduser")
+    public User addUser(@RequestBody User user) {
+        return userService.addUser(user);
+    }
+
     //Adds multiple Users to DB, most likely un-needed
     @PostMapping("/addMultiple")
     List<User> addMultiple(@RequestBody List<User> userList) {
@@ -51,6 +57,7 @@ public class AdminController {
         userService.addRoleToUser(form.getEmail(),form.getRoleName());
         return ResponseEntity.ok().build();
     }
+
 
     //Converts a role to a specific format necessary for role processing. We need the role name to be attached to an email.
     @Data

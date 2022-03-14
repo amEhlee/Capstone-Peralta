@@ -37,18 +37,9 @@ public class UserService implements UserDetailsService {
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepo userRepo) {
-        this.userRepo = userRepo;
-    }
-
     public User getUserById(Integer id) {
         return userRepo.getById(id);
     }
-
-    public List<User> getAll() {
-        return userRepo.findAll();
-    }
-
 
     public User addUser(User user) {
         log.info("Saving new User into Database");
@@ -58,15 +49,13 @@ public class UserService implements UserDetailsService {
 
 /*    public void deleteUser(User user) {
         log.info("User deleted");
-        userRepo.remove(user);
+        userRepo.removeUserById(user.getUserId());
     }*/
 
     public Role addRole(Role role) {
         log.info("Saving new Role into Database");
         return roleRepo.save(role);
     }
-
-    public User getUserById(int id) { return userRepo.getById(id); }
 
     public User getUserByName(String email) {
         log.info("Fetching User: {}", email);

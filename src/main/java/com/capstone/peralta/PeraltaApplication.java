@@ -65,18 +65,6 @@ public class PeraltaApplication {
 	@Bean
 	CommandLineRunner run (UserService userService) {
 		return args -> {
-			userService.addRole(new Role(1, "ROLE_USER"));
-			userService.addRole(new Role(2, "ROLE_ADMIN"));
-			userService.addRole(new Role(3, "ROLE_OWNER"));
-
-
-			userService.addUser(new User(1,"admin@gmail.com", "password", "Mister", "Admin", "someplace", "T3J2Y9", "403678123") );
-			userService.addUser(new User(2,"john@gmail.com", "t100", "John", "Connor", "someplace", "T1K4V7", "403789123") );
-
-			userService.addRoleToUser("admin@gmail.com", "ROLE_USER");
-			userService.addRoleToUser("admin@gmail.com", "ROLE_ADMIN");
-
-			userService.addRoleToUser("john@gmail.com", "ROLE_USER");
 		};
 	}
 }
