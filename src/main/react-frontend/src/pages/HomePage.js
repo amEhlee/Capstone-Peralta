@@ -1,6 +1,8 @@
 // Import Dependencies
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { UserContext } from "../UserContext";
+import { Link } from "react-router-dom";
 
 // Import Components
 import ItemList from "../components/items/ItemList";
@@ -12,10 +14,18 @@ export default function HomePage() {
     const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
     var [datajson, setDataJson] = useState([]); // used to store data TODO rename var
 
+    const token = useContext(UserContext).contextData.token;
+
     // function that will be called when the page loads purpose is to handle and process the axios get request
     async function gatherData() {
+
+
         return await axios
-            .get(FETCH_URL) // preform get request
+            .get(FETCH_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }) // preform get request
             .then((res) => {
                 return res.data; // return response
             })
@@ -32,7 +42,13 @@ export default function HomePage() {
     console.log(datajson);
 
     if (datajson === "no data returned") {
-        return <section><p>{datajson}</p></section>;
+        return (
+            <section>
+                {/*TODO implement navigation on front end please*/}
+                <Link to="/admin/manageItems">Try Manage Items Page</Link>
+                <p>{datajson}</p>
+            </section>
+        );
     } else {
         return (
             <div className={style.homepage}>

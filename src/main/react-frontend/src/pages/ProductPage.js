@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import { Image, Container, Col, Row, Carousel } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
@@ -7,12 +7,17 @@ import { UserContext } from "../UserContext";
 export default function ProductPage() {
 	let { itemid } = useParams();
 	const FETCH_URL = "http://localhost:8080/item/get/" + itemid;
+	const token = useContext(UserContext).contextData.token;
 	var [datajson, setDataJson] = useState([]); // used to store data TODO rename var
 
 	// function that will be called when the page loads purpose is to handle and process the axios get request
 	async function gatherData() {
 		return await axios
-			.get(FETCH_URL) // preform get request
+			.get(FETCH_URL, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}) // preform get request
 			.then((res) => {
 				return res.data; // return response
 			})
