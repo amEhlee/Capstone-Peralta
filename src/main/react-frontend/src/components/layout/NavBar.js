@@ -45,6 +45,7 @@ function NavBar() {
                         <Button variant="light" onClick={handleShow}>
                             {BsFillPersonFill()}
                         </Button>
+
                         <IconButtons
                             iconElement={BsFillCartFill()}
                             buttonVariant="light"

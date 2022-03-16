@@ -1,5 +1,6 @@
+
 // Import Components
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import HomePage from "./pages/HomePage";
 import AdminPage from "./pages/AdminPage";
@@ -16,13 +17,18 @@ import SelectCategory from "./components/categories/SelectCategory";
 import ManageUsersPage from "./pages/ManageUsersPage";
 import ProductPage from "./pages/ProductPage";
 
+import UserProfile from "./components/UserSide/UserProfile";
+import EditProfile from "./components/UserSide/EditUserForm";
+
 // Import Styling
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Navbar} from "react-bootstrap";
+import NavBar from "./components/layout/NavBar";
 
 
 export default function App() {
-    return (
-        <Routes>
+  return (
+    <Routes>
 
             {/*TODO Change path to be under /home or smth*/}
             <Route path="/" element={<Layout/>}>
@@ -33,10 +39,18 @@ export default function App() {
 
             </Route>
 
+
+
             <Route path="/login" element={<LoginUserPage/>}/>
             <Route path="/signUp" element={<SignUpUserPage/>}/>
 
-            {/* Example Path Would Be e.g /admin/inventory */}
+
+        <Route path="/userProfile" element={<UserProfile/>}/>
+        <Route path="/editProfile" element={<EditProfile/>}/>
+
+
+
+        {/* Example Path Would Be e.g /admin/inventory */}
             <Route path="/admin" element={<AdminLayout/>}>
                 <Route index element={<AdminPage/>}/>
                 <Route path="addItem" element={<AddItem/>}/> {/* TODO remove path?*/}
