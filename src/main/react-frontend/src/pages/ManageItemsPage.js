@@ -37,7 +37,6 @@ export default function ManageItemsPage() {
 	// runs the gatherdata function when the page loads
 	useEffect(() => {
 		gatherData().then((data) => {
-			console.log("response allitem get: " + data); // log returned data
 			setDataJson(data || "no data returned"); // store returned data in a variable
 		});
 	}, []);

@@ -1,6 +1,6 @@
-
 // Import Components
 import { Route, Routes } from "react-router-dom";
+import { UserProvider, UserContext } from "./UserContext";
 import Layout from "./components/layout/Layout";
 import HomePage from "./pages/HomePage";
 import AdminPage from "./pages/AdminPage";
@@ -18,35 +18,41 @@ import ManageUsersPage from "./pages/ManageUsersPage";
 import ProductPage from "./pages/ProductPage";
 
 // Import Styling
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App() {
-    return (
-        <Routes>
+	return (
+		<UserProvider>
+			<UserContext.Consumer>
+				{(value) => {
+					return console.log(value);
+				}}
+			</UserContext.Consumer>
+			<Routes>
+				{/*TODO Change path to be under /home or smth*/}
+				<Route path="/" element={<Layout />}>
+					<Route index element={<HomePage />} />
+					<Route path="/cart" element={<CartPage />} />
+					<Route path="/items" element={<ViewAllItemsPage />} />
+					<Route path="/item/:itemid" element={<ProductPage />} />
+				</Route>
 
-            {/*TODO Change path to be under /home or smth*/}
-            <Route path="/" element={<Layout/>}>
-                <Route index element={<HomePage/>}/>
-                <Route path="/cart" element={<CartPage/>}/>
-                <Route path="/items" element={<ViewAllItemsPage/>}/>
-                <Route path="/item/:itemid" element={<ProductPage/>}/>
+				<Route path="/login" element={<LoginUserPage />} />
+				<Route path="/signUp" element={<SignUpUserPage />} />
 
-            </Route>
-
-            <Route path="/login" element={<LoginUserPage/>}/>
-            <Route path="/signUp" element={<SignUpUserPage/>}/>
-
-            {/* Example Path Would Be e.g /admin/inventory */}
-            <Route path="/admin" element={<AdminLayout/>}>
-                <Route index element={<AdminPage/>}/>
-                <Route path="addItem" element={<AddItem/>}/> {/* TODO remove path?*/}
-                <Route path="editItem" element={<EditItem/>}/> {/* TODO remove path?*/}
-                <Route path="manageItems" element={<ManageItemsPage/>}/>
-                <Route path="addCategory" element={<AddCategory/>}/>
-                <Route path="selectCategory" element={<SelectCategory/>}/>
-                <Route path="manageUsers" element={<ManageUsersPage/>}/>
-            </Route>
-        </Routes>
-    );
+				{/* Example Path Would Be e.g /admin/inventory */}
+				<Route path="/admin" element={<AdminLayout />}>
+					<Route index element={<AdminPage />} />
+					<Route path="addItem" element={<AddItem />} />{" "}
+					{/* TODO remove path?*/}
+					<Route path="editItem" element={<EditItem />} />{" "}
+					{/* TODO remove path?*/}
+					<Route path="manageItems" element={<ManageItemsPage />} />
+					<Route path="addCategory" element={<AddCategory />} />
+					<Route path="selectCategory" element={<SelectCategory />} />
+					<Route path="manageUsers" element={<ManageUsersPage />} />
+				</Route>
+			</Routes>
+		</UserProvider>
+	);
 }
