@@ -22,6 +22,7 @@ export default function ManageItems(props) {
           <td>
             <Image
               itemId={props.id}
+              size={"50px"}
             />
           </td>
           <td>{props.name}</td>
