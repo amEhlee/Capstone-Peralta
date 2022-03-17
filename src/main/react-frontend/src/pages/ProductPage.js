@@ -30,14 +30,16 @@ export default function ProductPage() {
 	}, []);
 
 	//sets what is output to the webpage
-	if (datajson === "no data returned") {
+
+
+	if (datajson === "no data returned") { //if no data is found return NO DATA FOUND
 		return (
 			<section>
 				<p>{datajson}</p>
 				<p>NO DATA FOUND</p>
 			</section>
 		);
-	} else {
+	} else { //if data is found return the data (item information)
 		return (
 			<>
 				<Container fluid={"xxl"}>

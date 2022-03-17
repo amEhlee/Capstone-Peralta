@@ -38,13 +38,14 @@ export default function App() {
 					<Route path="/cart" element={<CartPage />} />
 					<Route path="/items" element={<ViewAllItemsPage />} />
 					<Route path="/item/:itemid" element={<ProductPage />} />
+
+					<Route path="/userProfile" element={<UserProfile/>}/>
+					<Route path="/editProfile" element={<EditProfile/>}/>
 				</Route>
 
 				<Route path="/login" element={<LoginUserPage />} />
 				<Route path="/signUp" element={<SignUpUserPage />} />
 
-                <Route path="/userProfile" element={<UserProfile/>}/>
-                <Route path="/editProfile" element={<EditProfile/>}/>
 
 				{/* Example Path Would Be e.g /admin/inventory */}
 				<Route path="/admin" element={<AdminLayout />}>
