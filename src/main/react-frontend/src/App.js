@@ -1,3 +1,4 @@
+
 // Import Components
 import { Route, Routes } from "react-router-dom";
 import { UserProvider, UserContext } from "./UserContext";
@@ -16,6 +17,8 @@ import AddCategory from "./components/categories/AddCategory";
 import SelectCategory from "./components/categories/SelectCategory";
 import ManageUsersPage from "./pages/ManageUsersPage";
 import ProductPage from "./pages/ProductPage";
+import UserProfile from "./components/UserSide/UserProfile";
+import EditProfile from "./components/UserSide/EditProfile";
 
 // Import Styling
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -39,6 +42,9 @@ export default function App() {
 
 				<Route path="/login" element={<LoginUserPage />} />
 				<Route path="/signUp" element={<SignUpUserPage />} />
+
+                <Route path="/userProfile" element={<UserProfile/>}/>
+                <Route path="/editProfile" element={<EditProfile/>}/>
 
 				{/* Example Path Would Be e.g /admin/inventory */}
 				<Route path="/admin" element={<AdminLayout />}>
