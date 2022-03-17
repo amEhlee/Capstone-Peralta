@@ -18,7 +18,7 @@ import ManageUsersPage from "./pages/ManageUsersPage";
 import ProductPage from "./pages/ProductPage";
 
 import UserProfile from "./components/UserSide/UserProfile";
-import EditProfile from "./components/UserSide/EditUserForm";
+import EditProfile from "./components/UserSide/EditProfile";
 
 // Import Styling
 import 'bootstrap/dist/css/bootstrap.min.css';
