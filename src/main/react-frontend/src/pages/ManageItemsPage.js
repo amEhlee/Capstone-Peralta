@@ -1,5 +1,5 @@
 // Import Dependencies
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import axios from "axios";
 
 // Import Components
@@ -11,11 +11,13 @@ import AddItem from "../components/items/AddItem";
 
 // Import Styling
 import style from "../assets/styles/ManageItemsPage.module.css";
+import {UserContext} from "../UserContext";
 
 export default function ManageItemsPage() {
 	const [categoryjson, setCategoryJson] = useState([]);
 
 	const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
+	const token = useContext(UserContext).contextData.token;
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage, setItemsPerPage] = useState(10); // initalize at 10 items per page change as required
 	var [datajson, setDataJson] = useState([]); // used to store data
@@ -27,7 +29,11 @@ export default function ManageItemsPage() {
 	// function that will be called when the page loads purpose is to handle and process the axios get request
 	function gatherData() {
 		return axios
-			.get(FETCH_URL) // preform get request
+			.get(FETCH_URL, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}) // preform get request
 			.then((res) => {
 				return res.data; // return response
 			})
