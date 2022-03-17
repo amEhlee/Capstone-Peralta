@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Container,Col,Row,Carousel,Button,Form,Stack} from "react-bootstrap";
+import {Container,Col,Row,Button,Form,Stack} from "react-bootstrap";
+import { UserContext } from "../UserContext";
 import { useParams } from "react-router-dom";
 import Image from "../components/items/Image";
 
@@ -28,8 +29,6 @@ export default function ProductPage() {
 		});
 	}, []);
 
-	console.log(datajson);
-
 	//sets what is output to the webpage
 	if (datajson === "no data returned") {
 		return (
@@ -39,8 +38,6 @@ export default function ProductPage() {
 			</section>
 		);
 	} else {
-		const result = datajson;
-		console.log(result);
 		return (
 			<>
 				<Container fluid={"xxl"}>
@@ -75,9 +72,41 @@ export default function ProductPage() {
 									</Form.Control>
 								</Form.Group>
 
-								<Button variant={"primary"} className={"m-1"}>
-									Add to Cart
-								</Button>
+								{/*Adds to cart using previous*/}
+								<UserContext.Consumer >
+									{(value) => {
+										function AddToCart() {
+											let newCart = value.contextData.cart;
+
+											for (let i = 0; i < newCart.length; i++) {
+												if (newCart[i].item.itemName === datajson.itemName) {
+													newCart[i].quantity++;
+													return newCart;
+												}
+											}
+
+											newCart.push({ item: datajson, quantity: 1 });
+											return newCart;
+										}
+
+										return (
+											<Button variant={"primary"} className={"m-1"}
+												onClick={() => {
+													// Do this:
+													value.setContextData((prevData) => {
+														return {
+															...prevData,
+															cart: AddToCart(),
+														};
+													});
+												}}
+												
+											>
+												Add To Cart
+											</Button>
+										);
+									}}
+								</UserContext.Consumer>
 								<Button variant={"primary"} className={"m-1"}>
 									Buy Now
 								</Button>
@@ -102,39 +131,7 @@ export default function ProductPage() {
 					</Row>
 				</Container>
 
-				<UserContext.Consumer>
-					{(value) => {
-						function AddToCart() {
-							let newCart = value.contextData.cart;
 
-							for (let i = 0; i < newCart.length; i++) {
-								if (newCart[i].item.itemName === datajson.itemName) {
-									newCart[i].quantity++;
-									return newCart;
-								}
-							}
-
-							newCart.push({ item: datajson, quantity: 1 });
-							return newCart;
-						}
-
-						return (
-							<button
-								onClick={() => {
-									// Do this:
-									value.setContextData((prevData) => {
-										return {
-											...prevData,
-											cart: AddToCart(),
-										};
-									});
-								}}
-							>
-								Add To Cart
-							</button>
-						);
-					}}
-				</UserContext.Consumer>
 			</>
 		);
 	}
