@@ -41,6 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationFilter.setFilterProcessesUrl("/user/login"); //Sets the login page for the filter so it bypasses and allows logging in
 
 
+
+
         /*
         This section of code is a giant nested http method call. It is setting which URLs should be filtered and which ones should not, given the role arguments stated.
         Edit as needed but for the record it works very similarly to how are React front end works with the URL routing.
@@ -49,11 +51,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .and().sessionManagement().sessionCreationPolicy(STATELESS)
                 //TODO:Fix Authentication and normalize URL's
-                .and().authorizeRequests().antMatchers("/user/login", "/user/auth/refreshtoken", "/user/save", "/signup/**", "/home/**", "/").permitAll()
+                .and().authorizeRequests().antMatchers("/user/login", "/user/auth/refreshtoken").permitAll()
                 .and().authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER")
                 .and().authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_OWNER")
-                .and().authorizeRequests().anyRequest().authenticated().and()
-                .httpBasic();
+                .and().authorizeRequests().anyRequest().authenticated()
+                .and().httpBasic();
         http.addFilter(authenticationFilter); //Sets the filter of all the above addresses to be the authentication filter created above
         http.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class); //Makes a difference with the order of filters in the filter chain but at the moment we are only operating on one filter. Think Web Dev Semester 3
 
