@@ -36,7 +36,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
     private Cart cart;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Collection<Role> roles = new ArrayList<>();
 
     //Constructor for creating a User with Auto Gen ID, and lists
