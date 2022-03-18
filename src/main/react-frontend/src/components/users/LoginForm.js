@@ -3,7 +3,7 @@ import React, {useContext} from "react";
 
 // Import Components
 import { Form, FormGroup, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import axios from "axios";
 import { UserContext } from "../../UserContext";
@@ -16,6 +16,7 @@ export default function LoginForm() {
     const emailRef = useRef();
     const passwordRef = useRef();
     const givenContext = useContext(UserContext);
+    const navigate = useNavigate();
 
     async function submitHandler(event, token) {
         event.preventDefault();
@@ -36,6 +37,9 @@ export default function LoginForm() {
                 };
             })
         });
+
+        // goto homepage after logging in
+        navigate("/");
     }
 
     return (
@@ -65,11 +69,6 @@ export default function LoginForm() {
                 Login
             </Button>
 
-            <Link to="/">
-                <Button variant="primary">
-                    Redirect to Homepage
-                </Button>
-            </Link>
         </Form>
     );
 }

@@ -1,5 +1,5 @@
 // Import Dependencies
-import React, { useRef, useState, useEffect } from "react";
+import React, {useRef, useState, useEffect, useContext} from "react";
 
 // Import Components TODO revise imports and commented code
 import { Form, FormGroup, InputGroup, Button, FormControl } from "react-bootstrap";
@@ -9,12 +9,14 @@ import Creatable, {useCreatable} from "react-select/creatable";
 import CreatableSelect from 'react-select/creatable';
 
 import axios from "axios";
+import {UserContext} from "../../UserContext";
 
 
 
 export default function SelectCategory() {
     //grabs categories
-    var [categoryjson, setcategoryjson] = useState([]);
+    const [categoryjson, setcategoryjson] = useState([]);
+    const token = useContext(UserContext).contextData.token;
     const FETCH_URL = "http://localhost:8080/category/all";
     var CategoryList = [...categoryjson.map((i) => (
         {value: i.category_id, label: i.categoryName}))];
@@ -27,7 +29,11 @@ export default function SelectCategory() {
     //stores all the categories in the categoryjson array
     function getCategories() {
         return axios
-            .get(FETCH_URL) // preform get request
+            .get(FETCH_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }) // preform get request
             .then((res) => {
                 return res.data; // return response
             })
