@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .and().sessionManagement().sessionCreationPolicy(STATELESS)
                 //TODO:Fix Authentication and normalize URL's
-                .and().authorizeRequests().antMatchers("/user/login", "/user/auth/refreshtoken", "/user/save").permitAll()
+                .and().authorizeRequests().antMatchers("/user/login", "/user/auth/refreshtoken", "/user/save", "/signup/**", "/home/**", "/").permitAll()
                 .and().authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER")
                 .and().authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_OWNER")
                 .and().authorizeRequests().anyRequest().authenticated().and()

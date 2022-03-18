@@ -71,6 +71,8 @@ public class UserService implements UserDetailsService {
 
     public Role getRoleById(int id) { return roleRepo.getById(id); }
 
+    public Role getRoleByName(String name) { return roleRepo.findByRoleName(name); }
+
     public List<User> getAll() {
         log.info("Fetching all Users");
         return userRepo.findAll();
