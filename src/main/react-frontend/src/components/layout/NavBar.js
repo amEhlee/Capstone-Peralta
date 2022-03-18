@@ -19,9 +19,11 @@ import SignUpUserPage from "../../pages/SignUpUserPage";
 
 // Import Styles
 import style from "../../assets/styles/NavBar.module.css";
+import {useNavigate} from "react-router-dom";
 
 function NavBar() {
     const [show, setShow] = useState(false);
+    const navigate = useNavigate();
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
@@ -30,15 +32,16 @@ function NavBar() {
             <div>
                 <Navbar bg="light" variant="light">
                     <Container>
-                        <Navbar.Brand><BsShop/> <a href="/">Peralta Shop</a></Navbar.Brand>
+                        <button onClick={() => {navigate("/")}}>
+                            <Navbar.Brand><BsShop/> Peralta Shop</Navbar.Brand>
+                        </button>
                         <Nav>
                             {/*TODO: ADD NAVIGATION*/}
                             <NavDropdown title="Navigation">
-                                <NavDropdown.Item href="/">Home</NavDropdown.Item>
-                                <NavDropdown.Item href="/orders">Orders</NavDropdown.Item>
-
-                                <NavDropdown.Item href="/userProfile">User Profile</NavDropdown.Item>
-
+                                <NavDropdown.Item onClick={() => {navigate("/")}}>Home</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => {navigate("/order")}}>Orders</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => {navigate("/userProfile")}}>User Profile</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => {navigate("/admin/manageItems")}}>Admin Side</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                         {/* Search Functionality will be added in future update */}

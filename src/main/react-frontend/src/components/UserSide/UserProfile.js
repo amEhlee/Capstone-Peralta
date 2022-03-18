@@ -5,6 +5,7 @@ import {UserContext} from "../../UserContext";
 
 // Import Components
 import {Form, FormGroup, InputGroup, Button, FormControl, Col, Row} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 import Style from "../../assets/styles/UserSide.module.css";
 
 
@@ -12,6 +13,7 @@ export default function UserProfile() {
 
     //
     const userContext = useContext(UserContext);
+    const navigate = useNavigate();
 
 
     return (
@@ -40,7 +42,7 @@ export default function UserProfile() {
                 />
             </FormGroup>
 
-            <Button type="submit" className="btn btn-success" href="./editProfile">
+            <Button type="submit" className="btn btn-success" onClick={() => {navigate("/editProfile")}}>
                 Edit Account
             </Button>
 
