@@ -1,5 +1,5 @@
 // Import Components
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import {Button} from "react-bootstrap";
 
 // Import Styles
@@ -22,6 +22,9 @@ function CategoryNav() {
             </Button>
             <Button variant="outline-secondary" onClick={() => { history('/')}}>
                 Accessories
+            </Button>
+            <Button variant="outline-danger" onClick={() => { history('/admin/manageItems')}}>
+                ADMIN VIEW
             </Button>
         </div>
         </body>

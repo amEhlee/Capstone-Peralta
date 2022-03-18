@@ -1,5 +1,5 @@
 // Import Dependencies
-import React, {useRef, useState, useEffect} from "react";
+import React, {useRef, useState, useEffect, useContext} from "react";
 import axios from "axios";
 
 // Import Components
@@ -11,19 +11,25 @@ import CategoryChecklist from "../categories/SelectCategory";
 // Import Styles
 import Style from "../../assets/styles/ItemStyle.module.css"
 import Select from 'react-select'
+import {UserContext} from "../../UserContext";
 
 
 
 export default function AddItem() {
 
-    var [categoryjson, setcategoryjson] = useState([]);
+    const [categoryjson, setcategoryjson] = useState([]);
     const FETCH_URL = "http://localhost:8080/category/all";
+    const token = useContext(UserContext).contextData.token;
     var CategoryList = [...categoryjson.map((i) => (
         {value: i.categoryId, label: i.categoryName}))];
 
     function getCategories() {
         return axios
-            .get(FETCH_URL) // preform get request
+            .get(FETCH_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }) // preform get request
             .then((res) => {
                 setcategoryjson(res.data || "no data returned");
                 console.log(res.data); // return response
@@ -58,7 +64,11 @@ export default function AddItem() {
         const CATEGORY_URL = "http://localhost:8080/category/add"
         const categoryPost = async() => {
             try {
-                await axios.post(CATEGORY_URL, category)
+                await axios.post(CATEGORY_URL, category, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
                 getCategories();
             } catch (err) {
                 console.error(err);
@@ -99,7 +109,11 @@ export default function AddItem() {
 
         const imagePost = async(itemId) => {
             try {
-                const res = await axios.post(UPLOAD_URL + itemId, formData);
+                const res = await axios.post(UPLOAD_URL + itemId, formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 console.log("response image add: " + res);
                 formData.delete('image');
                 window.location.reload(false);
@@ -111,7 +125,11 @@ export default function AddItem() {
         const POST_URL = "http://localhost:8080/item/add/" + returnedCategoriesValue; // fetch url
         const itemPost = async () => {
             try {
-                const res = await axios.post(POST_URL, item);
+                const res = await axios.post(POST_URL, item, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                     // console.log("response item add: " + res.data);
                     // setResItemId(res.data.itemId);
                     if (imageData.files[0]){

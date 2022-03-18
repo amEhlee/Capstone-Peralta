@@ -1,15 +1,22 @@
 import { Table, Modal, Button } from "react-bootstrap";
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import ItemList from "../components/items/ItemList";
 import axios from "axios";
+import {UserContext} from "../UserContext";
+
 function CartPage() {
     const FETCH_URL = "http://localhost:8080/item/get/all";
-    var [datajson, setDataJson] = useState([]);
+    const token = useContext(UserContext).contextData.token;
+    const [datajson, setDataJson] = useState([]);
 
 // function that will be called when the page loads purpose is to handle and process the axios get request
 function gatherData() {
     return axios
-        .get(FETCH_URL) // preform get request
+        .get(FETCH_URL, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }) // preform get request
         .then((res) => {
             return res.data; // return response
         })

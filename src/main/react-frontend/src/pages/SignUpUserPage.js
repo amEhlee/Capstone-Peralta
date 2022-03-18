@@ -45,6 +45,21 @@ export default function  SignUpUserPage() {
                 <Form.Control type="password" placeholder="Enter your password"/>
             </FormGroup>
 
+            <FormGroup className="mb-3" controlId="lastnameForm">
+                <Form.Label>Last Name: </Form.Label>
+                <Form.Control type="text" placeholder="Enter lastname"/>
+            </FormGroup>
+
+            <FormGroup className="mb-3" controlId="lastnameForm">
+                <Form.Label>Last Name: </Form.Label>
+                <Form.Control type="text" placeholder="Enter lastname"/>
+            </FormGroup>
+
+            <FormGroup className="mb-3" controlId="lastnameForm">
+                <Form.Label>Last Name: </Form.Label>
+                <Form.Control type="text" placeholder="Enter lastname"/>
+            </FormGroup>
+
 
 
             <FormGroup className="mb-3" controlId="haveAccount">

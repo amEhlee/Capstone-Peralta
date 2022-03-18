@@ -6,6 +6,7 @@ import axios from "axios";
 
 export default function EditUser() {
     const userContext = useContext(UserContext).contextData.user;
+    const token = useContext(UserContext).contextData.token;
     const userFirstNameRef = useRef();
     const userLastNameRef = useRef();
     const userConfirmPasswordRef = useRef();
@@ -50,7 +51,11 @@ export default function EditUser() {
 
         async function userPost() {
             await axios
-                .put(PUT_URL, updatedUser)
+                .put(PUT_URL, updatedUser, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
                 .then((res) => {
                     console.log(res);
                 })
