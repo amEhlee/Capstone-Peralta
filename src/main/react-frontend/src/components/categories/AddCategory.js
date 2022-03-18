@@ -1,13 +1,15 @@
 // Import Dependencies
-import React, { useRef } from "react";
+import React, {useContext, useRef} from "react";
 import axios from "axios";
 
 // Import Componenets
 import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
+import {UserContext} from "../../UserContext";
 
 
 export default function AddCategory() {
     const categoryNameRef = useRef();
+    const token = useContext(UserContext).contextData.token;
 
     function submitHandler() {
         const returnedName = categoryNameRef;
@@ -20,7 +22,11 @@ export default function AddCategory() {
         };
 
         const POST_URL = "http://localhost:8080/category/add"; // fetch url
-        axios.post(POST_URL, category).then((res) => {
+        axios.post(POST_URL, category, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then((res) => {
             console.log(res);
         });
     }

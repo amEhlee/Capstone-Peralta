@@ -1,5 +1,5 @@
 // Import Dependencies
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import axios from "axios";
 
 // Import Components
@@ -10,10 +10,12 @@ import PaginationNav from "../components/layout/Pagination";
 
 // Import Styling
 import style from "../assets/styles/ManageUsersPage.module.css";
+import {UserContext} from "../UserContext";
 
 export default function ManageUsersPage() {
 	// requests
-	const FETCH_URL = "http://localhost:8080/user/all"; // fetch url
+	const FETCH_URL = "http://localhost:8080/admin/users"; // fetch url
+	const token = useContext(UserContext).contextData.token;
 	var [datajson, setDataJson] = useState([]); // used to store data
 
 	//pagination
@@ -26,7 +28,11 @@ export default function ManageUsersPage() {
 	// function that will be called when the page loads purpose is to handle and process the axios get request
 	function gatherData() {
 		return axios
-			.get(FETCH_URL) // preform get request
+			.get(FETCH_URL, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}) // preform get request
 			.then((res) => {
 				console.log(res);
 				return res.data; // return response

@@ -1,14 +1,16 @@
 // Import Dependencies
-import React, { useRef } from "react";
+import React, {useContext, useRef} from "react";
 import axios from "axios";
 
 // Import Components
 import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
+import {UserContext} from "../../UserContext";
 
 // Import Styles
 import Style from "../../assets/styles/ItemStyle.module.css";
 
 export default function EditItem(props) {
+	const token = useContext(UserContext).contextData.token;
 	const itemNameRef = useRef();
 	const itemPriceRef = useRef();
 	const itemWeightRef = useRef();
@@ -50,7 +52,11 @@ export default function EditItem(props) {
         formData.append('image', imageData.files[0]);
         const imagePost = async(itemId) => {
             try {
-                const res = await axios.post(UPLOAD_URL + itemId, formData); // TODO should be a put request 
+                const res = await axios.post(UPLOAD_URL + itemId, formData, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}); // TODO should be a put request
                 console.log("response image post: " + res);
                 formData.delete('image');
                 window.location.reload(false);

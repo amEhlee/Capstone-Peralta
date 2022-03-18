@@ -8,7 +8,10 @@ import {
     BsFillPersonFill,
     BsFillCartFill, BsShop,
 } from "react-icons/bs";
+
 import {Modal, Button, Container, Navbar, Nav, NavDropdown} from "react-bootstrap";
+import {Link} from "react-router-dom";
+
 import IconButtons from "./IconButtons";
 import CategoryNav from "./CategoryNav";
 import LoginForm from "../users/LoginForm";
@@ -44,8 +47,8 @@ function NavBar() {
                                 type="text"
                                 placeholder="Search"
                                 className={style.searchBar}
-                            ></input>
-                            <BsSearch></BsSearch>
+                            />
+                            <BsSearch/>
                         </div>
 
                         <IconButtons
@@ -53,9 +56,12 @@ function NavBar() {
                             buttonVariant="light"
                             redirectURL="/"
                         />
-                        <Button variant="light" onClick={handleShow}>
-                            {BsFillPersonFill()}
-                        </Button>
+
+                        <Link to="/login">
+                            <Button variant="light" onClick={handleShow}>
+                                {BsFillPersonFill()}
+                            </Button>
+                        </Link>
 
                         <IconButtons
                             iconElement={BsFillCartFill()}

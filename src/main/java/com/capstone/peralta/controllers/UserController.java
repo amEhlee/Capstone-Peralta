@@ -1,44 +1,114 @@
 package com.capstone.peralta.controllers;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.capstone.peralta.models.Item;
+import com.capstone.peralta.models.Role;
 import com.capstone.peralta.models.User;
 import com.capstone.peralta.services.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.SchemaOutputResolver;
+import java.io.IOException;
+import java.net.URI;
+import java.sql.Date;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = "3000")
+@RequiredArgsConstructor
+@RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
 public class UserController {
 
     @Autowired
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public void filter() {
+
     }
 
-    @GetMapping("/{userId}")
+    //Refreshes the users authentication token
+    @GetMapping("/auth/refreshtoken")
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String authorizationHeader = request.getHeader(AUTHORIZATION);//Grabs the authorization header in the request body
+        /*Checks if the Authorization section starts with "Bearer " which shows that the sender "bears" a token. Very important*/
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            try {
+                String refresh_token = authorizationHeader.substring("Bearer ".length()); //Cuts "Bearer " from the authorization body to grab just the token
+                Algorithm algorithm = Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()); //Creates a hashing algorithm TODO: Put this into a utility class to remove redundancy
+                JWTVerifier verifier = JWT.require(algorithm).build(); //Object that Verifies Token
+                DecodedJWT decodedJWT = verifier.verify(refresh_token); //Token Verification/Decoding
+                String username = decodedJWT.getSubject(); //gets username from decoded refresh_token
+                User user = userService.getUserByName(username); //grabs user object from username
+                String access_token = JWT.create() //Initial Access refresh_token
+                        .withSubject(user.getEmail()) //Subject of JWT must be unique so I chose Username which is technically email
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) //Ten minute expiry
+                        .withIssuer(request.getRequestURI().toString()) //Displays Issuer as the Request Url
+                        .withClaim("roles", user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toList())) //Collects authorities from the user
+                        .sign(algorithm); //Uses previously created hasing algorithm
+
+                Map<String, String> tokens = new HashMap<>(); //Stores tokens in a hashmap for formatting when being sent
+                tokens.put("access_token", access_token);//Puts tokens in the hashmap
+                tokens.put("refresh_token", refresh_token);
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE); //Sets data format as Json
+                new ObjectMapper().writeValue(response.getOutputStream(), tokens); //Writes data values to the response
+            }
+            //If any of the methods in try clause do not successfully execute then they throw an exception. Meaning the request was invalid.
+            catch (Exception exception){
+                //Basically, error logging to web browser terminal and IDE console for Debugging etc.
+                response.setHeader("error", exception.getMessage());
+                response.setStatus(FORBIDDEN.value());
+                //response.sendError(FORBIDDEN.value()); //Old code for sending an error new code is below
+                Map<String, String> error = new HashMap<>();
+                error.put("error_message", exception.getMessage());
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), error);
+            }
+
+        }
+        //In the event nothing was even sent... for some reason.
+        else {
+            throw new RuntimeException("Refresh token is missing");
+        }
+    }
+
+    //Doesn't make sense for security at the moment and we are using UUID at some point - Don
+/*    @GetMapping("/{userId}")
     User getById(@PathVariable Integer userId) {
         return userService.getUserById(userId);
+    }*/
+
+    //Returns user by given email but in my opinion should be replaced by UUID instead, or an Auth token - Don
+    @GetMapping("HttpServletRequest request, HttpServletResponse response")
+    User getByEmail(String email) {
+        return userService.getUserByName(email);
     }
 
-    @GetMapping("/all")
-    List<User> getAll() {
-        return userService.getAll();
-    }
-
-    @PostMapping("/add")
-    User createUser(@RequestBody User user) {
-        return userService.addUser(user);
-    }
-
-    @PostMapping("/addMultiple")
-    List<User> addMultiple(@RequestBody List<User> userList) {
-        return userService.addMultiple(userList);
-
-    }
+    //TODO: Add sets where applicable to a User, gets optional due to token grabbing the whole user. - Don
 }
