@@ -8,8 +8,10 @@ import {
     BsFillPersonFill,
     BsFillCartFill, BsShop,
 } from "react-icons/bs";
-import {Modal, Button, Container, Navbar} from "react-bootstrap";
+
+import {Modal, Button, Container, Navbar, Nav, NavDropdown} from "react-bootstrap";
 import {Link} from "react-router-dom";
+
 import IconButtons from "./IconButtons";
 import CategoryNav from "./CategoryNav";
 import LoginForm from "../users/LoginForm";
@@ -28,7 +30,17 @@ function NavBar() {
             <div>
                 <Navbar bg="light" variant="light">
                     <Container>
-                        <Navbar.Brand><BsShop/> Peralta Shop</Navbar.Brand>
+                        <Navbar.Brand><BsShop/> <a href="/">Peralta Shop</a></Navbar.Brand>
+                        <Nav>
+                            {/*TODO: ADD NAVIGATION*/}
+                            <NavDropdown title="Navigation">
+                                <NavDropdown.Item href="/">Home</NavDropdown.Item>
+                                <NavDropdown.Item href="/orders">Orders</NavDropdown.Item>
+
+                                <NavDropdown.Item href="/userProfile">User Profile</NavDropdown.Item>
+
+                            </NavDropdown>
+                        </Nav>
                         {/* Search Functionality will be added in future update */}
                         <div className={style.searchwrapper}>
                             <input
@@ -38,6 +50,7 @@ function NavBar() {
                             />
                             <BsSearch/>
                         </div>
+
                         <IconButtons
                             iconElement={BsFillBellFill()}
                             buttonVariant="light"
@@ -57,7 +70,7 @@ function NavBar() {
                         />
                     </Container>
                 </Navbar>
-                <CategoryNav/>
+                {/*<CategoryNav/>*/}
             </div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>

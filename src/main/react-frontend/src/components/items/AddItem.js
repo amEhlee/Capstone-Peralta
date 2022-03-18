@@ -17,12 +17,16 @@ import {UserContext} from "../../UserContext";
 
 export default function AddItem() {
 
+    //sets CategoryList to a copy of categoryjson
     const [categoryjson, setcategoryjson] = useState([]);
+    //sets the catergory URL
     const FETCH_URL = "http://localhost:8080/category/all";
     const token = useContext(UserContext).contextData.token;
+
     var CategoryList = [...categoryjson.map((i) => (
         {value: i.categoryId, label: i.categoryName}))];
 
+    //fetches all categories from the database using axios
     function getCategories() {
         return axios
             .get(FETCH_URL, {
@@ -37,10 +41,12 @@ export default function AddItem() {
             .catch((err) => console.error(err));
     }
 
+    //runs getCategories function on every render
     useEffect(() => {
         getCategories();
     }, []);
 
+    //sets the state of the item
     const itemNameRef = useRef();
     const itemPriceRef = useRef();
     const itemWeightRef = useRef();
@@ -54,6 +60,7 @@ export default function AddItem() {
 
     const itemCategoryRef = useRef();
 
+    //sets the category
     function submitCategory() {
         const returnedCategory = addCategoryRef.current.value;
 
