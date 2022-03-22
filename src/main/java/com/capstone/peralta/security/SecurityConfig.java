@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement().sessionCreationPolicy(STATELESS)
                 //TODO:Fix Authentication and normalize URL's
                 .and().authorizeRequests().antMatchers("/user/login", "/user/auth/refreshtoken").permitAll()
-                .and().authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER")
+                .and().authorizeRequests().antMatchers("/user/**", "/item/addMultiple").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER")
                 .and().authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_OWNER")
                 .and().authorizeRequests().anyRequest().authenticated()
                 .and().httpBasic();
