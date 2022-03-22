@@ -65,18 +65,22 @@ export default function EditItem(props) {
             }
         }
 
-        const PUT_URL = "http://localhost:8080/item/update"; // fetch url
-        const itemPost = async () => {
-            try {
-                const res = await axios.put(PUT_URL, item);
-                    console.log("response item put: " + res.data);
-                    // setResItemId(res.data.itemId);
-                    imagePost(res.data.itemId);
-                    // console.log(resItemId);
-            } catch (err) {
-                console.error(err);
-            }
-        };
+	const PUT_URL = "http://localhost:8080/item/update"; // fetch url
+	const itemPost = async () => {
+		try {
+			const res = await axios.put(PUT_URL, item, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			console.log("response item put: " + res.data);
+			// setResItemId(res.data.itemId);
+			imagePost(res.data.itemId);
+			// console.log(resItemId);
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
         itemPost();
 	}
