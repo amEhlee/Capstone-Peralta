@@ -6,6 +6,7 @@ import com.capstone.peralta.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,12 +46,14 @@ public class ItemController {
 
 //    Takes an Item object in the body of the request, and a categoryId as a path variable at /item/add/{categoryId}
 //    Saves the item to the database
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping("/add/{categoryId}")
     Item createItem(@RequestBody Item item, @PathVariable Integer categoryId) {
         return itemService.addItem(item, categoryId);
     }
 
 //    Adds multiple Item objects to the database from the body of the request
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping("/addMultiple")
     List<Item> addMultiple(@RequestBody List<Item> itemList) {
         return itemService.addMultiple(itemList);
@@ -58,6 +61,7 @@ public class ItemController {
 
 //    Takes an already existing item in the database in the body of the request body and updates
 //    its values in the database
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_OWNER"})
     @PutMapping("/update")
     Item updateItem(@RequestBody Item item) {
         return itemService.updateItem(item);
