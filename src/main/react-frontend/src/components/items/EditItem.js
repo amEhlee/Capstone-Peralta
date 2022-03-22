@@ -48,7 +48,7 @@ export default function EditItem(props) {
 
 
 		// TODO possible modifications as this is for edit item NOT SURE THO :L
-		const UPLOAD_URL = "http://localhost:8080/upload/";
+		const UPLOAD_URL = "http://localhost:8080/image/upload/";
         formData.append('image', imageData.files[0]);
         const imagePost = async(itemId) => {
             try {

@@ -35,13 +35,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         this.authenticationManager = authenticationManager;
     }
 
-    //Method is called on every request sent to server
+    //Method is called on every request sent to server from login
     @CrossOrigin(origins = "http://localhost:3000")
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String email = request.getParameter("email"); //Grabs email from request body
         String password = request.getParameter("password"); //Grabs password from request body
-        log.info(String.valueOf(request)); //For debugging, should be commented out as necessary
+        log.info(String.valueOf(request)); //For debugging
         log.info("Email is: {}", email); log.info("Password is: {}", password);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password); //formats username and password into a token
@@ -53,7 +53,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         User user = (User)authResult.getPrincipal(); //Accesses the User that is authenticated
 
-        Algorithm algorithm = Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()); //Creates a hashing algorithm TODO: Put this into a utility class to remove redundancy
+        Algorithm algorithm = Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()); //Creates a hashing algorithm
 
         String access_token = JWT.create() //Initial Access token
                 .withSubject(user.getUsername()) //Subject of JWT must be unique so I chose Username which is technically email
@@ -67,9 +67,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .withIssuer(request.getRequestURI().toString()) //Displays Issuer as the Request Url
                 .sign(algorithm); //Uses previously created hasing algorithm
 
-        //This block of code attaches tokens to header body of POST Request NOTE: Is deprecated now, should remove on full release. I only kept it for testing - Don
-/*      response.setHeader("access_token", access_token);
-        response.setHeader("refresh_token", refresh_token);*/
 
         //This block of code below maps the tokens to a hash map and encrypts them for more protection
         Map<String, String> tokens = new HashMap<>();
