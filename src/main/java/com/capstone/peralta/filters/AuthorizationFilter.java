@@ -41,7 +41,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         Basically, if you are trying to access something that doesn't require you to be logged in ignore the else clause.
         NOTE: I'm not 100% on whether login needs to be included here or not so if it stops working try removing it */
         //Otherwise
-        if ((request.getServletPath().contains("/admin") || request.getServletPath().contains("/user")) && (!request.getServletPath().equals("/user/auth/refreshtoken") || !request.getServletPath().equals("/user/login"))) {
+        if ((request.getServletPath().contains("/admin") || request.getServletPath().contains("/user") || request.getServletPath().contains("/item/add")) && (!request.getServletPath().equals("/user/auth/refreshtoken") || !request.getServletPath().equals("/user/login"))) {
             String authorizationHeader = request.getHeader(AUTHORIZATION); //Grabs the authorization header in the request body
             /*Checks if the Authorization section starts with "Bearer " which shows that the sender "bears" a token. Very important*/
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -75,10 +75,12 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
             }
             else { //If no bearer/authorization body exists go through filter
+                log.info("AuthF: No Auth Body");
                 filterChain.doFilter(request, response);
             }
         }
         else {
+            log.info("AuthF: No Path");
             filterChain.doFilter(request,response);
         }
     }
