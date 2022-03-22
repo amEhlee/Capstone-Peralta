@@ -111,7 +111,7 @@ export default function AddItem() {
             itemWeight: returnedWeight,
         };
 
-        const UPLOAD_URL = "http://localhost:8080/upload/";
+        const UPLOAD_URL = "http://localhost:8080/image/upload/";
         formData.append('image', imageData.files[0]);
 
         const imagePost = async(itemId) => {
