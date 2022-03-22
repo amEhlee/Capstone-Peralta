@@ -52,8 +52,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             case "/admin/role/addtouser" :
             case "/category/add" :
             case "/category/addMultiple" :
-            case "/image/upload/{itemId}" :
-            case "/item/add/{categoryId}" :
             case "/item/addMultiple" :
             case "/item/update" :
                 log.info("AuthF: Check Auth");
@@ -61,7 +59,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                 break;
             default:
                 if (path.contains("/image/upload") || path.contains("/item/add")) {
-                    log.info("AuthF: Image and Item Safety Net");
+                    log.info("AuthF: Check Auth 2");
                     checkAuthorizations(request, response, filterChain);
                 }
                 else {
@@ -103,7 +101,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                 log.info(String.valueOf(authorities)); //For debugging
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities); //Formats user info into a token. If not possible throws an exception
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken); //Authenticates the token and verifies it's valid. Otherwise throws an exception
-                log.info("AuthF: Authorized");
+                log.info("AuthF: Authorities Checked");
                 filterChain.doFilter(request, response); //Runs through the filter after checking token
             }
             catch (Exception exception){
