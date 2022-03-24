@@ -40,11 +40,12 @@ export default function App() {
 					<Route path="/item/:itemid" element={<ProductPage />} />
 
 					<Route path="/userProfile" element={<UserProfile/>}/>
-					<Route path="/editProfile" element={<EditProfile/>}/>
+
 				</Route>
 
 				<Route path="/login" element={<LoginUserPage />} />
 				<Route path="/signUp" element={<SignUpUserPage />} />
+				<Route path="/editProfile" element={<EditProfile/>}/>
 
 
 				{/* Example Path Would Be e.g /admin/inventory */}
