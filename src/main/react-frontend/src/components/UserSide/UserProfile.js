@@ -11,8 +11,8 @@ import Style from "../../assets/styles/UserSide.module.css";
 
 export default function UserProfile() {
 
-    //
-    const userContext = useContext(UserContext);
+
+    const userContext = useContext(UserContext).contextData.user;
     const navigate = useNavigate();
 
 
@@ -24,6 +24,7 @@ export default function UserProfile() {
                 <Form.Control
                     type="text"
                     placeholder="Enter your first name" disabled
+                    defaultValue={userContext.userFirstName}
                 />
             </FormGroup>
 
@@ -31,6 +32,7 @@ export default function UserProfile() {
                 <Form.Label>Last Name: </Form.Label>
                 <Form.Control type="text"
                               placeholder="Enter your last name" disabled
+                              defaultValue={userContext.userLastName}
                 />
             </Form.Group>
 
@@ -39,6 +41,7 @@ export default function UserProfile() {
                 <Form.Control
                     type="text"
                     placeholder="Enter your Email" disabled
+                    defaultValue={userContext.email}
                 />
             </FormGroup>
 
