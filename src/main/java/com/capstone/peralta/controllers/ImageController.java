@@ -8,12 +8,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.security.RolesAllowed;
+
 /*
  * Controller class for the Image model. Contains one REST endpoint to save the image locally
  */
 @Controller
 @RequestMapping("/image")
 @CrossOrigin(origins = "3000")
+@RolesAllowed({"ROLE_ADMIN", "ROLE_OWNER"})
 public class ImageController {
 
 //    Autowired tells Spring to inject an ImageService object when the constructor is called
