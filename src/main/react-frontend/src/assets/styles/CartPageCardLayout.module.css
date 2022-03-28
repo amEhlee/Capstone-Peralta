@@ -1,0 +1,22 @@
+
+.itemDisplay {
+    margin: 5px;
+	display:flex;
+    flex-direction: row;
+}
+
+.itemDetails {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+
+.cartSpacing {
+	margin: 4px;
+}
+
+img {
+	border-radius: 20px;
+}
