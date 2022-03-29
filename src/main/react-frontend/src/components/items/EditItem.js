@@ -1,15 +1,16 @@
 // Import Dependencies
-import React, {useContext, useRef} from "react";
+import React, { useContext, useRef } from "react";
 import axios from "axios";
 
 // Import Components
 import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
-import {UserContext} from "../../UserContext";
+import { UserContext } from "../../UserContext";
 
 // Import Styles
 import Style from "../../assets/styles/ItemStyle.module.css";
 
 export default function EditItem(props) {
+	// sets the state of the item
 	const token = useContext(UserContext).contextData.token;
 	const itemNameRef = useRef();
 	const itemPriceRef = useRef();
@@ -21,7 +22,13 @@ export default function EditItem(props) {
 	let formData = new FormData();
 
 	function submitHandler(event) {
+		// prevent default form submit page reload
 		event.preventDefault();
+
+		// close the modal TODO: MOVE TO PUT REQUEST SUCESS
+		props.handleClose();
+		
+		// gather form data
 		const returnedName = itemNameRef.current.value;
 		const returnedPrice = itemPriceRef.current.value;
 		const returnedWeight = itemWeightRef.current.value;
@@ -35,6 +42,7 @@ export default function EditItem(props) {
 			? (returnedAvailable = 1)
 			: (returnedAvailable = 0);
 
+		// create a new item object based on fields
 		const item = {
 			itemId: props.item.itemId,
 			category_id: null,
@@ -46,43 +54,40 @@ export default function EditItem(props) {
 			itemWeight: returnedWeight,
 		};
 
-
 		// TODO possible modifications as this is for edit item NOT SURE THO :L
 		const UPLOAD_URL = "http://localhost:8080/image/upload/";
-        formData.append('image', imageData.files[0]);
-        const imagePost = async(itemId) => {
-            try {
-                const res = await axios.post(UPLOAD_URL + itemId, formData, {
+		formData.append("image", imageData.files[0]);
+		const imagePost = async (itemId) => {
+			try {
+				const res = await axios.post(UPLOAD_URL + itemId, formData, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
 				}); // TODO should be a put request
-                console.log("response image post: " + res);
-                formData.delete('image');
-                window.location.reload(false);
-            } catch (err) {
-                console.error(err);
-            }
-        }
+				console.log("response image post: " + res);
+				formData.delete("image");
+			} catch (err) {
+				console.error(err);
+			}
+		};
 
-	const PUT_URL = "http://localhost:8080/item/update"; // fetch url
-	const itemPost = async () => {
-		try {
-			const res = await axios.put(PUT_URL, item, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-			console.log("response item put: " + res.data);
-			// setResItemId(res.data.itemId);
-			imagePost(res.data.itemId);
-			// console.log(resItemId);
-		} catch (err) {
-			console.error(err);
-		}
-	};
+		// put destination url
+		const PUT_URL = "http://localhost:8080/item/update"; 
+		const itemPost = async () => {
+			try {
+				const res = await axios.put(PUT_URL, item, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				console.log(res.data);
+				//imagePost(res.data.itemId); TODO: why is this here?
+			} catch (err) {
+				console.error(err);
+			}
+		};
 
-        itemPost();
+		itemPost();
 	}
 
 	return (
@@ -93,15 +98,13 @@ export default function EditItem(props) {
 					type="text"
 					placeholder="Enter Item Name"
 					ref={itemNameRef}
-          defaultValue={props.item.itemName}
+					defaultValue={props.item.itemName}
 				/>
 			</FormGroup>
 
 			<Form.Group controlId="formFileMultiple" className="mb-3">
 				<Form.Label>Item Images</Form.Label>
-				<Form.Control type="file" 
-					ref={imageRef}
-				/>
+				<Form.Control type="file" ref={imageRef} />
 			</Form.Group>
 
 			<FormGroup className="mb-3" controlId="formItemDescription">
@@ -133,7 +136,7 @@ export default function EditItem(props) {
 					<Form.Control
 						aria-label="Amount (to the nearest dollar)"
 						ref={itemPriceRef}
-            defaultValue={props.item.itemPrice}
+						defaultValue={props.item.itemPrice}
 					/>
 				</InputGroup>
 			</FormGroup>
@@ -144,7 +147,7 @@ export default function EditItem(props) {
 					type="number"
 					placeholder="Enter Item Quantity"
 					ref={itemQuantityRef}
-          defaultValue={props.item.itemQuantity}
+					defaultValue={props.item.itemQuantity}
 				/>
 			</FormGroup>
 
@@ -155,7 +158,7 @@ export default function EditItem(props) {
 						type="number"
 						placeholder="Enter Item Weight"
 						ref={itemWeightRef}
-            defaultValue={props.item.itemWeight}
+						defaultValue={props.item.itemWeight}
 					/>
 					<InputGroup.Text>kg</InputGroup.Text>
 				</InputGroup>
@@ -167,7 +170,7 @@ export default function EditItem(props) {
 					type="number"
 					placeholder="Enter Item Volume"
 					ref={itemVolumeRef}
-          defaultValue={props.item.itemVolume}
+					defaultValue={props.item.itemVolume}
 				/>
 			</FormGroup>
 

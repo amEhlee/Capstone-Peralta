@@ -113,7 +113,7 @@ export default function ManageItemsPage() {
 						<Modal.Title>Add Item</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<AddItem />
+						<AddItem handleClose={handleClose}/>
 					</Modal.Body>
 				</Modal>
 			</>

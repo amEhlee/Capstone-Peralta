@@ -3,7 +3,7 @@ import React from 'react';
 
 // Import Components
 import Item from './Item';
-import ManageItems from './ManageItems';
+import ManageItemsTable from './ManageItemsTable';
 
 // Import Styles
 import style from '../../assets/styles/ItemCardLayout.module.css'
@@ -42,7 +42,7 @@ export default function ItemList(props) {
           }
         }
         ).map((i) => (
-          <ManageItems
+          <ManageItemsTable
           key={i.itemId}
           id={i.itemId}
           name={i.itemName}
