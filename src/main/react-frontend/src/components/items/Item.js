@@ -11,6 +11,10 @@ import style from '../../assets/styles/ItemCardLayout.module.css'
 // Future update: add item id for dynamic navigation
 export default function Item(props) {
     const history = useNavigate();
+    let limitName = props.name;
+    if(limitName.length > 20) {
+        limitName = limitName.substring(0,20) + "...";
+    }
 
     function tryRequire() {
         try {
@@ -26,7 +30,7 @@ export default function Item(props) {
                     {/* Temporary Image Placeholder: Add dynamic image import from DB in future update*/}
                     <Card.Img variant="top" src={tryRequire()} />
                     <Card.Body>
-                        <Card.Title>{props.name}</Card.Title>
+                        <Card.Title>{limitName}</Card.Title>
                         <Card.Text>
                             Price ${props.price}
                         </Card.Text>

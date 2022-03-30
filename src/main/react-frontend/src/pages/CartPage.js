@@ -23,6 +23,19 @@ function gatherData() {
         .catch((err) => console.error(err));
 }
 
+// testing for email service
+const EMAILSERV_URL = "http://localhost:8080/send/";
+function sendEmail(){
+        axios.post(EMAILSERV_URL, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then((res) => {
+            console.log(res) // return response
+        })
+}
+
 // runs the gatherdata function when the page loads
 useEffect(() => {
     gatherData().then((data) => {
@@ -41,6 +54,7 @@ useEffect(() => {
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Remove</th>
+                        <th><Button onClick={() => {sendEmail()}}>test</Button></th>
                     </tr>
                 </thead>
                 <ItemList
