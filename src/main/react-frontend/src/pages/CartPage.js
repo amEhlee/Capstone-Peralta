@@ -6,8 +6,22 @@ import Image from "../components/items/Image";
 
 function CartPage() {
 	const givenContext = useContext(UserContext);
+	const token = givenContext.token;
 	const cart = givenContext.contextData.cart;
 	let totalPrice = 0.0;
+
+	// testing for email service
+	const EMAILSERV_URL = "http://localhost:8080/send/";
+	function sendEmail(){
+        axios.post(EMAILSERV_URL, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then((res) => {
+            console.log(res) // return response
+        })
+	}
 
 	function removeFromCart(givenIndex) {
 		// remove item from cart
@@ -65,7 +79,7 @@ function CartPage() {
 						<Card.Body>
 							<Card.Title>Subtotal</Card.Title>
 							<Card.Text>Price ${totalPrice.toFixed(2)}</Card.Text>
-							<Button variant="primary">Buy Now</Button> <br />
+							<Button variant="primary" onClick={() => {sendEmail()}}>Buy Now</Button>
 						</Card.Body>
 					</Card>
 				</div>
