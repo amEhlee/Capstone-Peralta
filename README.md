@@ -1,9 +1,9 @@
 # Capstone Peralta 
-Elie Tested and Fork/Branch Created ✅
-Sana Tested and Fork Created ✅
-Jared Tested and Fork Created ✅
-Don Tested and Fork Created ✅
-Jeric Tested and Fork Created ✅
+Elie Tested and Fork/Branch Created ✅ <br>
+Sana Tested and Fork Created ✅ <br>
+Jared Tested and Fork Created ✅ <br>
+Don Tested and Fork Created ✅ <br>
+Jeric Tested and Fork Created ✅ <br>
 
 ## Things we need to do ##
 ## Frontend - General
