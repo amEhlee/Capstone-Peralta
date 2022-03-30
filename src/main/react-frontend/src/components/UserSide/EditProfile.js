@@ -3,14 +3,15 @@ import { UserContext } from "../../UserContext";
 import Style from "../../assets/styles/UserSide.module.css";
 import {Form, FormGroup, Button} from "react-bootstrap";
 import axios from "axios";
+import NavBar from "../layout/NavBar";
 
-export default function EditUser() {
+export default function EditProfile() {
     const userContext = useContext(UserContext).contextData.user;
     const token = useContext(UserContext).contextData.token;
     const userFirstNameRef = useRef();
     const userLastNameRef = useRef();
     const userConfirmPasswordRef = useRef();
-    const userNewPasswordRef = useRef();
+    const userCurrPasswordRef = useRef();
     const userPhoneRef = useRef();
     const userAddressRef = useRef();
     const userPostalCodeRef = useRef();
@@ -23,7 +24,6 @@ export default function EditUser() {
         const returnedFirstName = userFirstNameRef.current.value;
         const returnedLastName = userLastNameRef.current.value;
         const retunedConfirmPassword = userConfirmPasswordRef.current.value;
-        const returnedNewPassword = userNewPasswordRef.current.value;
         const returnedPhone = userPhoneRef.current.value;
         const returnedAddress = userAddressRef.current.value;
         const returnedPostalCode = userPostalCodeRef.current.value;
@@ -40,7 +40,7 @@ export default function EditUser() {
             userId: "", // TODO context api
             firstName: returnedFirstName,
             lastName: returnedLastName,
-            password: returnedNewPassword,
+            password: userConfirmPasswordRef,
             email: returnedEmail,
             phoneNumber: returnedPhone,
             address: returnedAddress,
@@ -66,42 +66,48 @@ export default function EditUser() {
     }
 
     return (
+
         <Form onSubmit={submitHandler} className={Style.centrize}>
             <FormGroup className="mb-3" controlId="formFirstName">
-                <Form.Label>First Name</Form.Label>
+                <Form.Label>First Name:</Form.Label>
                 <Form.Control
                     type="text"
                     placeholder="Enter First Name"
                     ref={userFirstNameRef}
-                    defaultValue={""} /// TODO
+                    defaultValue={userContext.userFirstName} /// TODO
                 />
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="formLastName">
-                <Form.Label>Last Name</Form.Label>
+                <Form.Label>Last Name:</Form.Label>
                 <Form.Control
                     type="text"
                     placeholder="Enter Last Name"
                     ref={userLastNameRef}
-                    defaultValue={""}
+                    defaultValue={userContext.userLastName}
                 />
             </FormGroup>
 
-            <FormGroup className="mb-3" controlId="formConfirmPassword">
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control
-                    type="password"
-                    placeholder="Enter Current Password"
-                    ref={userConfirmPasswordRef}
-                />
-            </FormGroup>
 
-            <FormGroup className="mb-3" controlId="formNewPassword">
-                <Form.Label>New Password</Form.Label>
+            <FormGroup className="mb-3" controlId="formCurrentPassword">
+                <Form.Label>New Password: </Form.Label>
                 <Form.Control
                     type="password"
                     placeholder="Enter New Password"
-                    ref={userNewPasswordRef}
+                    ref={userCurrPasswordRef}
+                    defaultValue={userContext.password}
+                />
+            </FormGroup>
+
+
+            <FormGroup className="mb-3" controlId="formConfirmPassword">
+                <Form.Label>Confirm Password: </Form.Label>
+                <Form.Control
+                    type="password"
+                    placeholder="Confirm the Password"
+                    ref={userConfirmPasswordRef}
+
+
                 />
             </FormGroup>
 
@@ -111,7 +117,7 @@ export default function EditUser() {
                     type="text"
                     placeholder="403-111-1111"
                     ref={userPhoneRef}
-                    defaultValue={""}
+                    defaultValue={userContext.phone}
                 />
             </FormGroup>
 
@@ -121,7 +127,7 @@ export default function EditUser() {
                     type="text"
                     placeholder="Enter Address"
                     ref={userAddressRef}
-                    defaultValue={""}
+                    defaultValue={userContext.address}
                 />
             </FormGroup>
 
@@ -131,11 +137,11 @@ export default function EditUser() {
                     type="text"
                     placeholder="Enter Postal Code"
                     ref={userPostalCodeRef}
-                    defaultValue={""}
+                    defaultValue={userContext.postalcode}
                 />
             </FormGroup>
 
-            <Button type="submit" className="btn btn-success">
+            <Button type="submit" className="btn btn-success" href="./userProfile">
                 Save Changes
             </Button>
         </Form>

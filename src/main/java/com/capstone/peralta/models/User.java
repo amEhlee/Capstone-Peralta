@@ -39,6 +39,7 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Collection<Role> roles = new ArrayList<>();
 
+
     //Constructor for creating a User with Auto Gen ID, and lists
     public User(Integer userId, String email, String password, String firstName, String lastName, String address, String postalCode, String phoneNumber) {
         this.userId = userId;
