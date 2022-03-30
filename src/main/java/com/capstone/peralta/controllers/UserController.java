@@ -20,6 +20,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -100,10 +101,19 @@ public class UserController {
     //Saves User to java object from React (Used for signup)
     @PostMapping("/signup")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
-        //TODO:We need backend validation for signing up to be placed here
+        List<User> userList = userService.getAll();
+
+        //Checks if email is already logged on database
+        for (User value : userList) {
+            if (user.getEmail().equals(value.getEmail())) {
+                return null;
+            }
+        }
 
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
         return ResponseEntity.created(uri).body(userService.addUser(user));
+
+
     }
 
 
@@ -112,9 +122,8 @@ public class UserController {
     User getById(@PathVariable Integer userId) {
         return userService.getUserById(userId);
     }*/
-
-    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     @GetMapping("/load")
+    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public User getByToken (HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);//Grabs the authorization header in the request body
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -142,6 +151,15 @@ public class UserController {
     }
 
     /*
+        Verifies a password from our DB
+     */
+    public boolean verifyPassword (String email, String rawPassword) {
+        User dbUserInstance = userService.getUserByName(email);
+        String encryptedPassword = dbUserInstance.getPassword();
+        return userService.getPasswordEncoder().matches(encryptedPassword, rawPassword);
+    }
+
+    /*
     Method loads a user using a token by getting the subject. The subject key has the users email.
      */
     public User loadUser( String authorizationHeader, String token, Algorithm algorithm) throws IOException {
@@ -150,6 +168,8 @@ public class UserController {
             String username = decodedJWT.getSubject(); //gets username from decoded refresh_token
             return userService.getUserByName(username);
     }
+
+
 
 
 }

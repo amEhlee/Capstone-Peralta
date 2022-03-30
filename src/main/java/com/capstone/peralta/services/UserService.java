@@ -99,4 +99,8 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(userDbResult.getEmail(), userDbResult.getPassword(), authorities); //Returns new Spring Security User Class NOT our User class with loaded privileges
     }
 
+    public PasswordEncoder getPasswordEncoder() {
+        return passwordEncoder;
+    }
+
 }
