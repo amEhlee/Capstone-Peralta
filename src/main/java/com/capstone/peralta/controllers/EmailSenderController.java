@@ -16,9 +16,9 @@ public class EmailSenderController {
         this.senderService = service;
     }
 
-    @PostMapping("/send/{email}")
-    void sendEmail(@PathVariable String email){
-        senderService.sendEmail(email,
+    @PostMapping("/send")
+    void sendEmail(){
+        senderService.sendEmail("javaemailtest35@gmail.com",
                 "This is subject",
                 "This is the body of email");
     }

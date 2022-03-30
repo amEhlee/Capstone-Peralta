@@ -24,7 +24,7 @@ function gatherData() {
 }
 
 // testing for email service
-const EMAILSERV_URL = "http://localhost:8080/send/";
+const EMAILSERV_URL = "http://localhost:8080/email/send";
 function sendEmail(){
         axios.post(EMAILSERV_URL, {
             headers: {
@@ -54,7 +54,7 @@ useEffect(() => {
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Remove</th>
-                        <th><Button onClick={() => {sendEmail()}}>test</Button></th>
+                        <th><Button onClick={() => {sendEmail()}}>Email Test</Button></th>
                     </tr>
                 </thead>
                 <ItemList
