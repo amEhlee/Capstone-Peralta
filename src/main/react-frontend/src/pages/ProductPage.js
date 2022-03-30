@@ -1,11 +1,13 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState, useRef} from "react";
 import axios from "axios";
+
 import {Container,Col,Row,Button,Form,Stack} from "react-bootstrap";
 import { UserContext } from "../UserContext";
 import { useParams } from "react-router-dom";
 import Image from "../components/items/Image";
 
 export default function ProductPage() {
+	// get item id from navbar
 	let { itemid } = useParams();
 
 	//Fetches the item using item ID
@@ -13,16 +15,20 @@ export default function ProductPage() {
 	const token = useContext(UserContext).contextData.token;
 	var [datajson, setDataJson] = useState([]); // used to store data TODO rename var
 
+	// form refs 
+	const selectedQuantity = useRef(); // quantity that the user selects
+
 	// function that will be called when the page loads purpose is to handle and process the axios get request
 	async function gatherData() {
 		return await axios
 			.get(FETCH_URL, {
+				// include authorization header to be able to access the protected route
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			}) // preform get request
 			.then((res) => {
-				return res.data; // return response
+				return res.data; // return response data
 			})
 			.catch((err) => console.error(err));
 	}
@@ -34,10 +40,8 @@ export default function ProductPage() {
 		});
 	}, []);
 
-	//sets what is output to the webpage
-
-
-	if (datajson === "no data returned") { //if no data is found return NO DATA FOUND
+	//if no data is found return NO DATA FOUND
+	if (datajson === "no data returned") { 
 		return (
 			<section>
 				<p>{datajson}</p>
@@ -70,7 +74,7 @@ export default function ProductPage() {
 
 								<Form.Group controlId="quantity-select" className="mb-3">
 									<Form.Label>Select Quantity</Form.Label>
-									<Form.Control as="select">
+									<Form.Control as="select" ref={selectedQuantity}>
 										<option>1</option>
 										<option>2</option>
 										<option>3</option>
@@ -83,23 +87,27 @@ export default function ProductPage() {
 								<UserContext.Consumer >
 									{(value) => {
 										function AddToCart() {
+											//TODO checking should be done here to make sure quantity is valid
+											const givenQuantity = parseInt(selectedQuantity.current.value);
 											let newCart = value.contextData.cart;
 
+											// check to see if item is already in cart if so update quantity
 											for (let i = 0; i < newCart.length; i++) {
 												if (newCart[i].item.itemName === datajson.itemName) {
-													newCart[i].quantity++;
+													newCart[i].quantity += givenQuantity;
 													return newCart;
 												}
 											}
 
-											newCart.push({ item: datajson, quantity: 1 });
+											// if item is not in cart push a new entry
+											newCart.push({ item: datajson, quantity: givenQuantity });
 											return newCart;
 										}
 
 										return (
 											<Button variant={"primary"} className={"m-1"}
 												onClick={() => {
-													// Do this:
+													// Onclick set new cart data
 													value.setContextData((prevData) => {
 														return {
 															...prevData,
@@ -114,6 +122,7 @@ export default function ProductPage() {
 										);
 									}}
 								</UserContext.Consumer>
+								{/*TODO Add Logic for Buy Now Button*/}
 								<Button variant={"primary"} className={"m-1"}>
 									Buy Now
 								</Button>
@@ -124,7 +133,7 @@ export default function ProductPage() {
 					<Row>
 						{/*item desciption placeholder*/}
 						<Stack gap={3}>
-							<div></div>
+							<div/>
 							<div>
 								"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
 								eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
