@@ -52,6 +52,11 @@ public class UserService implements UserDetailsService {
         userRepo.removeUserById(user.getUserId());
     }*/
 
+    public void updateUser(User user) {
+        log.info("Updating User " + user.getEmail());
+        userRepo.update(user);
+    }
+
     public Role addRole(Role role) {
         log.info("Saving new Role into Database");
         return roleRepo.save(role);
