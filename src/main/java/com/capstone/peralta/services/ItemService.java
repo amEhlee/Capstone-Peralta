@@ -53,4 +53,12 @@ public class ItemService {
         return itemRepo.findItemsByItemNameContaining(searchString);
     }
 
+    public List<Item> searchItemsByCategoryName(String searchString) {
+
+        return itemRepo.findItemsByCategory(categoryRepo.findByCategoryNameContaining(searchString));
+    }
+
+//    public void deleteItem(Item item) {
+//        itemRepo.delete(item);
+//    }
 }

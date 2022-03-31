@@ -44,7 +44,7 @@ function NavBar() {
                                 <NavDropdown.Item onClick={() => {navigate("/admin/manageItems")}}>Admin Side</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
-                        {/* Search Functionality will be added in future update */}
+                        {/* TODO: add search functionality */}
                         <div className={style.searchwrapper}>
                             <input
                                 type="text"
