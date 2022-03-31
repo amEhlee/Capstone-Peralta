@@ -57,8 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests().anyRequest().authenticated()
                 .and().httpBasic();
         http.addFilter(authenticationFilter); //Sets the filter of all the above addresses to be the authentication filter created above
-        http.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);//Makes a difference with the order of filters in the filter chain but at the moment we are only operating on one filter. Think Web Dev Semester 3
-
+        http.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class); //Makes a difference with the order of filters in the filter chain but at the moment we are only operating on one filter. Think Web Dev Semester 3
 
 
         //This block of code activates the filters and if active will not let you do anything atm....

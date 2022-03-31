@@ -42,7 +42,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String email = request.getParameter("email"); //Grabs email from request body
         String password = request.getParameter("password"); //Grabs password from request body
         log.info(String.valueOf(request)); //For debugging
-        log.info("Email is: {}", email); log.info("Password is: {}", password);
+        log.info("Email is: {}", email);
+        log.info("Password is: {}", password);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password); //formats username and password into a token
         return authenticationManager.authenticate(authenticationToken); //Authenticates token Note: at the end of the method it will call successfulAuthentication()
@@ -57,13 +58,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         String access_token = JWT.create() //Initial Access token
                 .withSubject(user.getUsername()) //Subject of JWT must be unique so I chose Username which is technically email
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) //Ten minute expiry
+                .withExpiresAt(new Date(System.currentTimeMillis() + 120 * 60 * 1000)) //Ten minute expiry
                 .withIssuer(request.getRequestURI().toString()) //Displays Issuer as the Request Url
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())) //Collects authorities from the user
                 .sign(algorithm); //Uses previously created hasing algorithm
         String refresh_token = JWT.create() //Token that "refreshes" the access token
                 .withSubject(user.getUsername()) //Subject of JWT must be unique so I chose Username which is technically email
-                .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) //1 hour expiry
+                .withExpiresAt(new Date(System.currentTimeMillis() + 240 * 60 * 1000)) //1 hour expiry
                 .withIssuer(request.getRequestURI().toString()) //Displays Issuer as the Request Url
                 .sign(algorithm); //Uses previously created hasing algorithm
 
