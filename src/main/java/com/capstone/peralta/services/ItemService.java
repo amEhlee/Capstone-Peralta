@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ItemService {
@@ -23,15 +22,17 @@ public class ItemService {
         this.categoryRepo = categoryRepo;
         this.itemRepo = itemRepo;
     }
-
+//    Gets an item from the repository, specified by the ID
     public Item getItemById(Integer itemId) {
         return itemRepo.findById(itemId).get();
     }
 
+//    Gets a list of all items in the repository
     public List<Item> getAll() {
         return itemRepo.findAll();
     }
 
+//    Adds an item to the repository, and adds attaches it to the corresponding category
     public Item addItem(Item item, Integer categoryId) {
         Category category = categoryRepo.findById(categoryId).orElse(null);
         if (category != null) {

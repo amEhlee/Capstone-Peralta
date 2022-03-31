@@ -20,6 +20,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -43,7 +44,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @RequestMapping("/user")
 @CrossOrigin(origins = "3000")
 @RequiredArgsConstructor
-@RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
+
 public class UserController {
 
     @Autowired
@@ -55,20 +56,18 @@ public class UserController {
 
     //Refreshes the users authentication token
     @GetMapping("/auth/refreshtoken")
+    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);//Grabs the authorization header in the request body
         /*Checks if the Authorization section starts with "Bearer " which shows that the sender "bears" a token. Very important*/
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length()); //Cuts "Bearer " from the authorization body to grab just the token
-                Algorithm algorithm = Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()); //Creates a hashing algorithm TODO: Put this into a utility class to remove redundancy
-                JWTVerifier verifier = JWT.require(algorithm).build(); //Object that Verifies Token
-                DecodedJWT decodedJWT = verifier.verify(refresh_token); //Token Verification/Decoding
-                String username = decodedJWT.getSubject(); //gets username from decoded refresh_token
-                User user = userService.getUserByName(username); //grabs user object from username
+                Algorithm algorithm = Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()); //Creates a hashing algorithm
+                User user = loadUser(authorizationHeader, refresh_token, algorithm); //loads user using the authorization header, a valid refresh token, and auth header
                 String access_token = JWT.create() //Initial Access refresh_token
                         .withSubject(user.getEmail()) //Subject of JWT must be unique so I chose Username which is technically email
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) //Ten minute expiry
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 120 * 60 * 1000)) //Ten minute expiry
                         .withIssuer(request.getRequestURI().toString()) //Displays Issuer as the Request Url
                         .withClaim("roles", user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toList())) //Collects authorities from the user
                         .sign(algorithm); //Uses previously created hasing algorithm
@@ -87,6 +86,7 @@ public class UserController {
                 //response.sendError(FORBIDDEN.value()); //Old code for sending an error new code is below
                 Map<String, String> error = new HashMap<>();
                 error.put("error_message", exception.getMessage());
+                error.put("error_notes", "Token Invalid");
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
@@ -98,17 +98,78 @@ public class UserController {
         }
     }
 
+    //Saves User to java object from React (Used for signup)
+    @PostMapping("/signup")
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        List<User> userList = userService.getAll();
+
+        //Checks if email is already logged on database
+        for (User value : userList) {
+            if (user.getEmail().equals(value.getEmail())) {
+                return null;
+            }
+        }
+
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
+        return ResponseEntity.created(uri).body(userService.addUser(user));
+
+
+    }
+
+
     //Doesn't make sense for security at the moment and we are using UUID at some point - Don
 /*    @GetMapping("/{userId}")
     User getById(@PathVariable Integer userId) {
         return userService.getUserById(userId);
     }*/
-
-    //Returns user by given email but in my opinion should be replaced by UUID instead, or an Auth token - Don
-    @GetMapping("HttpServletRequest request, HttpServletResponse response")
-    User getByEmail(String email) {
-        return userService.getUserByName(email);
+    @GetMapping("/load")
+    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
+    public User getByToken (HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String authorizationHeader = request.getHeader(AUTHORIZATION);//Grabs the authorization header in the request body
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            try {
+                String token = authorizationHeader.substring("Bearer ".length()); //Cuts "Bearer " from the authorization body to grab just the token
+                Algorithm algorithm = Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()); //Creates a hashing algorithm TODO: Put this into a utility class to remove redundancy
+                return loadUser(authorizationHeader,token,algorithm); //returns loaded user, refer to loadUser method below
+            }
+            catch (Exception exception) {
+                //Basically, error logging to web browser terminal and IDE console for Debugging etc.
+                response.setHeader("error", exception.getMessage());
+                response.setStatus(FORBIDDEN.value());
+                //response.sendError(FORBIDDEN.value()); //Old code for sending an error new code is below
+                Map<String, String> error = new HashMap<>();
+                error.put("error_message", exception.getMessage());
+                error.put("error_notes", "Token Invalid Could Not Load User");
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), error);
+            }
+        }
+        else {
+            throw new RuntimeException("Refresh token is missing");
+        }
+        return null;
     }
 
-    //TODO: Add sets where applicable to a User, gets optional due to token grabbing the whole user. - Don
+    /*
+        Verifies a password from our DB
+     */
+    public boolean verifyPassword (String email, String rawPassword) {
+        User dbUserInstance = userService.getUserByName(email);
+        String encryptedPassword = dbUserInstance.getPassword();
+        return userService.getPasswordEncoder().matches(encryptedPassword, rawPassword);
+    }
+
+    /*
+    Method loads a user using a token by getting the subject. The subject key has the users email.
+     */
+    public User loadUser( String authorizationHeader, String token, Algorithm algorithm) throws IOException {
+            JWTVerifier verifier = JWT.require(algorithm).build(); //Object that Verifies Token
+            DecodedJWT decodedJWT = verifier.verify(token); //Token Verification/Decoding
+            String username = decodedJWT.getSubject(); //gets username from decoded refresh_token
+            return userService.getUserByName(username);
+    }
+
+
+
+
 }
