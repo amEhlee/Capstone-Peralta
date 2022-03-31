@@ -74,14 +74,17 @@ export default function ProductPage() {
 
 								<Form.Group controlId="quantity-select" className="mb-3">
 									<Form.Label>Select Quantity</Form.Label>
-									<Form.Control as="select" ref={selectedQuantity}>
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-									</Form.Control>
+									<Form.Control
+										type="number"
+										min="0"
+										max={datajson.itemQuantity}
+										placeholder="Enter Item Quantity"
+
+										defaultValue={1}
+
+									/>
 								</Form.Group>
+
 
 								{/*Adds to cart using previous*/}
 								<UserContext.Consumer >
@@ -123,6 +126,7 @@ export default function ProductPage() {
 									}}
 								</UserContext.Consumer>
 								{/*TODO Add Logic for Buy Now Button*/}
+								{/*Buy now will just send the user directly to checkout with the specified item*/}
 								<Button variant={"primary"} className={"m-1"}>
 									Buy Now
 								</Button>
