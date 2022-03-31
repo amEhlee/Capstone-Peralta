@@ -31,10 +31,12 @@ Jeric Tested and Fork Created ✅ <br>
 - ➖ User session loading / Save details like cart/token over refresh - Elie ( Might Need Help )
 - 🟨 Cart Persistence in database - Elie
 - ➖ Item Description added to model and rendered on frontend
-- 🟥 Delete or deactivate functionality for users
-- 🟥 Delete or deactivate functionality for items
-- 🟥 Delete or deactivate functionality for categories
+- 🟥 Delete or deactivate functionality for users - Jared
+- 🟥 Delete or deactivate functionality for items - Jared
+- 🟥 Delete or deactivate functionality for categories - Jared
 - ➖ Cancel functionality for orders
+- ➖ Persist orders - Jared
+- ➖ Update order model - Jared
 - ➖ Change order status
 - ➖ Report Generation
 - 🟨 Backend category implementation, search on category
