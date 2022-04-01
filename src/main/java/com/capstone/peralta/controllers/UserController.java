@@ -112,8 +112,15 @@ public class UserController {
 
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
         return ResponseEntity.created(uri).body(userService.addUser(user));
+    }
 
-
+    @PostMapping("/update")
+    public boolean updateUser(@RequestBody User user, @RequestBody String password) {
+        if (verifyPassword(user.getEmail(), password)) {
+            userService.updateUser(user);
+            return true;
+        }
+        return false;
     }
 
 
