@@ -58,7 +58,8 @@ public class ItemService {
         return itemRepo.findItemsByCategory(categoryRepo.findByCategoryNameContaining(searchString));
     }
 
-//    public void deleteItem(Item item) {
-//        itemRepo.delete(item);
-//    }
+    public void deleteItem(int id) {
+        Item item = getItemById(id);
+        itemRepo.delete(item);
+    }
 }

@@ -54,7 +54,7 @@ export default function EditItem(props) {
 			itemWeight: returnedWeight,
 		};
 
-		// TODO possible modifications as this is for edit item NOT SURE THO :L
+
 		const UPLOAD_URL = "http://localhost:8080/image/upload/";
 		formData.append("image", imageData.files[0]);
 		const imagePost = async (itemId) => {
@@ -63,7 +63,7 @@ export default function EditItem(props) {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
-				}); // TODO should be a put request
+				});
 				console.log("response image post: " + res);
 				formData.delete("image");
 			} catch (err) {
@@ -81,7 +81,9 @@ export default function EditItem(props) {
 					},
 				});
 				console.log(res.data);
-				//imagePost(res.data.itemId); TODO: why is this here?
+				if (imageData.files[0]){
+					imagePost(res.data.itemId);
+				}
 			} catch (err) {
 				console.error(err);
 			}
