@@ -79,7 +79,7 @@ export default function ProductPage() {
 										min="0"
 										max={datajson.itemQuantity}
 										placeholder="Enter Item Quantity"
-
+										ref={selectedQuantity}
 										defaultValue={1}
 
 									/>
