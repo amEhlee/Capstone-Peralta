@@ -13,7 +13,8 @@ export default function ProductPage() {
 	//Fetches the item using item ID
 	const FETCH_URL = "http://localhost:8080/item/get/" + itemid;
 	const token = useContext(UserContext).contextData.token;
-	var [datajson, setDataJson] = useState([]); // used to store data TODO rename var
+	var [datajson, setDataJson] = useState([]);
+	var [itemCategory, setItemCategory] = useState();
 
 	// form refs 
 	const selectedQuantity = useRef(); // quantity that the user selects
@@ -28,6 +29,7 @@ export default function ProductPage() {
 				},
 			}) // preform get request
 			.then((res) => {
+				setItemCategory(res.data.category.categoryName);
 				return res.data; // return response data
 			})
 			.catch((err) => console.error(err));
@@ -59,7 +61,7 @@ export default function ProductPage() {
 
 						<Col md="auto">
 							<div>{datajson.itemName}</div>
-							<div>item category placeholder</div>
+							<div>{itemCategory}</div>
 							<div>${datajson.itemPrice}</div>
 
 							<Form>
@@ -139,13 +141,7 @@ export default function ProductPage() {
 						<Stack gap={3}>
 							<div/>
 							<div>
-								"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-								eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-								enim ad minim veniam, quis nostrud exercitation ullamco laboris
-								nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-								in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-								nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-								sunt in culpa qui officia deserunt mollit anim id est laborum."
+								{datajson.itemDescription}
 							</div>
 						</Stack>
 					</Row>

@@ -1,15 +1,20 @@
 // Import Dependencies
-import React, { useContext, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect} from "react";
 import axios from "axios";
 
 // Import Components
-import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
+import { Form, FormGroup, InputGroup, Button, Col, Row } from "react-bootstrap";
 import { UserContext } from "../../UserContext";
+import Select from 'react-select'
 
 // Import Styles
 import Style from "../../assets/styles/ItemStyle.module.css";
 
 export default function EditItem(props) {
+	//sets CategoryList to a copy of categoryjson
+    const [categoryjson, setcategoryjson] = useState([]);
+    //sets the catergory URL
+    const FETCH_URL = "http://localhost:8080/category/all";
 	// sets the state of the item
 	const token = useContext(UserContext).contextData.token;
 	const itemNameRef = useRef();
@@ -18,8 +23,56 @@ export default function EditItem(props) {
 	const itemVolumeRef = useRef();
 	const itemQuantityRef = useRef();
 	const itemAvailableRef = useRef();
+	const addCategoryRef = useRef();
 	const imageRef = useRef();
 	let formData = new FormData();
+
+	//fetches all categories from the database using axios
+    function getCategories() {
+        return axios
+            .get(FETCH_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }) // preform get request
+            .then((res) => {
+                setcategoryjson(res.data || "no data returned");
+                console.log(res.data); // return response
+            })
+            .catch((err) => console.error(err));
+    }
+
+    //runs getCategories function on every render
+    useEffect(() => {
+        getCategories();
+    }, []);
+
+	const itemCategoryRef = useRef();
+
+    //sets the category
+    function submitCategory() {
+        const returnedCategory = addCategoryRef.current.value;
+
+        const category = {
+            categoryName: returnedCategory 
+        }
+
+        const CATEGORY_URL = "http://localhost:8080/category/add"
+        const categoryPost = async() => {
+            try {
+                await axios.post(CATEGORY_URL, category, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                getCategories();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        categoryPost();
+    }
 
 	function submitHandler(event) {
 		// prevent default form submit page reload
@@ -36,6 +89,7 @@ export default function EditItem(props) {
 		const returnedQuantity = itemQuantityRef.current.value;
 		let returnedAvailable = itemAvailableRef.current.checked;
 		const imageData = imageRef.current;
+		const returnedCategoriesValue = itemCategoryRef.current.props.value.value;
 
 		// parse checkbox result e.g if checkbox_clicked true = 1 if checkbox_clicked false = 0
 		returnedAvailable === true
@@ -119,12 +173,35 @@ export default function EditItem(props) {
 			</FormGroup>
 
 			<FormGroup className="mb-3" controlId="formItemCategory">
-				{/* checkbox */}
-				<Form.Label>Item Category</Form.Label>
-				<Form.Check type="checkbox" label="Food" />
-				<Form.Check type="checkbox" label="Clothing" />
-				<Form.Check type="checkbox" label="Electronics" />
+			<Form.Label>Add Category</Form.Label>
+                <Row>
+                    <Col>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter Category Name"
+                            ref={addCategoryRef}
+                        />
+                    </Col>
+                    <Col lg={4}>
+                        <Button variant="primary" onClick={submitCategory}>Add Category</Button>
+                    </Col>
+                </Row>
 			</FormGroup>
+
+			<FormGroup className="mb-3" controlId="formItemCategory">
+                <Form.Label>Category</Form.Label>
+                <Select
+                    options={categoryjson.map((i) => (
+        {value: i.categoryId, label: i.categoryName}))}
+
+                    placeholder="Select Category"
+                    isSearchable
+                    isClearable
+
+                    ref={itemCategoryRef}
+                />
+
+            </FormGroup>
 
 			<FormGroup className="mb-3" controlId="formItemAvailable">
 				<Form.Label>Available</Form.Label>
