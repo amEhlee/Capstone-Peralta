@@ -31,9 +31,9 @@ Jeric Tested and Fork Created ✅ <br>
 ## Backend
 - ➖ User session loading / Save details like cart/token over refresh - Elie ( Might Need Help )
 - 🟨 Cart Persistence in database - Elie
-- ➖ Item Description added to model and rendered on frontend - Jared
+- ✅ Item Description added to model and rendered on frontend - Jared
 - ✅ Delete or deactivate functionality for users - Jared
-- 🟥 Delete or deactivate functionality for items - Jared
+- 🟨 Delete or deactivate functionality for items - Jared
 - 🟥 Delete or deactivate functionality for categories - Jared
 - ➖ Cancel functionality for orders - Jared
 - ➖ Persist orders - Jared
