@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
 
     public void updateUser(User user) {
         log.info("Updating User " + user.getEmail());
-        userRepo.update(user);
+        userRepo.save(user);
     }
 
     public Role addRole(Role role) {
