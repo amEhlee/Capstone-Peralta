@@ -1,7 +1,9 @@
 package com.capstone.peralta.controllers;
 
+import com.capstone.peralta.models.Item;
 import com.capstone.peralta.models.Role;
 import com.capstone.peralta.models.User;
+import com.capstone.peralta.services.ItemService;
 import com.capstone.peralta.services.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ public class AdminController {
 
     @Autowired
     private final UserService userService;
+    @Autowired
+    private final ItemService itemService;
 
     //Returns all Users for the admin view
     @GetMapping("/users")
@@ -41,6 +45,12 @@ public class AdminController {
     List<User> addMultiple(@RequestBody List<User> userList) {
         return userService.addMultiple(userList);
 
+    }
+
+    //    Returns a list of all items at path /item/get/all
+    @GetMapping("/get/allItems")
+    List<Item> getAll() {
+        return itemService.getAll();
     }
 
 
