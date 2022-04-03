@@ -9,7 +9,6 @@ import Select from 'react-select'
 
 // Import Styles
 import Style from "../../assets/styles/ItemStyle.module.css";
-import { BsConeStriped } from "react-icons/bs";
 
 export default function EditItem(props) {
 	//sets CategoryList to a copy of categoryjson
@@ -24,6 +23,7 @@ export default function EditItem(props) {
 	const itemVolumeRef = useRef();
 	const itemQuantityRef = useRef();
 	const itemAvailableRef = useRef();
+	const itemDescriptionRef = useRef();
 	const addCategoryRef = useRef();
 	const imageRef = useRef();
 	let formData = new FormData();
@@ -88,6 +88,7 @@ export default function EditItem(props) {
 		const returnedWeight = itemWeightRef.current.value;
 		const returnedVolume = itemVolumeRef.current.value;
 		const returnedQuantity = itemQuantityRef.current.value;
+		const returnedDescription = itemDescriptionRef.current.value;
 		let returnedAvailable = itemAvailableRef.current.checked;
 		const imageData = imageRef.current;
 		const returnedCategoriesValue = itemCategoryRef.current.props.value.value;
@@ -103,6 +104,7 @@ export default function EditItem(props) {
 			category_id: null,
 			itemAvailable: returnedAvailable,
 			itemName: returnedName,
+			itemDescription: returnedDescription,
 			itemPrice: returnedPrice,
 			itemQuantity: returnedQuantity,
 			itemVolume: returnedVolume,
@@ -119,7 +121,7 @@ export default function EditItem(props) {
 						Authorization: `Bearer ${token}`,
 					},
 				});
-				console.log(res);
+				console.log("response image post: " + res);
 				formData.delete("image");
 			} catch (err) {
 				console.error(err);
@@ -127,7 +129,7 @@ export default function EditItem(props) {
 		};
 
 		// put destination url
-		const PUT_URL = "http://localhost:8080/item/update"; 
+		const PUT_URL = "http://localhost:8080/item/update/" + returnedCategoriesValue; 
 		const itemPost = async () => {
 			try {
 				const res = await axios.put(PUT_URL, item, {
@@ -139,8 +141,6 @@ export default function EditItem(props) {
 				if (imageData.files[0]){
 					imagePost(res.data.itemId);
 				}
-
-				props.gatherData(); // if all goes well, update current database data
 			} catch (err) {
 				console.error(err);
 			}
@@ -172,6 +172,8 @@ export default function EditItem(props) {
 					as="textarea"
 					rows="3"
 					placeholder="Enter Item Description"
+					ref={itemDescriptionRef}
+					defaultValue={props.item.itemDescription}
 				/>
 			</FormGroup>
 
@@ -208,7 +210,10 @@ export default function EditItem(props) {
 
 			<FormGroup className="mb-3" controlId="formItemAvailable">
 				<Form.Label>Available</Form.Label>
-				<Form.Check type="checkbox" label="Available" ref={itemAvailableRef} />
+				<Form.Check type="checkbox" 
+					label="Available" 
+					ref={itemAvailableRef} 
+					defaultChecked={props.item.itemAvailable}/>
 			</FormGroup>
 
 			<FormGroup className="mb-3" controlId="formItemPrice">
@@ -250,6 +255,7 @@ export default function EditItem(props) {
 				<Form.Label>Item Volume</Form.Label>
 				<Form.Control
 					type="number"
+					min="0"
 					placeholder="Enter Item Volume"
 					ref={itemVolumeRef}
 					defaultValue={props.item.itemVolume}

@@ -53,7 +53,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             case "/category/add" :
             case "/category/addMultiple" :
             case "/item/addMultiple" :
-            case "/item/update" :
+//            case "/item/update" :
             case "/user/load" :
             case "/user/verifypass" :
             case "/admin/get/allItems" :
@@ -61,7 +61,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                 checkAuthorizations(request, response, filterChain);
                 break;
             default:
-                if (path.contains("/image/upload") || path.contains("/item/add")) {
+                if (path.contains("/image/upload") || path.contains("/item/add") || path.contains("/item/update")) {
                     log.info("AuthF: Check Auth 2");
                     checkAuthorizations(request, response, filterChain);
                 }

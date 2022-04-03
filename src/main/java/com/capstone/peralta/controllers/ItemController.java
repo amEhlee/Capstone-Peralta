@@ -64,9 +64,9 @@ public class ItemController {
 //    Takes an already existing item in the database in the body of the request body and updates
 //    its values in the database
     @RolesAllowed({"ROLE_ADMIN", "ROLE_OWNER"})
-    @PutMapping("/update")
-    Item updateItem(@RequestBody Item item) {
-        return itemService.updateItem(item);
+    @PutMapping("/update/{categoryId}")
+    Item updateItem(@RequestBody Item item, @PathVariable Integer categoryId) {
+        return itemService.updateItem(item, categoryId);
     }
 
 //     returns a list of items that match the search query
