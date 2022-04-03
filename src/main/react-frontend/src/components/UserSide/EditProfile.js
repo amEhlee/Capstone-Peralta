@@ -1,11 +1,17 @@
-import React, { useContext, useRef,   } from "react";
+import React, {useContext, useRef, useState,} from "react";
 import { UserContext } from "../../UserContext";
 import Style from "../../assets/styles/UserSide.module.css";
-import {Form, FormGroup, Button} from "react-bootstrap";
+import {Form, FormGroup, Button, Modal} from "react-bootstrap";
 import axios from "axios";
+import DeleteProfile from "./DeleteProfile"
 import NavBar from "../layout/NavBar";
+import EditForm from "../items/EditItem";
 
 export default function EditProfile() {
+    const [show, setShow] = useState(false);
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+
     const userContext = useContext(UserContext).contextData.user;
     const token = useContext(UserContext).contextData.token;
     const userFirstNameRef = useRef();
@@ -144,6 +150,23 @@ export default function EditProfile() {
             <Button type="submit" className="btn btn-success" href="./userProfile">
                 Save Changes
             </Button>
+
+            <Button type="submit" className="btn btn-warning" onClick={handleShow} variant="primary" data-toggle="modal" >
+                Delete Account
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        Delete Account
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <DeleteProfile/>
+                </Modal.Body>
+            </Modal>
+
+
         </Form>
     );
 }

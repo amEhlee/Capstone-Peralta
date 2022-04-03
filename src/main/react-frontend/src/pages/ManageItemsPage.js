@@ -16,7 +16,7 @@ import {UserContext} from "../UserContext";
 export default function ManageItemsPage() {
 	const [categoryjson, setCategoryJson] = useState([]);
 
-	const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
+	const FETCH_URL = "http://localhost:8080/admin/get/allItems"; // fetch url
 	const token = useContext(UserContext).contextData.token;
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage, setItemsPerPage] = useState(10); // initalize at 10 items per page change as required
@@ -35,6 +35,7 @@ export default function ManageItemsPage() {
 				},
 			}) // preform get request
 			.then((res) => {
+				setDataJson(res.data || "no data returned"); // store returned data in a variable
 				return res.data; // return response
 			})
 			.catch((err) => console.error(err));
@@ -100,6 +101,7 @@ export default function ManageItemsPage() {
                             </tr>
                         </thead>
                         <ItemList
+							gatherData={gatherData}
                             items={currentDataChunk}
                             target="adminList"
                             search={searchName}
@@ -113,7 +115,7 @@ export default function ManageItemsPage() {
 						<Modal.Title>Add Item</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<AddItem />
+						<AddItem handleClose={handleClose} gatherData={gatherData}/>
 					</Modal.Body>
 				</Modal>
 			</>

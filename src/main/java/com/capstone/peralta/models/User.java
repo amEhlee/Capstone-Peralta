@@ -69,6 +69,10 @@ public class User {
         this.roles = new ArrayList<>();
     }
 
+    public User(Integer userId) {
+        this.userId = userId;
+    }
+
     public Integer getUserId() {
         return userId;
     }

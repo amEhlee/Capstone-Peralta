@@ -51,10 +51,10 @@ public class UserService implements UserDetailsService {
         return returnUser;
     }
 
-/*    public void deleteUser(User user) {
-        log.info("User deleted");
-        userRepo.removeUserById(user.getUserId());
-    }*/
+    public void deleteUser(User user) {
+        User deletedUser = new User(user.getUserId());
+        userRepo.save(deletedUser);
+    }
 
     public void updateUser(User user) {
         log.info("Updating User " + user.getEmail());
