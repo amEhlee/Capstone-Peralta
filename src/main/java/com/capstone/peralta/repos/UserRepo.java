@@ -11,6 +11,6 @@ import java.util.List;
 public interface UserRepo extends JpaRepository<User, Integer> {
     User findUserByEmail(String email);
     List<User> findAll();
-    void update(User user);
-    /*    Void removeUserById(Integer id);*/
+    //void update(User user);
+    //Void removeUserById(Integer id);
 }
