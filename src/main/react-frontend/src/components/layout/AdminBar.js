@@ -1,14 +1,18 @@
 // Import Components
 import {BsShop} from "react-icons/bs";
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import {Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 
 function AdminBar() {
+    const navigate = useNavigate();
+
     return (
         <div>
             <Navbar bg="light" variant="light">
                 <Container>
-                    <Navbar.Brand><BsShop/> Peralta Shop</Navbar.Brand>
+                    <button onClick={() => {navigate("/")}}>
+                        <Navbar.Brand><BsShop/> Peralta Shop</Navbar.Brand>
+                    </button>
                     <Nav>
                         <NavDropdown title="Navigation">
                             <Link to="/"><NavDropdown.Item href="/">Home</NavDropdown.Item></Link>

@@ -47,10 +47,15 @@ public class UserService implements UserDetailsService {
         return userRepo.save(user);
     }
 
-/*    public void deleteUser(User user) {
-        log.info("User deleted");
-        userRepo.removeUserById(user.getUserId());
-    }*/
+    public void deleteUser(User user) {
+        User deletedUser = new User(user.getUserId());
+        userRepo.save(deletedUser);
+    }
+
+    public void updateUser(User user) {
+        log.info("Updating User " + user.getEmail());
+        userRepo.save(user);
+    }
 
     public Role addRole(Role role) {
         log.info("Saving new Role into Database");
@@ -97,6 +102,10 @@ public class UserService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(role.getRoleName())); //adds them to authorities list
         });
         return new org.springframework.security.core.userdetails.User(userDbResult.getEmail(), userDbResult.getPassword(), authorities); //Returns new Spring Security User Class NOT our User class with loaded privileges
+    }
+
+    public PasswordEncoder getPasswordEncoder() {
+        return passwordEncoder;
     }
 
 }

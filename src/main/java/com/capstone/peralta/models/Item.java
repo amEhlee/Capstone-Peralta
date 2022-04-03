@@ -20,7 +20,6 @@ public class Item {
     private Double itemPrice;
     private Double itemWeight;
     private Double itemVolume;
-    private String description;
     private String size;
     private Integer itemQuantity;
     private Boolean itemAvailable;
@@ -117,13 +116,6 @@ public class Item {
         this.category = category;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public String getSize() {
         return size;

@@ -52,7 +52,7 @@ export default function HomePage() {
     } else {
         return (
             <div className={style.homepage}>
-                <h1>Homepage</h1>
+                {/*<h1>Homepage</h1>*/}
                 <ItemList items={datajson} target="regularList" />
             </div>
         );
