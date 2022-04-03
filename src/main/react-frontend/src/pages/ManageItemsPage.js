@@ -16,7 +16,7 @@ import {UserContext} from "../UserContext";
 export default function ManageItemsPage() {
 	const [categoryjson, setCategoryJson] = useState([]);
 
-	const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
+	const FETCH_URL = "http://localhost:8080/admin/get/allItems"; // fetch url
 	const token = useContext(UserContext).contextData.token;
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage, setItemsPerPage] = useState(10); // initalize at 10 items per page change as required
