@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Controller class for the Item mode. Contains all the REST endpoints
@@ -67,10 +69,23 @@ public class ItemController {
         return itemService.updateItem(item);
     }
 
+//     returns a list of items that match the search query
+    @GetMapping("/search/{query}")
+    List<Item> searchItems(@PathVariable String query) {
+        List<Item> listOne = itemService.searchItems(query);
+        List<Item> listTwo = itemService.searchItemsByCategoryName(query);
+
+        List<Item> result = Stream.concat(listOne.stream(), listTwo.stream())
+                .collect(Collectors.toList());
 
 
-//    @DeleteMapping("/delete")
-//    void deleteItem(@RequestBody Item item) {
-//        itemService.deleteItem(item);
-//    }
+        return result;
+    }
+
+
+
+    @DeleteMapping("/delete/{id}")
+    void deleteItem(@PathVariable int id) {
+        itemService.deleteItem(id);
+    }
 }

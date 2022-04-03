@@ -124,11 +124,26 @@ public class UserController {
     }
 
 
-    //Doesn't make sense for security at the moment and we are using UUID at some point - Don
-/*    @GetMapping("/{userId}")
-    User getById(@PathVariable Integer userId) {
-        return userService.getUserById(userId);
-    }*/
+    @DeleteMapping("/delete")
+    void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        try {
+            User user = loadUser(authorizationHeader, authorizationHeader.substring("Bearer ".length()), Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()));
+            userService.deleteUser(user);
+        } catch (Exception exception) {
+            //Basically, error logging to web browser terminal and IDE console for Debugging etc.
+            response.setHeader("error", exception.getMessage());
+            response.setStatus(FORBIDDEN.value());
+            //response.sendError(FORBIDDEN.value()); //Old code for sending an error new code is below
+            Map<String, String> error = new HashMap<>();
+            error.put("error_message", exception.getMessage());
+            error.put("error_notes", "Token Invalid");
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            new ObjectMapper().writeValue(response.getOutputStream(), error);
+        }
+    }
+
+
     @GetMapping("/load")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public User getByToken (HttpServletRequest request, HttpServletResponse response) throws IOException {

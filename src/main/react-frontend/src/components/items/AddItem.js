@@ -3,8 +3,7 @@ import React, {useRef, useState, useEffect, useContext} from "react";
 import axios from "axios";
 
 // Import Components
-import {Form, FormGroup, InputGroup, Button, FormControl, Col, Row} from "react-bootstrap";
-import Item from "./Item";
+import {Form, FormGroup, InputGroup, Button, Col, Row} from "react-bootstrap";
 import CategoryChecklist from "../categories/SelectCategory";
 //import SelectCategory from "../categories/SelectCategory";
 
@@ -15,7 +14,7 @@ import {UserContext} from "../../UserContext";
 
 
 
-export default function AddItem() {
+export default function AddItem(props) {
 
     //sets CategoryList to a copy of categoryjson
     const [categoryjson, setcategoryjson] = useState([]);
@@ -46,7 +45,7 @@ export default function AddItem() {
         getCategories();
     }, []);
 
-    //sets the state of the item
+    // set refrences for form data
     const itemNameRef = useRef();
     const itemPriceRef = useRef();
     const itemWeightRef = useRef();
@@ -86,7 +85,13 @@ export default function AddItem() {
     }
 
     function submitHandler(event) {
+		// prevent default form submit page reload
         event.preventDefault();
+
+        // close the modal TODO: MOVE TO POST SUCESS
+        props.handleClose();
+
+        // on submit, gather current form data
         const returnedName = itemNameRef.current.value;
         const returnedPrice = itemPriceRef.current.value;
         const returnedWeight = itemWeightRef.current.value;
@@ -97,8 +102,10 @@ export default function AddItem() {
         const imageData = imageRef.current;
         const returnedCategoriesValue = itemCategoryRef.current.props.value.value;
   
+        // ternary conditional to parse boolean value 0 = false, 1 = true
         returnedAvailable === true ? (returnedAvailable = 1) : (returnedAvailable = 0);
 
+        // create new item object
         const item = {
             itemId: null,
             category_id: null,
@@ -123,13 +130,13 @@ export default function AddItem() {
                 });
                 console.log("response image add: " + res);
                 formData.delete('image');
-                window.location.reload(false);
             } catch (err) {
                 console.error(err);
             }
         }
 
-        const POST_URL = "http://localhost:8080/item/add/" + returnedCategoriesValue; // fetch url
+        // post new item to database
+        const POST_URL = "http://localhost:8080/item/add/" + returnedCategoriesValue; 
         const itemPost = async () => {
             try {
                 const res = await axios.post(POST_URL, item, {
@@ -137,17 +144,18 @@ export default function AddItem() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                    // console.log("response item add: " + res.data);
-                    // setResItemId(res.data.itemId);
+                    console.log(res);
                     if (imageData.files[0]){
                         imagePost(res.data.itemId);
                     }
                     console.log(returnedCategoriesValue);
+                    props.gatherData(); // if everything is successful, update the items list
             } catch (err) {
                 console.error(err);
             }
         };
 
+        // run post function
         itemPost();
     }
 

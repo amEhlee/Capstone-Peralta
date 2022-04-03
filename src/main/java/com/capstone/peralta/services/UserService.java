@@ -47,14 +47,14 @@ public class UserService implements UserDetailsService {
         return userRepo.save(user);
     }
 
-/*    public void deleteUser(User user) {
-        log.info("User deleted");
-        userRepo.removeUserById(user.getUserId());
-    }*/
+    public void deleteUser(User user) {
+        User deletedUser = new User(user.getUserId());
+        userRepo.save(deletedUser);
+    }
 
     public void updateUser(User user) {
         log.info("Updating User " + user.getEmail());
-        userRepo.update(user);
+        userRepo.save(user);
     }
 
     public Role addRole(Role role) {

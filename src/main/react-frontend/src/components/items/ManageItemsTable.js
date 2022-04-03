@@ -44,7 +44,7 @@ export default function ManageItems(props) {
         </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <EditForm item={props.item}/>
+              <EditForm item={props.item} handleClose={handleClose} gatherData={props.gatherData}/>
           </Modal.Body>
       </Modal>
       </>
