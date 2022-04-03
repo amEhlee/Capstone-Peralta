@@ -45,7 +45,11 @@ public class ItemService {
         return itemRepo.saveAll(itemList);
     }
 
-    public Item updateItem(Item item) {
+    public Item updateItem(Item item, Integer categoryId) {
+        Category category = categoryRepo.findById(categoryId).orElse(null);
+        if (category != null) {
+            item.setCategory(category);
+        }
         return itemRepo.save(item);
     }
 
