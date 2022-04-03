@@ -114,10 +114,14 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.addUser(user));
     }
 
+    /*
+    Updates the user after verifying the old password
+     */
     @PostMapping("/update")
+    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public boolean updateUser(@RequestBody User user, @RequestBody String password) {
-        if (verifyPassword(user.getEmail(), password)) {
-            userService.updateUser(user);
+        if (verifyPassword(user.getEmail(), password)) { //If password matches DB password
+            userService.updateUser(user); //Update the user (including password)
             return true;
         }
         return false;
@@ -175,6 +179,7 @@ public class UserController {
     /*
         Verifies a password from our DB
      */
+    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public boolean verifyPassword (String email, String rawPassword) {
         User dbUserInstance = userService.getUserByName(email);
         String encryptedPassword = dbUserInstance.getPassword();
@@ -184,6 +189,7 @@ public class UserController {
     /*
     Method loads a user using a token by getting the subject. The subject key has the users email.
      */
+    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public User loadUser( String authorizationHeader, String token, Algorithm algorithm) throws IOException {
             JWTVerifier verifier = JWT.require(algorithm).build(); //Object that Verifies Token
             DecodedJWT decodedJWT = verifier.verify(token); //Token Verification/Decoding

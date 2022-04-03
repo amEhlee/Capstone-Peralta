@@ -34,8 +34,10 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private final UserRepo userRepo;
+    @Autowired
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
+
 
     public User getUserById(Integer id) {
         return userRepo.getById(id);
@@ -44,7 +46,9 @@ public class UserService implements UserDetailsService {
     public User addUser(User user) {
         log.info("Saving new User into Database");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+        User returnUser = userRepo.save(user);
+        addRoleToUser(user.getEmail(), "ROLE_USER");
+        return returnUser;
     }
 
     public void deleteUser(User user) {
@@ -72,6 +76,7 @@ public class UserService implements UserDetailsService {
         User user = userRepo.findUserByEmail(email);
         Role role = roleRepo.findByRoleName(roleName);
         user.getRoles().add(role);
+        userRepo.save(user);
     }
 
     public Role getRoleById(int id) { return roleRepo.getById(id); }
