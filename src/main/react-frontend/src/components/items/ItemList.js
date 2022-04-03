@@ -53,6 +53,7 @@ export default function ItemList(props) {
 							quantity={i.itemQuantity}
 							available={i.itemAvailable}
 							item={i}
+							gatherData={props.gatherData}
 						/>
 					))}
 			</tbody>

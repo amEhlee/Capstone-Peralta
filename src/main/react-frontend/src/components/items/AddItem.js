@@ -14,7 +14,7 @@ import {UserContext} from "../../UserContext";
 
 
 
-export default function AddItem({handleClose}) {
+export default function AddItem(props) {
 
     //sets CategoryList to a copy of categoryjson
     const [categoryjson, setcategoryjson] = useState([]);
@@ -89,7 +89,7 @@ export default function AddItem({handleClose}) {
         event.preventDefault();
 
         // close the modal TODO: MOVE TO POST SUCESS
-        handleClose() 
+        props.handleClose();
 
         // on submit, gather current form data
         const returnedName = itemNameRef.current.value;
@@ -149,6 +149,7 @@ export default function AddItem({handleClose}) {
                         imagePost(res.data.itemId);
                     }
                     console.log(returnedCategoriesValue);
+                    props.gatherData(); // if everything is successful, update the items list
             } catch (err) {
                 console.error(err);
             }

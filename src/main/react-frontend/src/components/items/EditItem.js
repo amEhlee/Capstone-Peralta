@@ -9,6 +9,7 @@ import Select from 'react-select'
 
 // Import Styles
 import Style from "../../assets/styles/ItemStyle.module.css";
+import { BsConeStriped } from "react-icons/bs";
 
 export default function EditItem(props) {
 	//sets CategoryList to a copy of categoryjson
@@ -118,7 +119,7 @@ export default function EditItem(props) {
 						Authorization: `Bearer ${token}`,
 					},
 				});
-				console.log("response image post: " + res);
+				console.log(res);
 				formData.delete("image");
 			} catch (err) {
 				console.error(err);
@@ -138,6 +139,8 @@ export default function EditItem(props) {
 				if (imageData.files[0]){
 					imagePost(res.data.itemId);
 				}
+
+				props.gatherData(); // if all goes well, update current database data
 			} catch (err) {
 				console.error(err);
 			}
