@@ -85,7 +85,7 @@ export default function NavBar() {
 						</div>
 
 						<Nav>
-							<Link to="/Orders">
+							<Link to="/order">
                                 <Button variant="light">
                                     {BsBagCheck()}
                                     <div>Orders</div>
