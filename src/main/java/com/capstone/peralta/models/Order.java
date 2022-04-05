@@ -1,6 +1,7 @@
 package com.capstone.peralta.models;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +18,9 @@ public class Order {
     private Double itemTotal;
     private Double orderTotal;
     private Double shippingCost;
-    private Boolean orderPaid;
+    private String orderStatus;
+    private Integer itemAmount;
+    private Date orderDate;
 
     @ManyToMany
     @JoinTable(
@@ -64,12 +67,12 @@ public class Order {
         this.shippingCost = shippingCost;
     }
 
-    public Boolean getOrderPaid() {
-        return orderPaid;
+    public String getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setOrderPaid(Boolean orderPaid) {
-        this.orderPaid = orderPaid;
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public List<Item> getItemList() {
