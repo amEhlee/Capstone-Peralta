@@ -64,6 +64,8 @@ export default function  SignUpUserPage() {
                 return <div>Passwords do not match!</div>
             }
 
+            // on success navigtate back to login
+            navigate("/login");
 
         }
 

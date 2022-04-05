@@ -13,6 +13,7 @@ import EditItem from "./components/items/EditItem";
 import ManageItemsPage from "./pages/ManageItemsPage";
 
 import LoginUserPage from "./pages/LoginUserPage";
+import LogoutUserPage from "./pages/LogoutUserPage";
 import SignUpUserPage from "./pages/SignUpUserPage";
 import Checkout from "./components/UserSide/CheckoutItem"
 
@@ -56,6 +57,7 @@ export default function App() {
 
 				<Route path="/order" element={<OrderUser />} />
 				<Route path="/login" element={<LoginUserPage />} />
+				<Route path="/logout" element={<LogoutUserPage />} />
 				<Route path="/signUp" element={<SignUpUserPage />} />
 				<Route path="/editProfile" element={<EditProfile/>}/>
 
