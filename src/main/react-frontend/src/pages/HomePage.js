@@ -1,14 +1,15 @@
 // Import Dependencies
-import React, { useEffect, useState, useContext } from "react";
+import React, {useEffect, useState, useContext} from "react";
 import axios from "axios";
-import { UserContext } from "../UserContext";
-import { Link } from "react-router-dom";
+import {UserContext} from "../UserContext";
+import {Link} from "react-router-dom";
 
 // Import Components
 import ItemList from "../components/items/ItemList";
 
 // Import Styling
 import style from "../assets/styles/Layout.module.css";
+import style2 from "../assets/styles/Homepage.module.css";
 
 export default function HomePage() {
     const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
@@ -51,9 +52,18 @@ export default function HomePage() {
         );
     } else {
         return (
-            <div className={style.homepage}>
+            <div>
                 {/*<h1>Homepage</h1>*/}
-                <ItemList items={datajson} target="regularList" />
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <ItemList items={datajson} target="regularList"/>
+                </div>
+
             </div>
         );
     }
