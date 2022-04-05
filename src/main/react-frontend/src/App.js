@@ -25,7 +25,7 @@ import ManageUsersPage from "./pages/ManageUsersPage";
 import ProductPage from "./pages/ProductPage";
 import UserProfile from "./components/UserSide/UserProfile";
 import EditProfile from "./components/UserSide/EditProfile";
-
+import OrderUser from "./components/orders/Order";
 
 
 
@@ -54,6 +54,7 @@ export default function App() {
 					<Route path="/checkout" element={<Checkout/>}/>
 				</Route>
 
+				<Route path="/order" element={<OrderUser />} />
 				<Route path="/login" element={<LoginUserPage />} />
 				<Route path="/signUp" element={<SignUpUserPage />} />
 				<Route path="/editProfile" element={<EditProfile/>}/>
