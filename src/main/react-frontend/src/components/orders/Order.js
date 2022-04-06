@@ -18,16 +18,17 @@ import style from '../../assets/styles/ItemCardLayout.module.css'
 import TotalCart from "./TotalCart";
 
 
-// Future update: add item id for dynamic navigation
+// Future update: add order id for dynamic navigation
 export default function Order(props) {
     const history = useNavigate();
+    const {order} = props;
+
 
     return (
 
         <div>
-
-            <h1> Order ID #123456789</h1>
-            <h3> Date Placed 4/4/2022 </h3>
+            <h1> Order ID {props.orderId}</h1>
+            <h3> Date Placed {props.orderDate} </h3>
         <Table striped bordered hover style={{ width: '100%' }}>
             <thead>
             <tr>

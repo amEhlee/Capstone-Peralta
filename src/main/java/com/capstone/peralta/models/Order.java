@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "ORDERS")
-public class Order {
+public class    Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_Id", nullable = false)
