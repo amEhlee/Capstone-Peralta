@@ -33,6 +33,7 @@ import OrderUser from "./components/orders/Order";
 // Import Styling
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchPage from "./pages/SearchPage";
+import OrderHistoryPage from "./pages/OrderHistoryPage";
 
 export default function App() {
 	return (
@@ -50,6 +51,7 @@ export default function App() {
 					<Route path="/items" element={<ViewAllItemsPage />} />
 					<Route path="/item/:itemid" element={<ProductPage />} />
 					<Route path="search/:searchTerm" element={<SearchPage />} />
+					<Route path="/orderhistory" element={<OrderHistoryPage />} />
 
 					<Route path="/userProfile" element={<UserProfile/>}/>
 					<Route path="/checkout" element={<Checkout/>}/>
