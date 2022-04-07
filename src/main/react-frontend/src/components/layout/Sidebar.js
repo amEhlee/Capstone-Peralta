@@ -36,14 +36,6 @@ export default function AdminSidebar() {
                     <div className={style.rowIcon} id="icon"><BsFillPersonLinesFill /></div>
                     <div className={style.rowTitle} id="title">User Accounts</div>
                 </li>
-                <li className={style.row} key={5} onClick={() => {navigate("/admin/sales")}}>
-                    <div className={style.rowIcon} id="icon"><BsGraphUp /></div>
-                    <div className={style.rowTitle} id="title">Sales</div>
-                </li>
-                <li className={style.row} key={6} onClick={() => {navigate("/admin/settings")}}>
-                    <div className={style.rowIcon} id="icon"><BsFillGearFill /></div>
-                    <div className={style.rowTitle} id="title">Settings</div>
-                </li>
 
             </ul>
         </div>

@@ -11,10 +11,10 @@ import axios from "axios";
 
 // Import Components
 import { Form, FormGroup, Button } from "react-bootstrap";
-import { UserContext } from "../../UserContext";
-import Style from "../../assets/styles/UserSide.module.css";
+import { UserContext } from "../UserContext";
+import Style from "../assets/styles/UserSide.module.css";
 
-export default function CheckoutItem() {
+export default function CheckoutPage() {
 
 	// instansiate user cart and user object
 	const cart = useContext(UserContext).contextData.cart;

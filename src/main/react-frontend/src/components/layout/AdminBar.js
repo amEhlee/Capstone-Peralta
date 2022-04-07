@@ -19,8 +19,6 @@ function AdminBar() {
                             <NavDropdown.Item onClick={() => {navigate("/admin/manageItems")}}>Manage Inventory</NavDropdown.Item>
                             <NavDropdown.Item onClick={() => {navigate("/admin/manageOrders")}}>Manage Orders</NavDropdown.Item>
                             <NavDropdown.Item onClick={() => {navigate("/admin/manageUsers")}}>Manage Users</NavDropdown.Item>
-                            <NavDropdown.Item onClick={() => {navigate("/admin/sales")}}>Sales</NavDropdown.Item>
-                            <NavDropdown.Item onClick={() => {navigate("/admin/settings")}}>Settings</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="Account">
                             <NavDropdown.Item onClick={() => {navigate("/logout")}}>Log Out</NavDropdown.Item>
