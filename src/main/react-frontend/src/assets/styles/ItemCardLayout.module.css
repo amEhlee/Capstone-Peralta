@@ -8,24 +8,42 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 60px;
+        justify-content: center;
+        place-self: center;
     }
 }
 
 @media screen and (min-width: 1050px) {
     .unorderedList {
-        display: grid;
+        display: inline-grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 50px;
+        justify-content: center;
+        place-self: center;
     }
 }
 
 @media screen and (min-width: 1400px) {
     .unorderedList {
-        display: grid;
+        display: inline-grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 50px;
+        justify-content: center;
+        place-self: center;
     }
 }
+
+@media screen and (min-width: 1800px) {
+    .unorderedList {
+        display: inline-grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 50px;
+        place-self: center;
+
+    }
+}
+
+
 
 .unorderedList :hover {
     box-shadow: 0 0 11px rgba(33, 33, 33, .2);

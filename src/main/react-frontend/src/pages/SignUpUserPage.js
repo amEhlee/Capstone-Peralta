@@ -71,6 +71,8 @@ export default function  SignUpUserPage() {
 
             }
 
+            // on success navigtate back to login
+            navigate("/login");
 
         }
 

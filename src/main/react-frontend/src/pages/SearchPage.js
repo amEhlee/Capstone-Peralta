@@ -9,11 +9,15 @@ import ItemList from "../components/items/ItemList";
 import {UserContext} from "../UserContext";
 
 export default function SearchPage() {
-    let searchTerm = useParams();
-    const FETCH_URL = "http://localhost:8080/search/" + searchTerm;
+    // get search term from the nav bar
+    let { searchTerm } = useParams();
+
+    // set the search term to the search term from the nav bar
+    const FETCH_URL = "http://localhost:8080/item/search/" + searchTerm;
 
     var [items, setItems] = useState([]);
     const token = useContext(UserContext).contextData.token;
+    
     async function gatherData() {
         return await axios
             .get(FETCH_URL, {
@@ -37,7 +41,7 @@ export default function SearchPage() {
 
     return (
         <div>
-            <ItemList items={items} />
+            <ItemList items={items} target="regularList"/>
         </div>
     );
 

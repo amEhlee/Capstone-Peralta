@@ -59,6 +59,7 @@ public class UserService implements UserDetailsService {
 
     public void updateUser(User user) { //TODO: Not done yet needs checks
         log.info("Updating User " + user.getEmail());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
     }
 

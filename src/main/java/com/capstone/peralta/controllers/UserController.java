@@ -114,17 +114,20 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.addUser(user));
     }
 
+    @PostMapping("/verify")
+    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
+    public boolean verify(@RequestBody User verifyUser) {
+        return verifyPassword(verifyUser.getEmail(), verifyUser.getPassword());
+    }
+
     /*
     Updates the user after verifying the old password
      */
-    @PostMapping("/update")
+    @PutMapping("/update")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
-    public boolean updateUser(@RequestBody User user, @RequestBody String password) {
-        if (verifyPassword(user.getEmail(), password)) { //If password matches DB password
-            userService.updateUser(user); //Update the user (including password)
-            return true;
-        }
-        return false;
+    public Boolean updateUser(@RequestBody User user) {
+        userService.updateUser(user); //Update the user (including password)
+        return true; // return a true on success
     }
 
 
@@ -183,7 +186,7 @@ public class UserController {
     public boolean verifyPassword (String email, String rawPassword) {
         User dbUserInstance = userService.getUserByName(email);
         String encryptedPassword = dbUserInstance.getPassword();
-        return userService.getPasswordEncoder().matches(encryptedPassword, rawPassword);
+        return userService.getPasswordEncoder().matches(rawPassword, encryptedPassword);
     }
 
     /*

@@ -17,16 +17,37 @@ function gatherData() {
         .get(FETCH_URL)
 }
 
-
+/* broken function consider exporting to default and specificy if you wnat to use props or not 
 function OrderHistoryTable() {
+    const [show, setShow] = useState(false);
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+
     return (
+        <>
         <tr>
             <td>{props.id}</td>
             <td>{props.date}</td>
             <td>{props.totalCost}</td>
-            <td>{props.totalItems}</td>
             <td>{props.status}</td>
+            <td>
+              <Button onClick={handleShow} variant="primary" data-toggle="modal"  size="sm">View Order</Button>
+          </td>
         </tr>
+
+
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+            <Modal.Title>
+                Order Details
+            </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Order item={props.order} handleClose={handleClose} gatherData={gatherData}/>
+            </Modal.Body>
+        </Modal>
+</>
 
     );
 }
+*/
