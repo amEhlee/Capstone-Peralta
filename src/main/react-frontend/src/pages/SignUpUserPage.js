@@ -4,7 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useContext, useRef} from "react";
 import axios from "axios";
 import {UserContext} from "../UserContext";
-import {validEmail, validPassword} from "../components/regex/RegEx.js";
+import {validEmail, validPassword, validPostalCode, validPhoneNumber} from "../components/regex/RegEx.js";
 
 // Import Styling
 import userStyle from "../assets/styles/UserSide.module.css";
@@ -37,13 +37,19 @@ export default function  SignUpUserPage() {
             console.log(returnedConfirmPassword);
 
             if (!(returnedPassword === returnedConfirmPassword)) {
-                return <div>Passwords do not match!</div>
+                //return Passwords do not match!
             }
             else if (validEmail.test(returnedEmail)) {
-
+                //return email invalid
             }
             else if (validPassword.test(returnedPassword)) {
-
+                //return password does not meet requirements and send requirements
+            }
+            else if (validPostalCode.test(returnedPostal)) {
+                //return postalcode does not meet requirements and send requirements
+            }
+            else if (validPhoneNumber.test(returnedPhoneNumber)) {
+                //return postalcode does not meet requirements and send requirements
             }
             else {
                 const user = {
