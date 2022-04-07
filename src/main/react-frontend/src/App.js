@@ -33,7 +33,7 @@ import OrderUser from "./components/orders/Order";
 // Import Styling
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchPage from "./pages/SearchPage";
-import OrderHistoryPage from "./pages/OrderHistoryPage";
+//import OrderHistoryPage from "./pages/OrderHistoryPage"; no export default this breaks stuff
 
 export default function App() {
 	return (
@@ -51,7 +51,8 @@ export default function App() {
 					<Route path="/items" element={<ViewAllItemsPage />} />
 					<Route path="/item/:itemid" element={<ProductPage />} />
 					<Route path="search/:searchTerm" element={<SearchPage />} />
-					<Route path="/orderhistory" element={<OrderHistoryPage />} />
+					{/* fix actual exported function first please */}
+					{/* <Route path="/orderhistory" element={<OrderHistoryPage />} /> */}
 
 					<Route path="/userProfile" element={<UserProfile/>}/>
 					<Route path="/checkout" element={<Checkout/>}/>
