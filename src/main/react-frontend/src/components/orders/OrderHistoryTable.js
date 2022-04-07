@@ -17,7 +17,7 @@ function gatherData() {
         .get(FETCH_URL)
 }
 
-
+/* broken function consider exporting to default and specificy if you wnat to use props or not 
 function OrderHistoryTable() {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
@@ -50,3 +50,4 @@ function OrderHistoryTable() {
 
     );
 }
+*/

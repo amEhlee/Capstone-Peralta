@@ -1,7 +1,7 @@
 //Import Dependencies
 import React, { useState, useEffect, useContext } from 'react';
 
-
+/* broken function please fix dependencies based on what you need first 
 //import components
 import OrderHistoryTable from '../components/orders/OrderHistoryTable';
 
@@ -9,7 +9,7 @@ import OrderHistoryTable from '../components/orders/OrderHistoryTable';
 import {UserContext} from "../UserContext";
 
 function OrderHistoryPage() {
-    const FETCH_URL = ;
+    // const FETCH_URL = ; // causes errors
     const token = useContext(UserContext).contextData.token;
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -71,3 +71,4 @@ function OrderHistoryPage() {
 }
 
 export default OrderHistoryPage;
+*/
