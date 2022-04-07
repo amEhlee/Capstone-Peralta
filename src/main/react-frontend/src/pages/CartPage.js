@@ -1,4 +1,5 @@
 import { Button, Card, ListGroup } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import React, { useContext } from "react";
 import { UserContext } from "../UserContext";
 import styles from "../assets/styles/CartPageCardLayout.module.css";
@@ -12,6 +13,7 @@ function CartPage() {
     let totalPrice = 0.0;
 
     // testing for email service
+    /*
     const EMAILSERV_URL = "http://localhost:8080/email/send";
     function sendEmail(){
         axios.post(EMAILSERV_URL, {
@@ -23,6 +25,7 @@ function CartPage() {
                 console.log(res) // return response
             })
     }
+    */
 
     function removeFromCart(givenIndex) {
         // remove item from cart
@@ -41,8 +44,6 @@ function CartPage() {
     return (
         <>
             <h1>Cart Page</h1>
-            <Button onClick={() => {sendEmail()}}>Email Test</Button>
-
             {/* Optinally display the below line to indicate empty cart */}
             {cart.length ? "" : <p>Your Cart is Empty! Add Items on Homepage</p>}
 
@@ -81,7 +82,9 @@ function CartPage() {
                         <Card.Body>
                             <Card.Title>Subtotal</Card.Title>
                             <Card.Text>Price ${totalPrice.toFixed(2)}</Card.Text>
-                            <Button variant="primary" onClick={() => {sendEmail()}}>Buy Now</Button>
+                            <Link to="/checkout">
+                                <Button variant="primary">Buy Now</Button>
+                            </Link>
                         </Card.Body>
                     </Card>
                 </div>

@@ -62,7 +62,7 @@ export default function EditProfile() {
 		const returnedLastName = userLastNameRef.current.value;
 		const retunedConfirmPassword = userConfirmPasswordRef.current.value;
 		const retunedNewPassword = userNewPasswordRef.current.value;
-		const returnedUserNewPasswordConfirmRef = userNewPasswordConfirmRef.current.value;
+		const returnedUserNewPasswordConfirm = userNewPasswordConfirmRef.current.value;
 		const returnedPhone = userPhoneRef.current.value;
 		const returnedAddress = userAddressRef.current.value;
 		const returnedPostalCode = userPostalCodeRef.current.value;
@@ -79,7 +79,7 @@ export default function EditProfile() {
 			postalCode: returnedPostalCode,
 		};
 
-		if(retunedNewPassword !== returnedUserNewPasswordConfirmRef) {
+		if(retunedNewPassword !== returnedUserNewPasswordConfirm) {
 			console.log("Passwords do not match");
 			return;
 		}
