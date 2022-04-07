@@ -1,6 +1,6 @@
 package com.capstone.peralta.controllers;
 
-import com.capstone.peralta.EmailSenderService;
+import com.capstone.peralta.services.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

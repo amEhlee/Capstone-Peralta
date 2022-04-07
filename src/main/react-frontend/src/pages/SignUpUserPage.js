@@ -3,7 +3,8 @@ import React, {Form, FormGroup, Button} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
 import {useContext, useRef} from "react";
 import axios from "axios";
-import { UserContext } from "../UserContext";
+import {UserContext} from "../UserContext";
+import {validEmail, validPassword, validPostalCode, validPhoneNumber} from "../components/regex/RegEx.js";
 
 // Import Styling
 import userStyle from "../assets/styles/UserSide.module.css";
@@ -35,7 +36,22 @@ export default function  SignUpUserPage() {
             console.log(returnedPassword);
             console.log(returnedConfirmPassword);
 
-            if (returnedPassword === returnedConfirmPassword) {
+            if (!(returnedPassword === returnedConfirmPassword)) {
+                //return Passwords do not match!
+            }
+            else if (validEmail.test(returnedEmail)) {
+                //return email invalid
+            }
+            else if (validPassword.test(returnedPassword)) {
+                //return password does not meet requirements and send requirements
+            }
+            else if (validPostalCode.test(returnedPostal)) {
+                //return postalcode does not meet requirements and send requirements
+            }
+            else if (validPhoneNumber.test(returnedPhoneNumber)) {
+                //return postalcode does not meet requirements and send requirements
+            }
+            else {
                 const user = {
                     firstName: returnedFirstName,
                     lastName: returnedLastName,
@@ -59,9 +75,6 @@ export default function  SignUpUserPage() {
                     })
                 });
 
-            }
-            else {
-                return <div>Passwords do not match!</div>
             }
 
             // on success navigtate back to login

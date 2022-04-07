@@ -1,8 +1,11 @@
-package com.capstone.peralta;
+package com.capstone.peralta.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,4 +28,7 @@ public class EmailSenderService {
         System.out.println("Mail sent successfully...");
 
     }
+
 }
+
+
