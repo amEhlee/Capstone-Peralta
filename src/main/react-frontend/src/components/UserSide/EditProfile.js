@@ -8,7 +8,7 @@ import { Navigate } from "react-router-dom";
 import { Form, FormGroup, Button, Modal } from "react-bootstrap";
 import DeleteProfile from "./DeleteProfile";
 
-// import styles from 
+// import styles from
 import Style from "../../assets/styles/UserSide.module.css";
 
 export default function EditProfile() {
@@ -21,56 +21,90 @@ export default function EditProfile() {
 	const userFirstNameRef = useRef();
 	const userLastNameRef = useRef();
 	const userConfirmPasswordRef = useRef();
-	const userCurrPasswordRef = useRef();
+	const userNewPasswordRef = useRef();
+	const userNewPasswordConfirmRef = useRef();
 	const userPhoneRef = useRef();
 	const userAddressRef = useRef();
 	const userPostalCodeRef = useRef();
-	const userEmailRef = useRef();
+
+	function checkPassword(givenEmail, givenPassword) {
+		// Post url used to verify password
+		const POST_URL = "http://localhost:8080/user/verify";
+
+		// content we will pass to post url
+		const content = {
+			email: givenEmail,
+			password: givenPassword,
+		};
+
+		let returnedResponse = true;
+
+		// try post request
+		axios
+			.post(POST_URL, content, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+			.then((res) => {
+				returnedResponse = res.data; // boolean depending on result of pass verify
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		return returnedResponse;
+	}
 
 	function submitHandler(event) {
 		event.preventDefault();
 		const returnedFirstName = userFirstNameRef.current.value;
 		const returnedLastName = userLastNameRef.current.value;
 		const retunedConfirmPassword = userConfirmPasswordRef.current.value;
+		const retunedNewPassword = userNewPasswordRef.current.value;
+		const returnedUserNewPasswordConfirmRef = userNewPasswordConfirmRef.current.value;
 		const returnedPhone = userPhoneRef.current.value;
 		const returnedAddress = userAddressRef.current.value;
 		const returnedPostalCode = userPostalCodeRef.current.value;
-		const returnedEmail = userEmailRef.current.value;
-
-		// TODO password logic here
-		if (retunedConfirmPassword !== userContext.password) {
-			//TODO render modal
-			console.log("incorrect confirm password");
-			return; // break out of function
-		}
+		const returnedEmail = userContext.email;
 
 		const updatedUser = {
-			userId: "", // TODO context api
+			userId: userContext.userId,
 			firstName: returnedFirstName,
 			lastName: returnedLastName,
-			password: userConfirmPasswordRef,
+			password: retunedNewPassword,
 			email: returnedEmail,
 			phoneNumber: returnedPhone,
 			address: returnedAddress,
 			postalCode: returnedPostalCode,
 		};
 
-		const PUT_URL = "http://localhost:8080/user/add"; // fetch url
-
-		async function userPost() {
-			await axios
-				.put(PUT_URL, updatedUser, {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				})
-				.then((res) => {
-					console.log(res);
-				})
-				.catch((err) => console.error(err));
+		if(retunedNewPassword !== returnedUserNewPasswordConfirmRef) {
+			console.log("Passwords do not match");
+			return;
 		}
 
-		userPost();
+		console.log("checking pass");
+		console.log(checkPassword(returnedEmail, retunedConfirmPassword));
+		if (checkPassword(returnedEmail, retunedConfirmPassword)) {
+			console.log("trying to do update now");
+			const PUT_URL = "http://localhost:8080/user/update"; // fetch url
+
+			async function userPost() {
+				await axios
+					.put(PUT_URL, updatedUser, {
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					})
+					.then((res) => {
+						console.log(res);
+					})
+					.catch((err) => console.error(err));
+			}
+
+			userPost();
+		}
 	}
 
 	// check if user is null if so rendirec to home
@@ -99,21 +133,30 @@ export default function EditProfile() {
 					/>
 				</FormGroup>
 
+				<FormGroup className="mb-3" controlId="formConfirmPassword">
+					<Form.Label>Confirm Previous Password: </Form.Label>
+					<Form.Control
+						type="password"
+						placeholder="Confirm the Password"
+						ref={userConfirmPasswordRef}
+					/>
+				</FormGroup>
+
 				<FormGroup className="mb-3" controlId="formCurrentPassword">
 					<Form.Label>New Password: </Form.Label>
 					<Form.Control
 						type="password"
 						placeholder="Enter New Password"
-						ref={userCurrPasswordRef}
+						ref={userNewPasswordRef}
 					/>
 				</FormGroup>
 
-				<FormGroup className="mb-3" controlId="formConfirmPassword">
-					<Form.Label>Confirm Password: </Form.Label>
+				<FormGroup className="mb-3" controlId="formCurrentPassword">
+					<Form.Label>Confirm New Password: </Form.Label>
 					<Form.Control
 						type="password"
-						placeholder="Confirm the Password"
-						ref={userConfirmPasswordRef}
+						placeholder="Enter New Password"
+						ref={userNewPasswordConfirmRef}
 					/>
 				</FormGroup>
 
@@ -147,7 +190,7 @@ export default function EditProfile() {
 					/>
 				</FormGroup>
 
-				<Button type="submit" className="btn btn-success" href="./userProfile">
+				<Button type="submit" className="btn btn-success">
 					Save Changes
 				</Button>
 
