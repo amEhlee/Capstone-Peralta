@@ -82,6 +82,11 @@ export default function NavBar() {
 								placeholder="Search"
 								className={style.searchBar}
 								onChange={e => search(e.target.value)}
+								onKeyPress={(e) => {
+									if (e.key === "Enter"){
+										navigate('/search/' + searchQuery);
+									}
+								}}
 							/>
 							<BsSearch onClick={() => {navigate('/search/' + searchQuery)}}/>
 						</div>
