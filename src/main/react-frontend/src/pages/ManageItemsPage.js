@@ -68,7 +68,7 @@ export default function ManageItemsPage() {
         return (
             <>
                 <div className={style.manageItems}>
-                    <h1>Inventory</h1>
+                    <h1>Manage Inventory</h1>
 
 					<div className={style.searchwrapper}>
 						<input

@@ -11,21 +11,20 @@ import AdminLayout from "./components/layout/AdminLayout";
 import AddItem from "./components/items/AddItem";
 import EditItem from "./components/items/EditItem";
 import ManageItemsPage from "./pages/ManageItemsPage";
+import ManageUsersPage from "./pages/ManageUsersPage";
+import ManageOrdersPage from "./pages/ManageOrdersPage";
 
 import LoginUserPage from "./pages/LoginUserPage";
 import LogoutUserPage from "./pages/LogoutUserPage";
 import SignUpUserPage from "./pages/SignUpUserPage";
-import Checkout from "./components/UserSide/CheckoutItem"
+import CheckoutPage from "./pages/CheckoutPage";
 
 import AddCategory from "./components/categories/AddCategory";
 import SelectCategory from "./components/categories/SelectCategory";
-import ManageUsersPage from "./pages/ManageUsersPage";
-
-
 
 import ProductPage from "./pages/ProductPage";
-import UserProfile from "./components/UserSide/UserProfile";
-import EditProfile from "./components/UserSide/EditProfile";
+import UserProfile from "./components/users/UserProfile";
+import EditProfile from "./components/users/EditProfile";
 import OrderUser from "./components/orders/Order";
 
 
@@ -55,7 +54,7 @@ export default function App() {
 					{/* <Route path="/orderhistory" element={<OrderHistoryPage />} /> */}
 
 					<Route path="/userProfile" element={<UserProfile/>}/>
-					<Route path="/checkout" element={<Checkout/>}/>
+					<Route path="/checkout" element={<CheckoutPage/>}/>
 				</Route>
 
 				<Route path="/order" element={<OrderUser />} />
@@ -69,14 +68,11 @@ export default function App() {
 				{/* Example Path Would Be e.g /admin/inventory */}
 				<Route path="/admin" element={<AdminLayout />}>
 					<Route index element={<AdminPage />} />
-					<Route path="addItem" element={<AddItem />} />{" "}
-					{/* TODO remove path?*/}
-					<Route path="editItem" element={<EditItem />} />{" "}
-					{/* TODO remove path?*/}
 					<Route path="manageItems" element={<ManageItemsPage />} />
+					<Route path="manageOrders" element={<ManageOrdersPage />} />
+					<Route path="manageUsers" element={<ManageUsersPage />} />
 					<Route path="addCategory" element={<AddCategory />} />
 					<Route path="selectCategory" element={<SelectCategory />} />
-					<Route path="manageUsers" element={<ManageUsersPage />} />
 				</Route>
 			</Routes>
 		</>
