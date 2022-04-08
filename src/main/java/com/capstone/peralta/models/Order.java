@@ -4,23 +4,22 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 @Entity
 @Table(name = "ORDERS")
-public class    Order {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_Id", nullable = false)
     private Integer orderId;
 
-    private Double itemTotal;
     private Double orderTotal;
-    private Double shippingCost;
     private String orderStatus;
     private Integer itemAmount;
-    private Date orderDate;
+    private java.util.Date orderDate;
+    private String address;
+    private String email;
 
     @ManyToMany
     @JoinTable(
@@ -30,7 +29,7 @@ public class    Order {
     )
     private List<Item> itemList;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="user_Id", referencedColumnName = "user_Id")
     private User user;
 
@@ -42,13 +41,20 @@ public class    Order {
         this.orderId = orderId;
     }
 
-
-    public Double getItemTotal() {
-        return itemTotal;
+    public Integer getItemAmount() {
+        return itemAmount;
     }
 
-    public void setItemTotal(Double itemTotal) {
-        this.itemTotal = itemTotal;
+    public void setItemAmount(Integer itemAmount) {
+        this.itemAmount = itemAmount;
+    }
+
+    public java.util.Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(java.util.Date orderDate) {
+        this.orderDate = orderDate;
     }
 
     public Double getOrderTotal() {
@@ -59,12 +65,20 @@ public class    Order {
         this.orderTotal = orderTotal;
     }
 
-    public Double getShippingCost() {
-        return shippingCost;
+    public String getAddress() {
+        return address;
     }
 
-    public void setShippingCost(Double shippingCost) {
-        this.shippingCost = shippingCost;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getOrderStatus() {
