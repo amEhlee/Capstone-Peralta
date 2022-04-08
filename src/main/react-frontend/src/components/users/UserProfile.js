@@ -1,14 +1,34 @@
-import React, { useContext } from "react";
+import React, {useContext, useState} from "react";
 import { UserContext } from "../../UserContext";
 
 // Import Components
-import { Form, FormGroup, Button } from "react-bootstrap";
-import { Link, Navigate } from "react-router-dom";
+import { Form, FormGroup, Button, Alert } from "react-bootstrap";
+import {Link, Navigate, useParams} from "react-router-dom";
 import Style from "../../assets/styles/UserSide.module.css";
 
+
 export default function UserProfile() {
+
+
 	const userContext = useContext(UserContext).contextData.user;
 
+	const [work, setWork] = useState(true);
+	if (work) {
+		return (
+			<Alert variant="success" onClose={() => setWork(false)} dismissible>
+				<Alert.Heading>You changes have been saved!</Alert.Heading>
+				<p>
+					you can view your updated profile
+				</p>
+			</Alert>
+		);
+	}
+
+	let {saved} = useParams();
+
+	if (saved === "saved") {
+		setWork(true);
+	}
 	// check if user is null if so rendirec to home
 	if (!userContext) {
 		return <Navigate to="/" />

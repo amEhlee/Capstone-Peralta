@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState, useRef} from "react";
 import axios from "axios";
 
-import {Container,Col,Row,Button,Form,Stack} from "react-bootstrap";
+import {Container,Col,Row,Button,Form,Stack,Alert} from "react-bootstrap";
 import { UserContext } from "../UserContext";
 import { useParams } from "react-router-dom";
 import Image from "../components/items/Image";
@@ -16,8 +16,23 @@ export default function ProductPage() {
 	var [datajson, setDataJson] = useState([]);
 	var [itemCategory, setItemCategory] = useState();
 
+
+
 	// form refs 
 	const selectedQuantity = useRef(); // quantity that the user selects
+
+	const [show, setShow] = useState(true);
+
+	if (show) {
+		return (
+			<Alert variant="success" onClose={() => setShow(false)} dismissible>
+				<Alert.Heading> You are almost there! </Alert.Heading>
+				<p>
+					fill out this form to proceed with your purchase.
+				</p>
+			</Alert>
+		);
+	}
 
 	// function that will be called when the page loads purpose is to handle and process the axios get request
 	async function gatherData() {

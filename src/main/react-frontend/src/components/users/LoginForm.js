@@ -1,8 +1,8 @@
 // Import Dependencies
-import React, { useContext } from "react";
+import React, {useContext, useState} from "react";
 
 // Import Components
-import { Form, FormGroup, Button } from "react-bootstrap";
+import {Form, FormGroup, Button, Alert} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import axios from "axios";
@@ -17,6 +17,18 @@ export default function LoginForm() {
 	const passwordRef = useRef();
 	const givenContext = useContext(UserContext);
 	const navigate = useNavigate();
+
+	const [work, setWork] = useState(true);
+	if (work) {
+		return (
+			<Alert variant="Danger" onClose={() => setWork(false)} dismissible>
+				<Alert.Heading>Failed Login attempt</Alert.Heading>
+				<p>
+					Wrong credentials, try again!
+				</p>
+			</Alert>
+		);
+	}
 
 	async function submitHandler(event, token) {
 		event.preventDefault();
@@ -39,6 +51,8 @@ export default function LoginForm() {
 				};
 			});
 		});
+
+
 
 		await axios.get("http://localhost:8080/user/load", {
             headers: {
@@ -81,7 +95,7 @@ export default function LoginForm() {
 				</Link>
 			</FormGroup>
 
-			<Button type="submit" variant="primary">
+			<Button type="submit" variant="primary" onClick={() => setWork(true)}>
 				Login
 			</Button>
 		</Form>

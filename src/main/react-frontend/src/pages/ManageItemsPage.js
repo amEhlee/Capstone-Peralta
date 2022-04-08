@@ -3,7 +3,7 @@ import React, {useState, useEffect, useContext} from "react";
 import axios from "axios";
 
 // Import Components
-import { Table, Modal, Button } from "react-bootstrap";
+import {Table, Modal, Button, Alert} from "react-bootstrap";
 import { BsSearch } from "react-icons/bs";
 import PaginationNav from '../components/layout/Pagination';
 import ItemList from "../components/items/ItemList";
@@ -12,6 +12,7 @@ import AddItem from "../components/items/AddItem";
 // Import Styling
 import style from "../assets/styles/ManageItemsPage.module.css";
 import {UserContext} from "../UserContext";
+import {useParams} from "react-router-dom";
 
 export default function ManageItemsPage() {
 	const [categoryjson, setCategoryJson] = useState([]);
@@ -25,6 +26,24 @@ export default function ManageItemsPage() {
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
+
+	const [work, setWork] = useState(true);
+	if (work) {
+		return (
+			<Alert variant="success" onClose={() => setWork(false)} dismissible>
+				<Alert.Heading>Item added!</Alert.Heading>
+				<p>
+					you can view the item details in the table below.
+				</p>
+			</Alert>
+		);
+	}
+
+	let {added} = useParams();
+
+	if (added === "added") {
+		setWork(true);
+	}
 
 	// function that will be called when the page loads purpose is to handle and process the axios get request
 	function gatherData() {
