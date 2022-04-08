@@ -1,5 +1,5 @@
 // Import Dependencies
-import {useContext } from "react";
+import {useContext, useState} from "react";
 
 // Import Components
 import {BsSearch,BsFillPersonFill,BsFillCartFill,BsShop,BsBagCheck} from "react-icons/bs";
@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 // export navbar component
 export default function NavBar() {
 	const navigate = useNavigate();
+	const [searchQuery, search] = useState('');
 
 	// grab context information
 	const context = useContext(UserContext).contextData;
@@ -80,8 +81,9 @@ export default function NavBar() {
 								type="text"
 								placeholder="Search"
 								className={style.searchBar}
+								onChange={e => search(e.target.value)}
 							/>
-							<BsSearch />
+							<BsSearch onClick={() => {navigate('/search/' + searchQuery)}}/>
 						</div>
 
 						<Nav>
