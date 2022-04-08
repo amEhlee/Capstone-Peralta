@@ -48,7 +48,7 @@ export default function CheckoutPage() {
 		// add itemIds to cart
 		for (let i = 0; i < cart.length; i++) {
 			for (let j = 0; j < cart[i].quantity; j++) {
-				formattedCart.push(cart[i].item.itemId);
+				formattedCart.push(cart[i].item);
 			}
 		}
 
@@ -58,22 +58,23 @@ export default function CheckoutPage() {
 		orderObject = {
 			orderId: null, // should be done on backend
 			orderTotal: null, // should be done on backend
+			orderStatus: null,
 			itemAmount: null, // should be done on backend
 			orderDate: null, // should be done on backend
 			address: user.address,
 			email: user.email,
 			itemList: formattedCart,
-			user: user,
+			user: user
 		};
 
 		console.log(orderObject);
 
-		/* TODO Uncomment when you want to test!
+		// TODO Uncomment when you want to test!
 		const POST_URL = "http://localhost:8080/order/add"; // fetch url
 		axios.post(POST_URL, orderObject).then((res) => {
 			console.log(res);
 		});
-		*/
+		
 	}
 
 	return (
