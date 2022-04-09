@@ -1,7 +1,7 @@
 // Import Dependencies
-import React, {Form, FormGroup, Button} from "react-bootstrap";
+import React, {Form, FormGroup, Button, Alert} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
-import {useContext, useRef} from "react";
+import {useContext, useRef, useState} from "react";
 import axios from "axios";
 import {UserContext} from "../UserContext";
 import {validEmail, validPassword, validPostalCode, validPhoneNumber} from "../components/regex/RegEx.js";
@@ -21,6 +21,18 @@ export default function  SignUpUserPage() {
         const phoneNumberRef = useRef();
         const givenContext = useContext(UserContext);
         const navigate = useNavigate();
+
+    const [show, setShow] = useState(true);
+    if (show) {
+        return (
+            <Alert variant="success" onClose={() => setShow(false)} dismissible>
+                <Alert.Heading>You changes have been saved!</Alert.Heading>
+                <p>
+                    you can view your updated profile
+                </p>
+            </Alert>
+        );
+    }
 
         async function submitHandler(event) {
             event.preventDefault();
@@ -142,7 +154,7 @@ export default function  SignUpUserPage() {
                 <Link to="/login" className="ml-2">Login</Link>
             </FormGroup>
 
-            <Button type="submit" variant="warning">Sign Up</Button>
+            <Button type="submit" variant="warning" onClick={() => setShow(true)}>Sign Up</Button>
 
 
         </Form>

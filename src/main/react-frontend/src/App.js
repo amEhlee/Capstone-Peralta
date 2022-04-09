@@ -53,7 +53,7 @@ export default function App() {
 					{/* fix actual exported function first please */}
 					{/* <Route path="/orderhistory" element={<OrderHistoryPage />} /> */}
 
-					<Route path="/userProfile" element={<UserProfile/>}/>
+					<Route path="/userProfile/:saved" element={<UserProfile/>}/>
 					<Route path="/checkout" element={<CheckoutPage/>}/>
 				</Route>
 
@@ -68,7 +68,7 @@ export default function App() {
 				{/* Example Path Would Be e.g /admin/inventory */}
 				<Route path="/admin" element={<AdminLayout />}>
 					<Route index element={<AdminPage />} />
-					<Route path="manageItems" element={<ManageItemsPage />} />
+					<Route path="manageItems/:added" element={<ManageItemsPage />} />
 					<Route path="manageOrders" element={<ManageOrdersPage />} />
 					<Route path="manageUsers" element={<ManageUsersPage />} />
 					<Route path="addCategory" element={<AddCategory />} />

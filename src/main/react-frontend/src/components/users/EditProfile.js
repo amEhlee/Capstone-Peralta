@@ -16,6 +16,8 @@ export default function EditProfile() {
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
 
+
+
 	const userContext = useContext(UserContext).contextData.user;
 	const token = useContext(UserContext).contextData.token;
 	const userFirstNameRef = useRef();
@@ -190,7 +192,7 @@ export default function EditProfile() {
 					/>
 				</FormGroup>
 
-				<Button type="submit" className="btn btn-success">
+				<Button type="submit" className="btn btn-success" href={"./userProfile/saved"}>
 					Save Changes
 				</Button>
 

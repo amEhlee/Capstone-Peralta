@@ -3,7 +3,7 @@ import React, {useRef, useState, useEffect, useContext} from "react";
 import axios from "axios";
 
 // Import Components
-import {Form, FormGroup, InputGroup, Button, Col, Row} from "react-bootstrap";
+import {Form, FormGroup, InputGroup, Button, Col, Row, Alert} from "react-bootstrap";
 import CategoryChecklist from "../categories/SelectCategory";
 //import SelectCategory from "../categories/SelectCategory";
 
@@ -11,10 +11,13 @@ import CategoryChecklist from "../categories/SelectCategory";
 import Style from "../../assets/styles/ItemStyle.module.css"
 import Select from 'react-select'
 import {UserContext} from "../../UserContext";
+import {useParams} from "react-router-dom";
 
 
 
 export default function AddItem(props) {
+
+
 
     //sets CategoryList to a copy of categoryjson
     const [categoryjson, setcategoryjson] = useState([]);
@@ -267,7 +270,7 @@ export default function AddItem(props) {
                 />
             </FormGroup>
 
-            <Button type="submit" className="btn btn-success">
+            <Button type="submit" className="btn btn-success" href={"./manageItems/added"}>
                 Add Item
             </Button>
 
