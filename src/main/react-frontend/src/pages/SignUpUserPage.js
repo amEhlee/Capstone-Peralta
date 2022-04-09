@@ -33,25 +33,13 @@ export default function  SignUpUserPage() {
             const returnedPostal = postalRef.current.value;
             const returnedPhoneNumber = phoneNumberRef.current.value;
 
+
             console.log(returnedPassword);
             console.log(returnedConfirmPassword);
 
-            if (!(returnedPassword === returnedConfirmPassword)) {
-                //return Passwords do not match!
-            }
-            else if (validEmail.test(returnedEmail)) {
-                //return email invalid
-            }
-            else if (validPassword.test(returnedPassword)) {
-                //return password does not meet requirements and send requirements
-            }
-            else if (validPostalCode.test(returnedPostal)) {
-                //return postalcode does not meet requirements and send requirements
-            }
-            else if (validPhoneNumber.test(returnedPhoneNumber)) {
-                //return postalcode does not meet requirements and send requirements
-            }
-            else {
+
+
+            if (validate() == true) {
                 const user = {
                     firstName: returnedFirstName,
                     lastName: returnedLastName,
@@ -65,7 +53,7 @@ export default function  SignUpUserPage() {
                 console.log(user);
 
                 const POST_URL = "http://localhost:8080/user/signup"; // fetch url
-                await axios.post(POST_URL, user).then((res) => {
+                const userExists = await axios.post(POST_URL, user).then((res) => {
                     console.log(res);
                     givenContext.setContextData((prevData) => {
                         return {
@@ -75,13 +63,17 @@ export default function  SignUpUserPage() {
                     })
                 });
 
+                if (userExists == null) {
+                    alert("User Already Exists")
+                }
+                else {
+                    // on success navigtate back to login
+                    navigate("/login");
+                }
             }
 
-            // on success navigtate back to login
-            navigate("/login");
 
         }
-
 
     return (
         <div className="test">
@@ -103,42 +95,42 @@ export default function  SignUpUserPage() {
         <Form className={userStyle.centrize} onSubmit={submitHandler}>
             <FormGroup className="mb-3" controlId="firstnameForm">
                 <Form.Label>First Name: </Form.Label>
-                <Form.Control type="text" placeholder="Input firstname" ref={firstnameRef}/>
+                <Form.Control type="text" placeholder="Input firstname" required ref={firstnameRef}/>
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="lastnameForm">
                 <Form.Label>Last Name: </Form.Label>
-                <Form.Control type="text" placeholder="Enter lastname" ref={lastnameRef}/>
+                <Form.Control type="text" placeholder="Enter lastname" required ref={lastnameRef}/>
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="emailForm">
                 <Form.Label>Email Address</Form.Label>
-                <Form.Control type="email" placeholder="Enter Email" ref={emailRef}/>
+                <Form.Control type="email" placeholder="Enter Email" required pattern="^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$" ref={emailRef} onChange={validateEmail}/>
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="passwordForm">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Enter your password" ref={passwordRef}/>
+                <Form.Control type="password" placeholder="Enter your password" required pattern="^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$" ref={passwordRef} onChange={validatePassword}/>
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="confirmPasswordForm">
                 <Form.Label>Confirm Password</Form.Label>
-                <Form.Control type="password" placeholder="Enter your password" ref={confirmPasswordRef}/>
+                <Form.Control type="password" placeholder="Enter your password" required pattern="^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$" ref={confirmPasswordRef} onChange={validatePasswordsMatch}/>
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="addressForm">
                 <Form.Label>Address: </Form.Label>
-                <Form.Control type="text" placeholder="Enter address" ref={addressRef}/>
+                <Form.Control type="text" placeholder="Enter address" required ref={addressRef}/>
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="postalcodeForm">
                 <Form.Label>Postal Code: </Form.Label>
-                <Form.Control type="text" placeholder="Enter Postal Code" pattern="[A-Za-z][0-9][A-Za-z] [0-9][A-Za-z][0-9]" ref={postalRef}/>
+                <Form.Control type="text" placeholder="Enter Postal Code" required pattern="^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$" ref={postalRef} onChange={validatePostalCode}/>
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="phoneNumberForm">
                 <Form.Label>Phone Number: </Form.Label>
-                <Form.Control type="tel" placeholder="Enter Phone Number" ref={phoneNumberRef}/>
+                <Form.Control type="tel" placeholder="Enter Phone Number" pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$" ref={phoneNumberRef} onChange={validatePhoneNumber}/>
             </FormGroup>
 
 
@@ -156,6 +148,68 @@ export default function  SignUpUserPage() {
         </Form>
         </div>
     )
+
+
+    function validate() {
+        switch(true) {
+            case validatePassword():
+            case validatePasswordsMatch():
+            case validateEmail():
+            case validatePostalCode():
+            case validatePhoneNumber():
+                return true;
+                break;
+            default:
+                return false;
+        }
+    }
+
+
+    function validateEmail() {
+        const returnedEmail = emailRef.current.value;
+        if (!validEmail.test(returnedEmail)) {
+            console.log("Email invalid!");
+            return false;
+        }
+        return true;
+    }
+
+    function validatePassword() {
+        const returnedPassword = passwordRef.current.value;
+        if (!validPassword.test(returnedPassword)) {
+            console.log("Password Invalid");
+            return false;
+        }
+        return validatePasswordsMatch();
+    }
+
+    function validatePasswordsMatch() {
+        const returnedPassword = passwordRef.current.value;
+        const returnedConfirmPassword = confirmPasswordRef.current.value;
+        if (!(returnedPassword === returnedConfirmPassword)) {
+            console.log("Passwords don't match");
+            return false;
+        }
+        return true;
+    }
+
+    function validatePostalCode() {
+        const returnedPostal = postalRef.current.value;
+        if (!validPostalCode.test(returnedPostal)) {
+            console.log("Postalcode invalid!");
+            return false;
+        }
+        return true;
+    }
+
+    function validatePhoneNumber() {
+        const returnedPhoneNumber = phoneNumberRef.current.value;
+        if (!validPhoneNumber.test(returnedPhoneNumber)) {
+            console.log("Phonenumber invalid!");
+            return false;
+        }
+        return true;
+    }
 
 
 }
