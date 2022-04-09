@@ -11,19 +11,17 @@ import CategoryChecklist from "../categories/SelectCategory";
 import Style from "../../assets/styles/ItemStyle.module.css"
 import Select from 'react-select'
 import {UserContext} from "../../UserContext";
-import {useParams} from "react-router-dom";
+import {Navigate, useParams, useNavigate} from "react-router-dom";
 
 
 
 export default function AddItem(props) {
-
-
-
     //sets CategoryList to a copy of categoryjson
     const [categoryjson, setcategoryjson] = useState([]);
     //sets the catergory URL
     const FETCH_URL = "http://localhost:8080/category/all";
     const token = useContext(UserContext).contextData.token;
+    const navigate = useNavigate();
 
     var CategoryList = [...categoryjson.map((i) => (
         {value: i.categoryId, label: i.categoryName}))];
@@ -153,6 +151,7 @@ export default function AddItem(props) {
                     }
                     console.log(returnedCategoriesValue);
                     props.gatherData(); // if everything is successful, update the items list
+                    navigate("./manageItems/added");
             } catch (err) {
                 console.error(err);
             }
@@ -270,7 +269,7 @@ export default function AddItem(props) {
                 />
             </FormGroup>
 
-            <Button type="submit" className="btn btn-success" href={"./manageItems/added"}>
+            <Button type="submit" className="btn btn-success">
                 Add Item
             </Button>
 
