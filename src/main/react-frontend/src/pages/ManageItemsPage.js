@@ -23,27 +23,11 @@ export default function ManageItemsPage() {
 	const [itemsPerPage, setItemsPerPage] = useState(10); // initalize at 10 items per page change as required
 	var [datajson, setDataJson] = useState([]); // used to store data
 	var [searchName, setSearchName] = useState("");
+	const [work, setWork] = useState(true);
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
-
-	const [work, setWork] = useState(true);
-	if (work) {
-		return (
-			<Alert variant="success" onClose={() => setWork(false)} dismissible>
-				<Alert.Heading>Item added!</Alert.Heading>
-				<p>
-					you can view the item details in the table below.
-				</p>
-			</Alert>
-		);
-	}
-
-	let {added} = useParams();
-
-	if (added === "added") {
-		setWork(true);
-	}
+	let added = useParams();
 
 	// function that will be called when the page loads purpose is to handle and process the axios get request
 	function gatherData() {
@@ -77,15 +61,36 @@ export default function ManageItemsPage() {
         setCurrentPage(pageNumber);
     }
 
+	if(added === "added") {
+		setWork(true);
+	}
+
+	function conditionalAlertRender() {
+		if (work) {
+			return (
+				<Alert variant="success" onClose={() => setWork(false)} dismissible>
+					<Alert.Heading>Item added!</Alert.Heading>
+					<p>
+						you can view the item details in the table below.
+					</p>
+				</Alert>
+			);
+		}
+	}
+
     if (datajson === "no data returned") {
         return (
             <section>
-                <p>{datajson}</p>
+                <p> NO DATA RETURNED </p>
             </section>
         );
     } else {
         return (
             <>
+				{/* render the alert based on given input */}
+				{conditionalAlertRender()}
+				
+				{/* manage items form */}
                 <div className={style.manageItems}>
                     <h1>Manage Inventory</h1>
 

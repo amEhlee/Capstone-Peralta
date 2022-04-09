@@ -1,40 +1,38 @@
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../../UserContext";
 
 // Import Components
 import { Form, FormGroup, Button, Alert } from "react-bootstrap";
-import {Link, Navigate, useParams} from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import Style from "../../assets/styles/UserSide.module.css";
 
-
 export default function UserProfile() {
-
-
 	const userContext = useContext(UserContext).contextData.user;
-
 	const [work, setWork] = useState(true);
-	if (work) {
-		return (
-			<Alert variant="success" onClose={() => setWork(false)} dismissible>
-				<Alert.Heading>You changes have been saved!</Alert.Heading>
-				<p>
-					you can view your updated profile
-				</p>
-			</Alert>
-		);
-	}
+	let saved  = useParams();
 
-	let {saved} = useParams();
+	function conditionalAlertRender() {
+		if (work) {
+			return (
+				<Alert variant="success" onClose={() => setWork(false)} dismissible>
+					<Alert.Heading>You changes have been saved!</Alert.Heading>
+					<p>you can view your updated profile</p>
+				</Alert>
+			);
+		}
+	}
 
 	if (saved === "saved") {
 		setWork(true);
 	}
+
 	// check if user is null if so rendirec to home
 	if (!userContext) {
-		return <Navigate to="/" />
+		return <Navigate to="/" />;
 	} else {
 		return (
 			<>
+				{conditionalAlertRender()}
 				<div>
 					<Form className={Style.centrize}>
 						<h1>Personal Details</h1>
