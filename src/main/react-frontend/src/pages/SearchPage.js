@@ -17,7 +17,7 @@ let { searchTerm } = useParams();
 
     const FETCH_URL = "http://localhost:8080/item/search/" + searchTerm; // fetch url
     var [datajson, setDataJson] = useState([]); // used to store data TODO rename var
-
+    var [itemList, setitemList] = useState([])
     const token = useContext(UserContext).contextData.token;
 
     // function that will be called when the page loads purpose is to handle and process the axios get request
@@ -39,9 +39,13 @@ let { searchTerm } = useParams();
     // runs the gatherdata function when the page loads
     useEffect(() => {
         gatherData().then((data) => {
-            setDataJson(data || "no data returned"); // store returned data in a variable
+            setDataJson(data || "no data returned");
+            setitemList(datajson) // store returned data in a variable
         });
-    }, []);
+    }, [ searchTerm]);
+
+
+    const items = datajson.map;
 
     console.log(datajson);
 
@@ -62,7 +66,7 @@ let { searchTerm } = useParams();
         return (
             
             <div>
-            
+            <h1>Results containing: "{ searchTerm }"</h1>
                 <div
                     style={{
                         display: 'flex',
