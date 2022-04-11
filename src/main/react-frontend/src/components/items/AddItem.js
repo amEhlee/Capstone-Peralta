@@ -215,7 +215,7 @@ export default function AddItem(props) {
                     placeholder="Select Category"
                     isSearchable
                     isClearable
-
+                    required
                     ref={itemCategoryRef}
                 />
 

@@ -91,7 +91,13 @@ export default function EditItem(props) {
 		const returnedDescription = itemDescriptionRef.current.value;
 		let returnedAvailable = itemAvailableRef.current.checked;
 		const imageData = imageRef.current;
-		const returnedCategoriesValue = itemCategoryRef.current.props.value.value;
+		var returnedCategoriesValue = props.item.category.categoryId;
+		console.log(returnedCategoriesValue);
+		try {
+			returnedCategoriesValue = itemCategoryRef.current.props.value.value;
+		} catch (err){
+
+		}
 
 		// parse checkbox result e.g if checkbox_clicked true = 1 if checkbox_clicked false = 0
 		returnedAvailable === true
@@ -141,6 +147,7 @@ export default function EditItem(props) {
 				if (imageData.files[0]){
 					imagePost(res.data.itemId);
 				}
+				props.gatherData();
 			} catch (err) {
 				console.error(err);
 			}
@@ -202,7 +209,6 @@ export default function EditItem(props) {
                     placeholder="Select Category"
                     isSearchable
                     isClearable
-
                     ref={itemCategoryRef}
                 />
 
