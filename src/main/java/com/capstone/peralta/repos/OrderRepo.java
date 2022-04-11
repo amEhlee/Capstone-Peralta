@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface OrderRepo extends JpaRepository<Order, Integer> {
-    List<Order> getAllByUser(User user);
+    List<Order> findAllByUser(User user);
 }
