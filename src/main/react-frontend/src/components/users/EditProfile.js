@@ -78,6 +78,7 @@ export default function EditProfile() {
 			phoneNumber: returnedPhone,
 			address: returnedAddress,
 			postalCode: returnedPostalCode,
+			roles: userContext.roles,
 		};
 
 		if(retunedNewPassword !== returnedUserNewPasswordConfirm) {
