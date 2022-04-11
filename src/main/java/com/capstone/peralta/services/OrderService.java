@@ -2,7 +2,9 @@ package com.capstone.peralta.services;
 
 import com.capstone.peralta.models.Item;
 import com.capstone.peralta.models.Order;
+import com.capstone.peralta.models.User;
 import com.capstone.peralta.repos.OrderRepo;
+import com.capstone.peralta.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,12 @@ public class OrderService {
     @Autowired
     private final OrderRepo orderRepo;
 
-    public OrderService(OrderRepo orderRepo) {
+    @Autowired
+    private final UserRepo userRepo;
+
+    public OrderService(OrderRepo orderRepo, UserRepo userRepo) {
         this.orderRepo = orderRepo;
+        this.userRepo = userRepo;
     }
 
     public Order getOrderById(Integer id) {
@@ -26,6 +32,11 @@ public class OrderService {
 
     public List<Order> getAll() {
         return orderRepo.findAll();
+    }
+
+    public List<Order> getByUser(Integer userId) {
+        User user = userRepo.getById(userId);
+        return orderRepo.getAllByUser(user);
     }
 
     public Order addOrder(Order order) {
