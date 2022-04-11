@@ -6,161 +6,183 @@
  *
  */
 // import dependencies
-import React, { useContext, useRef } from "react";
+import React, {useContext, useRef} from "react";
 import axios from "axios";
+import emailjs from "emailjs-com";
 
 // Import Components
-import { Form, FormGroup, Button } from "react-bootstrap";
-import { UserContext } from "../UserContext";
+import {Form, FormGroup, Button} from "react-bootstrap";
+import {UserContext} from "../UserContext";
 import Style from "../assets/styles/UserSide.module.css";
 
 export default function CheckoutPage() {
 
-	// instansiate user cart and user object
-	const cart = useContext(UserContext).contextData.cart;
-	let user = useContext(UserContext).contextData.user;
+    // instansiate user cart and user object
+    const cart = useContext(UserContext).contextData.cart;
+    let user = useContext(UserContext).contextData.user;
 
-	// setup refs for the form
-	const orderFirstNameRef = useRef();
-	const orderLastNameRef = useRef();
-	const orderEmailRef = useRef();
-	const orderAddressRef = useRef();
-	const orderPostalCodeRef = useRef();
+    // add each individual item for email receipt
+    let formattedString = "";
+    cart.map((i) => {
+        formattedString += i.item.itemName + " Quantity:" + i.quantity + '<hr/>';
 
-	// set blank user if information is null
-	if (user === null) {
-		user = {
-			userId: null,
-			firstName: "",
-			lastName: "",
-			password: null,
-			email: "",
-			address: "",
-			postalCode: "",
-			phoneNumber: "",
-		};
-	}
+    })
 
-	function submitHandler(event) {
-		// prevent default submit behaviour
-		event.preventDefault();
+    // setup refs for the form
+    const orderFirstNameRef = useRef();
+    const orderLastNameRef = useRef();
+    const orderEmailRef = useRef();
+    const orderAddressRef = useRef();
+    const orderPostalCodeRef = useRef();
 
-		// will hold later items
-		const formattedCart = [];
+    // set blank user if information is null
+    if (user === null) {
+        user = {
+            userId: null,
+            firstName: "",
+            lastName: "",
+            password: null,
+            email: "",
+            address: "",
+            postalCode: "",
+            phoneNumber: "",
+        };
+    }
 
-		// set appropriate user information
-		user.firstName = orderFirstNameRef.current.value;
-		user.lastName = orderLastNameRef.current.value;
-		user.email = orderEmailRef.current.value;
-		user.address = orderAddressRef.current.value;
-		user.postalCode = orderPostalCodeRef.current.value;
+    function submitHandler(event) {
+        // prevent default submit behaviour
+        event.preventDefault();
 
-		// add itemIds to cart
-		for (let i = 0; i < cart.length; i++) {
-			for (let j = 0; j < cart[i].quantity; j++) {
-				formattedCart.push(cart[i].item);
-			}
-		}
+        // will hold later items
+        const formattedCart = [];
 
-		// format order object to be sent
-		let orderObject;
+        // set appropriate user information
+        user.firstName = orderFirstNameRef.current.value;
+        user.lastName = orderLastNameRef.current.value;
+        user.email = orderEmailRef.current.value;
+        user.address = orderAddressRef.current.value;
+        user.postalCode = orderPostalCodeRef.current.value;
 
-		orderObject = {
-			orderId: null, // should be done on backend
-			orderTotal: null, // should be done on backend
-			orderStatus: null,
-			itemAmount: null, // should be done on backend
-			orderDate: null, // should be done on backend
-			address: user.address,
-			email: user.email,
-			itemList: formattedCart,
-			user: user
-		};
+        // add itemIds to cart
+        for (let i = 0; i < cart.length; i++) {
+            for (let j = 0; j < cart[i].quantity; j++) {
+                formattedCart.push(cart[i].item);
+            }
+        }
 
-		console.log(orderObject);
+        // format order object to be sent
+        let orderObject;
 
-		// TODO Uncomment when you want to test!
-		const POST_URL = "http://localhost:8080/order/add"; // fetch url
-		axios.post(POST_URL, orderObject).then((res) => {
-			console.log(res);
-		});
-		
-	}
+        orderObject = {
+            orderId: null, // should be done on backend
+            orderTotal: null, // should be done on backend
+            orderStatus: null,
+            itemAmount: null, // should be done on backend
+            orderDate: null, // should be done on backend
+            address: user.address,
+            email: user.email,
+            itemList: formattedCart,
+            user: user
+        };
 
-	return (
-		<Form onSubmit={submitHandler}>
-			<h3>Customer Info</h3>
-			<FormGroup>
-				<Form.Label> First Name: </Form.Label>
-				<Form.Control
-					type="text"
-					placeholder="john"
-					ref={orderFirstNameRef}
-					defaultValue={user.firstName}
-				/>
-			</FormGroup>
+        console.log(orderObject);
 
-			<FormGroup>
-				<Form.Label> Last Name: </Form.Label>
-				<Form.Control
-					type="text"
-					placeholder="Doe"
-					ref={orderLastNameRef}
-					defaultValue={user.lastName}
-				/>
-			</FormGroup>
+        // TODO Uncomment when you want to test!
+        const POST_URL = "http://localhost:8080/order/add"; // fetch url
+        axios.post(POST_URL, orderObject).then((res) => {
+            console.log(res);
+        });
 
-			<FormGroup>
-				<Form.Label> Email: </Form.Label>
-				<Form.Control
-					type="text"
-					placeholder="abcd@example.com"
-					ref={orderEmailRef}
-					defaultValue={user.email}
-				/>
-			</FormGroup>
+        emailjs.sendForm('service_4u1fh14', 'template_d489nzh', event.target, 'QitERWWr6H0DNKr-1')
+            .then((result) => {
+                console.log(result.text);
+            }, (error) => {
+                console.log(error.text);
+            });
+        event.target.reset()
 
-			<h3> Shipping Info </h3>
-			<FormGroup>
-				<Form.Label> Address: </Form.Label>
-				<Form.Control
-					type="text"
-					placeholder="123 x street NE"
-					ref={orderAddressRef}
-					defaultValue={user.address}
-				/>
-			</FormGroup>
+    }
 
-			<FormGroup>
-				<Form.Label> Postal Code: </Form.Label>
-				<Form.Control
-					type="text"
-					placeholder="A1B1C1"
-					ref={orderPostalCodeRef}
-					defaultValue={user.postalCode}
-				/>
-			</FormGroup>
+    return (
+        <Form onSubmit={submitHandler}>
+            <h3>Customer Info</h3>
+            <FormGroup>
+                <Form.Label> First Name: </Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="John"
+                    ref={orderFirstNameRef}
+                    defaultValue={user.firstName}
+                    name="firstName"
+                />
+            </FormGroup>
 
-			<FormGroup>
-				<Form.Label> Country: </Form.Label>
-				<Form.Control type="text" placeholder="Canada" />
-			</FormGroup>
+            <FormGroup>
+                <Form.Label> Last Name: </Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Doe"
+                    ref={orderLastNameRef}
+                    defaultValue={user.lastName}
+                    name="lastName"
+                />
+            </FormGroup>
 
-			<FormGroup>
-				<Form.Label> City: </Form.Label>
-				<Form.Control type="text" placeholder="Calgary" />
-			</FormGroup>
+            <FormGroup>
+                <Form.Label> Email: </Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="johnDoe@example.com"
+                    ref={orderEmailRef}
+                    defaultValue={user.email}
+                    name="email"
+                />
+            </FormGroup>
 
-			<FormGroup>
-				<Form.Label> Province: </Form.Label>
-				<Form.Control type="text" placeholder="Alberta" />
-			</FormGroup>
+            <h3> Shipping Info </h3>
+            <FormGroup>
+                <Form.Label> Address: </Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="12 Street NE"
+                    ref={orderAddressRef}
+                    defaultValue={user.address}
+                    name="address"
+                />
+            </FormGroup>
 
-			<FormGroup>
-				<Button type="submit" className="mb-3 btn btn-success ">
-					Checkout and send email
-				</Button>
-			</FormGroup>
-		</Form>
-	);
+            <FormGroup>
+                <Form.Label> Postal Code: </Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="A1B1C1"
+                    ref={orderPostalCodeRef}
+                    defaultValue={user.postalCode}
+                    name="postalCode"
+                />
+            </FormGroup>
+
+            <FormGroup>
+                <Form.Label> Country: </Form.Label>
+                <Form.Control type="text" placeholder="Canada"/>
+            </FormGroup>
+
+            <FormGroup>
+                <Form.Label> City: </Form.Label>
+                <Form.Control type="text" placeholder="Calgary" name="city"/>
+            </FormGroup>
+
+            <FormGroup>
+                <Form.Label> Province: </Form.Label>
+                <Form.Control type="text" placeholder="Alberta" name="province"/>
+            </FormGroup>
+
+            <FormGroup>
+                <Form.Control type="hidden" name="orderItems" value={formattedString}/>
+                <Button type="submit" className="mb-3 btn btn-success ">
+                    Checkout and send email
+                </Button>
+            </FormGroup>
+        </Form>
+    );
 }
