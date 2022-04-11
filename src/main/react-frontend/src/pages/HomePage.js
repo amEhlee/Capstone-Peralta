@@ -10,7 +10,6 @@ import ItemList from "../components/items/ItemList";
 // Import Styling
 import style from "../assets/styles/Layout.module.css";
 import style2 from "../assets/styles/Homepage.module.css";
-import ItemCarousel from "../components/items/ItemCarousel";
 
 export default function HomePage() {
     const FETCH_URL = "http://localhost:8080/item/get/all"; // fetch url
@@ -55,8 +54,6 @@ export default function HomePage() {
         return (
             
             <div>
-                {/*<h1>Homepage</h1>*/}
-                {/* <ItemCarousel/> */}
                 <div
                     style={{
                         display: 'flex',

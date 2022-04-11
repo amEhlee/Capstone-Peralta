@@ -21,8 +21,11 @@ export default function CheckoutPage() {
 	let user = useContext(UserContext).contextData.user;
 
 	// setup refs for the form
+	const orderFirstNameRef = useRef();
+	const orderLastNameRef = useRef();
 	const orderEmailRef = useRef();
 	const orderAddressRef = useRef();
+	const orderPostalCodeRef = useRef();
 
 	// set blank user if information is null
 	if (user === null) {
@@ -44,6 +47,13 @@ export default function CheckoutPage() {
 
 		// will hold later items
 		const formattedCart = [];
+
+		// set appropriate user information
+		user.firstName = orderFirstNameRef.current.value;
+		user.lastName = orderLastNameRef.current.value;
+		user.email = orderEmailRef.current.value;
+		user.address = orderAddressRef.current.value;
+		user.postalCode = orderPostalCodeRef.current.value;
 
 		// add itemIds to cart
 		for (let i = 0; i < cart.length; i++) {
@@ -85,6 +95,7 @@ export default function CheckoutPage() {
 				<Form.Control
 					type="text"
 					placeholder="john"
+					ref={orderFirstNameRef}
 					defaultValue={user.firstName}
 				/>
 			</FormGroup>
@@ -94,6 +105,7 @@ export default function CheckoutPage() {
 				<Form.Control
 					type="text"
 					placeholder="Doe"
+					ref={orderLastNameRef}
 					defaultValue={user.lastName}
 				/>
 			</FormGroup>
@@ -124,6 +136,7 @@ export default function CheckoutPage() {
 				<Form.Control
 					type="text"
 					placeholder="A1B1C1"
+					ref={orderPostalCodeRef}
 					defaultValue={user.postalCode}
 				/>
 			</FormGroup>

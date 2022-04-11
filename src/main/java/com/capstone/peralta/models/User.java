@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +33,7 @@ public class User {
     private String postalCode;
     private String phoneNumber;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Order> userOrders;
 
