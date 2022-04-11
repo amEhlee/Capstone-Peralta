@@ -85,19 +85,11 @@ export default function ProductPage() {
 						</Col>
 
 						<Col md="auto">
-							<div>{datajson.itemName}</div>
+							<div><b>{datajson.itemName}</b></div>
 							<div>{itemCategory}</div>
 							<div>${datajson.itemPrice}</div>
 
 							<Form>
-								<Form.Group controlId="size-select" className={"mb-3"}>
-									<Form.Label>Select Size</Form.Label>
-									<Form.Control as="select">
-										<option>Small</option>
-										<option>Medium</option>
-										<option>Large</option>
-									</Form.Control>
-								</Form.Group>
 
 								<Form.Group controlId="quantity-select" className="mb-3">
 									<Form.Label>Select Quantity</Form.Label>
@@ -154,10 +146,6 @@ export default function ProductPage() {
 									}}
 								</UserContext.Consumer>
 								{/*TODO Add Logic for Buy Now Button*/}
-								{/*Buy now will just send the user directly to checkout with the specified item*/}
-								<Button variant={"primary"} className={"m-1"}>
-									Buy Now
-								</Button>
 							</Form>
 						</Col>
 					</Row>

@@ -29,7 +29,7 @@ export default function NavBar() {
             const payload = JSON.parse(atob(context.token.split(".")[1])); 
 			if (payload.roles.includes("ROLE_ADMIN")) {
 				return (
-					<Link to="/admin">
+					<Link to="/admin/manageItems">
 						<Button variant="light" >
 							{BsFillPersonFill()}
 							<div>Admin</div>
