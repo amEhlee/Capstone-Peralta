@@ -36,7 +36,7 @@ public class OrderService {
 
     public List<Order> getByUser(Integer userId) {
         User user = userRepo.getById(userId);
-        return orderRepo.getAllByUser(user);
+        return orderRepo.findAllByUser(user);
     }
 
     public Order addOrder(Order order) {
