@@ -10,7 +10,6 @@ import ItemList from "../components/items/ItemList";
 // Import Styling
 import style from "../assets/styles/Layout.module.css";
 import style2 from "../assets/styles/Homepage.module.css";
-import ItemCarousel from "../components/items/ItemCarousel";
 
 export default function SearchPage() {
 let { searchTerm } = useParams();
