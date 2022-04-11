@@ -46,6 +46,7 @@ export default function HomePage() {
     if (datajson === "no data returned") {
         return (
             <section>
+                {/*TODO implement navigation on front end please*/}
                 <Link to="/admin/manageItems">Try Manage Items Page</Link>
                 <p>{datajson}</p>
             </section>
@@ -54,6 +55,8 @@ export default function HomePage() {
         return (
             
             <div>
+                {/*<h1>Homepage</h1>*/}
+                {/* <ItemCarousel/> */}
                 <div
                     style={{
                         display: 'flex',
