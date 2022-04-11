@@ -1,5 +1,7 @@
 package com.capstone.peralta.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.List;
 @Table(name = "ORDERS")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_Id", nullable = false)
     private Integer orderId;
 
@@ -31,6 +33,7 @@ public class Order {
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="user_Id", referencedColumnName = "user_Id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;
 
     public Integer getOrderId() {

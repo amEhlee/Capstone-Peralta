@@ -20,7 +20,13 @@ export default function Item(props) {
         try {
             return require("../../assets/images/" + props.id + "_1.png");
         } catch (err) {
-            return require("../../assets/images/default-image-620x600.jpg");
+            // console.log(err);
+            try {
+                return require("../../assets/images/" + props.id + "_1.jpg");
+            } catch (err) {
+                // console.log(err);
+                return require("../../assets/images/default-image-620x600.jpg");
+            }
         }
     }
     return (
