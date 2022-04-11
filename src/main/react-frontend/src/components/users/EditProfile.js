@@ -17,6 +17,17 @@ export default function EditProfile() {
 	const handleClose = () => setShow(false);
 	const navigate = useNavigate();
 
+	const userContext = useContext(UserContext).contextData.user;
+	const token = useContext(UserContext).contextData.token;
+	const userFirstNameRef = useRef();
+	const userLastNameRef = useRef();
+	const userConfirmPasswordRef = useRef();
+	const userNewPasswordRef = useRef();
+	const userNewPasswordConfirmRef = useRef();
+	const userPhoneRef = useRef();
+	const userAddressRef = useRef();
+	const userPostalCodeRef = useRef();
+
 	const [fields, setFields] = useState({
 		firstName: "",
 		lastName: "",
@@ -89,17 +100,6 @@ export default function EditProfile() {
 
 
 	};
-
-	const userContext = useContext(UserContext).contextData.user;
-	const token = useContext(UserContext).contextData.token;
-	const userFirstNameRef = useRef();
-	const userLastNameRef = useRef();
-	const userConfirmPasswordRef = useRef();
-	const userNewPasswordRef = useRef();
-	const userNewPasswordConfirmRef = useRef();
-	const userPhoneRef = useRef();
-	const userAddressRef = useRef();
-	const userPostalCodeRef = useRef();
 
 	function checkPassword(givenEmail, givenPassword) {
 		// Post url used to verify password
