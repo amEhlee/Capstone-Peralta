@@ -73,6 +73,10 @@ public class ItemController {
     @GetMapping("/search/{query}")
     List<Item> searchItems(@PathVariable String query) {
         List<Item> listOne = itemService.searchItems(query);
+
+//        return listOne;
+
+
         List<Item> listTwo = itemService.searchItemsByCategoryName(query);
 
         List<Item> result = Stream.concat(listOne.stream(), listTwo.stream())

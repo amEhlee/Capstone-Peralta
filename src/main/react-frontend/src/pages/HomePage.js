@@ -52,8 +52,8 @@ export default function HomePage() {
         );
     } else {
         return (
+            
             <div>
-                {/*<h1>Homepage</h1>*/}
                 <div
                     style={{
                         display: 'flex',
@@ -61,6 +61,7 @@ export default function HomePage() {
                         justifyContent: 'center'
                     }}
                 >
+                    
                     <ItemList items={datajson} target="regularList"/>
                 </div>
 

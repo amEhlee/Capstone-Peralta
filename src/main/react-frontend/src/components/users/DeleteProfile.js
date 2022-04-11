@@ -7,6 +7,7 @@
 
 
 import React from "react";
+import {useNavigate} from "react-router-dom"
 
 // Import Components
 import {Form, FormGroup, InputGroup, Button, FormControl, Col, Row, Modal} from "react-bootstrap";
@@ -14,7 +15,7 @@ import {Form, FormGroup, InputGroup, Button, FormControl, Col, Row, Modal} from 
 
 
 export default function DeleteProfile() {
-
+    const navigate = useNavigate();
 
     return (
         <Form>
@@ -33,7 +34,7 @@ export default function DeleteProfile() {
             </FormGroup>
 
             <FormGroup>
-            <Button type="submit" className="btn btn-danger mb-3" href={"./"} >
+            <Button type="submit" className="btn btn-danger mb-3" onClick={() => {navigate("./")}} >
             Delete Account
             </Button>
             </FormGroup>

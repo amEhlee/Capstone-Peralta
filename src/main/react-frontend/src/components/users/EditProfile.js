@@ -4,7 +4,7 @@ import axios from "axios";
 
 // Import Components
 import { UserContext } from "../../UserContext";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Form, FormGroup, Button, Modal } from "react-bootstrap";
 import DeleteProfile from "./DeleteProfile";
 
@@ -15,6 +15,7 @@ export default function EditProfile() {
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
+	const navigate = useNavigate();
 
 	const userContext = useContext(UserContext).contextData.user;
 	const token = useContext(UserContext).contextData.token;
@@ -77,6 +78,7 @@ export default function EditProfile() {
 			phoneNumber: returnedPhone,
 			address: returnedAddress,
 			postalCode: returnedPostalCode,
+			roles: userContext.roles,
 		};
 
 		if(retunedNewPassword !== returnedUserNewPasswordConfirm) {
@@ -99,6 +101,7 @@ export default function EditProfile() {
 					})
 					.then((res) => {
 						console.log(res);
+						navigate("./userProfile/saved");
 					})
 					.catch((err) => console.error(err));
 			}
@@ -190,7 +193,7 @@ export default function EditProfile() {
 					/>
 				</FormGroup>
 
-				<Button type="submit" className="btn btn-success">
+				<Button type="submit" className="btn btn-success" >
 					Save Changes
 				</Button>
 

@@ -1,7 +1,15 @@
-import React, {useContext, useEffect, useState, useRef} from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import axios from "axios";
 
-import {Container,Col,Row,Button,Form,Stack} from "react-bootstrap";
+import {
+	Container,
+	Col,
+	Row,
+	Button,
+	Form,
+	Stack,
+	Alert,
+} from "react-bootstrap";
 import { UserContext } from "../UserContext";
 import { useParams } from "react-router-dom";
 import Image from "../components/items/Image";
@@ -15,8 +23,11 @@ export default function ProductPage() {
 	const token = useContext(UserContext).contextData.token;
 	var [datajson, setDataJson] = useState([]);
 	var [itemCategory, setItemCategory] = useState();
+	/*
+	const [show, setShow] = useState(true);
+	*/
 
-	// form refs 
+	// form refs
 	const selectedQuantity = useRef(); // quantity that the user selects
 
 	// function that will be called when the page loads purpose is to handle and process the axios get request
@@ -42,15 +53,29 @@ export default function ProductPage() {
 		});
 	}, []);
 
+	/* Move to checkout?
+	function conditionalAlertRender() {
+		if (show) {
+			return (
+				<Alert variant="success" onClose={() => setShow(false)} dismissible>
+					<Alert.Heading> You are almost there! </Alert.Heading>
+					<p>fill out this form to proceed with your purchase.</p>
+				</Alert>
+			);
+		}
+	}
+	*/
+
 	//if no data is found return NO DATA FOUND
-	if (datajson === "no data returned") { 
+	if (datajson === "no data returned") {
 		return (
 			<section>
 				<p>{datajson}</p>
 				<p>NO DATA FOUND</p>
 			</section>
 		);
-	} else { //if data is found return the data (item information)
+	} else {
+		//if data is found return the data (item information)
 		return (
 			<>
 				<Container fluid={"xxl"}>
@@ -83,17 +108,17 @@ export default function ProductPage() {
 										placeholder="Enter Item Quantity"
 										ref={selectedQuantity}
 										defaultValue={1}
-
 									/>
 								</Form.Group>
 
-
 								{/*Adds to cart using previous*/}
-								<UserContext.Consumer >
+								<UserContext.Consumer>
 									{(value) => {
 										function AddToCart() {
 											//TODO checking should be done here to make sure quantity is valid
-											const givenQuantity = parseInt(selectedQuantity.current.value);
+											const givenQuantity = parseInt(
+												selectedQuantity.current.value
+											);
 											let newCart = value.contextData.cart;
 
 											// check to see if item is already in cart if so update quantity
@@ -110,7 +135,9 @@ export default function ProductPage() {
 										}
 
 										return (
-											<Button variant={"primary"} className={"m-1"}
+											<Button
+												variant={"primary"}
+												className={"m-1"}
 												onClick={() => {
 													// Onclick set new cart data
 													value.setContextData((prevData) => {
@@ -120,7 +147,6 @@ export default function ProductPage() {
 														};
 													});
 												}}
-												
 											>
 												Add To Cart
 											</Button>
@@ -139,15 +165,11 @@ export default function ProductPage() {
 					<Row>
 						{/*item desciption placeholder*/}
 						<Stack gap={3}>
-							<div/>
-							<div>
-								{datajson.itemDescription}
-							</div>
+							<div />
+							<div>{datajson.itemDescription}</div>
 						</Stack>
 					</Row>
 				</Container>
-
-
 			</>
 		);
 	}

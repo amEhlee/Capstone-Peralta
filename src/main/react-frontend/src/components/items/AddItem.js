@@ -3,7 +3,7 @@ import React, {useRef, useState, useEffect, useContext} from "react";
 import axios from "axios";
 
 // Import Components
-import {Form, FormGroup, InputGroup, Button, Col, Row} from "react-bootstrap";
+import {Form, FormGroup, InputGroup, Button, Col, Row, Alert} from "react-bootstrap";
 import CategoryChecklist from "../categories/SelectCategory";
 //import SelectCategory from "../categories/SelectCategory";
 
@@ -11,16 +11,17 @@ import CategoryChecklist from "../categories/SelectCategory";
 import Style from "../../assets/styles/ItemStyle.module.css"
 import Select from 'react-select'
 import {UserContext} from "../../UserContext";
+import {Navigate, useParams, useNavigate} from "react-router-dom";
 
 
 
 export default function AddItem(props) {
-
     //sets CategoryList to a copy of categoryjson
     const [categoryjson, setcategoryjson] = useState([]);
     //sets the catergory URL
     const FETCH_URL = "http://localhost:8080/category/all";
     const token = useContext(UserContext).contextData.token;
+    const navigate = useNavigate();
 
     var CategoryList = [...categoryjson.map((i) => (
         {value: i.categoryId, label: i.categoryName}))];
@@ -150,6 +151,7 @@ export default function AddItem(props) {
                     }
                     console.log(returnedCategoriesValue);
                     props.gatherData(); // if everything is successful, update the items list
+                    navigate("./manageItems/added");
             } catch (err) {
                 console.error(err);
             }
