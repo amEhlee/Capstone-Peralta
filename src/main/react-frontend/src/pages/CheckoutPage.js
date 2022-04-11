@@ -11,94 +11,15 @@ import axios from "axios";
 import emailjs from "emailjs-com";
 
 // Import Components
-import {Form, FormGroup, Button} from "react-bootstrap";
+import {Form, FormGroup, Button, Alert} from "react-bootstrap";
 import {UserContext} from "../UserContext";
 import Style from "../assets/styles/UserSide.module.css";
 
 export default function CheckoutPage() {
 
-    const [fields, setFields] = useState({
-		firstName: "",
-		lastName: "",
-		password: "",
-		confirmPass:"",
-		address: "",
-		postalCode: "",
-		phoneNumber: ""
-	});
-
-	const [error, setError] = useState({});
-
-	const [work, setWork] = useState(false);
-	if (work) {
-		return (
-			<Alert variant="success" onClose={() => setWork(false)} dismissible>
-				<Alert.Heading>Successfully ordered</Alert.Heading>
-				<p>
-					An email has been sent to you regarding your info!
-				</p>
-			</Alert>
-		);
-	}
-
-
-	function validation() {
-		let errorDisplay={};
-
-		if (!fields.firstName) {
-			errorDisplay.firstName = "￮ You need to input your first name";
-		}
-
-
-		if (!fields.lastName) {
-			errorDisplay.lastName = "￮ You need to input your last name";
-		}
-
-		if (!fields.password){
-			errorDisplay.password= "￮ You need to input your Password"
-		}
-
-		else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
-			errorDisplay.password = "￮ your password is invalid";
-		}
-		//TODO: have to check for the password matching donno how yet
-		if (!fields.address){
-			errorDisplay.address= "￮ You need to input your address"
-		}
-
-		if (!fields.postalCode){
-			errorDisplay.postalCode= "￮ You need to input your postal code"
-		}
-		else if (!/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(fields.postalCode)){
-			errorDisplay.postalCode = "￮ your postal code format should be like this A1A A1A";
-		}
-
-		if (!fields.phoneNumber){
-			errorDisplay.phoneNumber= "￮ You need to input your phone number"
-		}
-		else if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)){
-			errorDisplay.postalCode = "￮ your phone number is invalid";
-		}
-
-		setError(errorDisplay);
-		if (Object.keys(errorDisplay).length===0){
-			return true;
-		}else {
-			return false;
-		}
-
-
-	};
-
     // instansiate user cart and user object
     const cart = useContext(UserContext).contextData.cart;
     let user = useContext(UserContext).contextData.user;
-
-    // add each individual item for email receipt
-    let formattedString = "";
-    cart.map((i) => {
-        formattedString += i.item.itemName + " Quantity:" + i.quantity + '<hr/>';
-    })
 
     // setup refs for the form
     const orderFirstNameRef = useRef();
@@ -106,6 +27,101 @@ export default function CheckoutPage() {
     const orderEmailRef = useRef();
     const orderAddressRef = useRef();
     const orderPostalCodeRef = useRef();
+
+    const [fields, setFields] = useState({
+        firstName: "",
+        lastName: "",
+        password: "",
+        confirmPass: "",
+        address: "",
+        postalCode: "",
+        phoneNumber: ""
+    });
+
+    const [error, setError] = useState({});
+
+    const [work, setWork] = useState(false);
+    if (work) {
+        return (
+            <Alert variant="success" onClose={() => setWork(false)} dismissible>
+                <Alert.Heading>Successfully ordered</Alert.Heading>
+                <p>
+                    An email has been sent to you regarding your info!
+                </p>
+            </Alert>
+        );
+    }
+
+
+    function validation() {
+        let errorDisplay = {};
+
+        if (!fields.firstName) {
+            errorDisplay.firstName = "￮ You need to input your first name";
+        }
+
+
+        if (!fields.lastName) {
+            errorDisplay.lastName = "￮ You need to input your last name";
+        }
+
+        if (!fields.password) {
+            errorDisplay.password = "￮ You need to input your Password"
+        } else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/.test(fields.password)) {
+            errorDisplay.password = "￮ your password is invalid";
+        }
+        //TODO: have to check for the password matching donno how yet
+        if (!fields.address) {
+            errorDisplay.address = "￮ You need to input your address"
+        }
+
+        if (!fields.postalCode) {
+            errorDisplay.postalCode = "￮ You need to input your postal code"
+        } else if (!/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(fields.postalCode)) {
+            errorDisplay.postalCode = "￮ your postal code format should be like this A1A A1A";
+        }
+
+        if (!fields.phoneNumber) {
+            errorDisplay.phoneNumber = "￮ You need to input your phone number"
+        } else if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)) {
+            errorDisplay.postalCode = "￮ your phone number is invalid";
+        }
+
+        setError(errorDisplay);
+        if (Object.keys(errorDisplay).length === 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+
+    };
+
+    let orderDetails = "";
+    let orderTtlPrice = 0;
+
+    // Acquire each individual cart item and place the order detail into HTML table rows
+    cart.map((cartObject) => {
+        orderDetails +=
+                '<tr>' +
+                   '<td>' + cartObject.item.itemName + '</td>' +
+                    '<td>' + cartObject.quantity + '</td>' +
+                    '<td>' + (cartObject.item.itemPrice * cartObject.quantity) + '</td>' +
+                '</tr>';
+        orderTtlPrice += (cartObject.item.itemPrice * cartObject.quantity);
+    })
+
+    orderTtlPrice = orderTtlPrice.toFixed(2);
+
+    // Combine cart item rows to the table for formatting the email receipt
+    let orderHTML =
+        '<table>' +
+            '<tr>' +
+                '<th>Product</th>' +
+                '<th>Quantity</th>' +
+                '<th>Price</th>' +
+            '</tr>' +  orderDetails +
+        '</table>';
 
     // set blank user if information is null
     if (user === null) {
@@ -125,11 +141,11 @@ export default function CheckoutPage() {
         // prevent default submit behaviour
         event.preventDefault();
 
-        if (validation(fields)){
-			setWork(true);
-		} else {
-			setWork(false);
-		}
+        if (validation(fields)) {
+            setWork(true);
+        } else {
+            setWork(false);
+        }
 
         // will hold later items
         const formattedCart = [];
@@ -256,7 +272,8 @@ export default function CheckoutPage() {
             </FormGroup>
 
             <FormGroup>
-                <Form.Control type="hidden" name="orderItems" value={formattedString}/>
+                <Form.Control type="hidden" name="orderItems" value={orderHTML}/>
+                <Form.Control type="hidden" name="orderTotal" value={orderTtlPrice}/>
                 <Button type="submit" className="mb-3 btn btn-success ">
                     Checkout and send email
                 </Button>
