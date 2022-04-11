@@ -27,9 +27,14 @@ public class OrderController {
     }
 
 //    Returns an order, takes in an order id as the variable at path /order/{orderId}
-    @GetMapping("/{orderId}")
+    @GetMapping("/get/{orderId}")
     Order getById(@PathVariable Integer orderId) {
         return orderService.getOrderById(orderId);
+    }
+
+    @GetMapping("/get/user/{userId}")
+    List<Order> getByUser(@PathVariable Integer userId) {
+        return orderService.getByUser(userId);
     }
 
 //    Returns a list of all orders in the database

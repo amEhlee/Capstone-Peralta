@@ -5,58 +5,86 @@
  *
  */
 
-
 // Import Dependencies
-import React from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
 
 // Import Components
-import {Card, Button, Table} from "react-bootstrap";
-import {useNavigate} from "react-router";
+import { Card, Button, Table } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
 // Import Styles
-import style from '../../assets/styles/ItemCardLayout.module.css'
+import style from "../../assets/styles/ItemCardLayout.module.css";
+import { UserContext } from "../../UserContext";
+import OrderList from "./OrderList";
 import TotalCart from "./TotalCart";
-
 
 // Future update: add order id for dynamic navigation
 export default function Order(props) {
     const history = useNavigate();
-    const {order} = props;
+    const { order } = props;
+    const token = useContext(UserContext).contextData.token;
+    const userContext = useContext(UserContext).contextData.user;
+    var [orderJson, setOrderJson] = useState([]);
+
+    const FETCH_URL =
+        "http://localhost:8080/order/get/user/" + userContext.userId;
+
+    function gatherData() {
+        return axios
+            .get(FETCH_URL, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                console.log(res.data);
+                return res.data;
+            })
+            .catch((err) => console.error(err));
+    }
+
+    useEffect(() => {
+        gatherData().then((data) => {
+            setOrderJson(data || "no data returned");
+        });
+    }, []);
 
 
-    return (
-
-        <div>
-            <h1> Order ID {props.orderId}</h1>
-            <h3> Date Placed {props.orderDate} </h3>
-        <Table striped bordered hover style={{ width: '100%' }}>
-            <thead>
-            <tr>
-                <th>Quantity</th>
-                <th>Item Name</th>
-                <th>Price Per Item</th>
-                <th>Item Total </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>2</td>
-                <td>Item 1</td>
-                <td>$5</td>
-                <td>$10</td>
-            </tr>
-
-            <tr>
-                <td>1</td>
-                <td>Item 2</td>
-                <td>$10</td>
-                <td>$10</td>
-            </tr>
-            </tbody>
-        </Table>
-<TotalCart/>
-        </div>
-
-
-    );
+    if (orderJson === "no data returned") {
+        return (
+            <section>
+                <p>No Orders Found</p>
+            </section>
+        );
+    } else {
+        return (
+            <div>
+                <h1>All Orders</h1>
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Item Quantity</th>
+                            <th>Order Status</th>
+                            <th>Order Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {orderJson.map((i) =>
+                            <OrderList
+                                key={i.orderId}
+                                orderId={i.orderId}
+                                itemAmount={i.itemAmount}
+                                orderStatus={i.orderStatus}
+                                orderTotal={i.orderTotal}
+                                itemList={i.itemList}
+                            />
+                        )}
+                    </tbody>
+                </Table>
+            </div>
+        );
+    }
 }

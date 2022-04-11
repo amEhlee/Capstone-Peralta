@@ -2,36 +2,57 @@
 import React, {useState} from "react";
 
 // Import Components
-import Order from "./Order";
-import ManageItemsTable from "./ManageItemsTable";
+import OrderItems from "./OrderItems";
+// import ManageItemsTable from "./ManageItemsTable";
+import { Modal, Button, Table } from 'react-bootstrap';
 
 // Import Styles
 import style from "../../assets/styles/ItemCardLayout.module.css";
 
 export default function OrderList(props) {
-    function regularOrderList() {
 
-        const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+    const itemList = props.itemList;
+    
+    return (
+        <>
+        <tr>
+            <td>{props.orderId}</td>
+            <td>{props.itemAmount}</td>
+            <td>{props.orderStatus}</td>
+            <td>{props.orderTotal}</td>
+            <td>
+              <Button onClick={handleShow} variant="primary" data-toggle="modal"  size="sm">View Items</Button>
+          </td>
+        </tr>
 
-        return (
-            <ul className={style.unorderedList}>
-                {props.items.map((i) => (
-                    <Order
-                        key={i.orderId}
-                        id={i.orderId}
-                        orderTotal={i.orderTotal}
-                        orderDate={i.orderDate}
-                    />
-                ))}
-            </ul>
-        );
-
-    }
-
-
-
-
-    function adminOrderList() {
-        return(<></>);
-}
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+        <Modal.Title>
+            Order Items
+        </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+              <Table striped bordered hover>
+                  <thead>
+                      <tr>
+                          <th>Item Name</th>
+                          <th>Item Price</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {itemList.map((i) =>
+                        <OrderItems
+                            itemName={i.itemName}
+                            itemPrice={i.itemPrice}
+                        />
+                      )}
+                  </tbody>
+              </Table>
+          </Modal.Body>
+      </Modal>
+        </>
+    );
 }
