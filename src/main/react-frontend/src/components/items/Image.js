@@ -6,7 +6,11 @@ export default function Image(props) {
         try {
             return require("../../assets/images/" + props.itemId + "_1.png");
         } catch (err) {
-            return require("../../assets/images/default-image-620x600.jpg");
+            try {
+                return require("../../assets/images/" + props.itemId + "_1.jpg");
+            } catch (err) {
+                return require("../../assets/images/default-image-620x600.jpg");
+            }
         }
     }
 
