@@ -6,17 +6,91 @@
  *
  */
 // import dependencies
-import React, { useContext, useRef } from "react";
+import React, {useContext, useRef, useState} from "react";
 import axios from "axios";
 
 // Import Components
-import { Form, FormGroup, Button } from "react-bootstrap";
+import {Form, FormGroup, Button, Alert} from "react-bootstrap";
 import { UserContext } from "../UserContext";
-import Style from "../assets/styles/UserSide.module.css";
+import Style from "../assets/styles/CheckoutStyle.module.css";
 
 export default function CheckoutPage() {
 
-	// instansiate user cart and user object
+
+	const [fields, setFields] = useState({
+		firstName: "",
+		lastName: "",
+		password: "",
+		confirmPass:"",
+		address: "",
+		postalCode: "",
+		phoneNumber: ""
+	});
+
+	const [error, setError] = useState({});
+
+	const [work, setWork] = useState(false);
+	if (work) {
+		return (
+			<Alert variant="success" onClose={() => setWork(false)} dismissible>
+				<Alert.Heading>Successfully ordered</Alert.Heading>
+				<p>
+					An email has been sent to you regarding your info!
+				</p>
+			</Alert>
+		);
+	}
+
+
+	const validation = () => {
+		let errorDisplay={};
+
+		if (!fields.firstName) {
+			errorDisplay.firstName = "￮ You need to input your first name";
+		}
+
+
+		if (!fields.lastName) {
+			errorDisplay.lastName = "￮ You need to input your last name";
+		}
+
+		if (!fields.password){
+			errorDisplay.password= "￮ You need to input your Password"
+		}
+
+		else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
+			errorDisplay.password = "￮ your password is invalid";
+		}
+		//TODO: have to check for the password matching donno how yet
+		if (!fields.address){
+			errorDisplay.address= "￮ You need to input your address"
+		}
+
+		if (!fields.postalCode){
+			errorDisplay.postalCode= "￮ You need to input your postal code"
+		}
+		else if (!/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(fields.postalCode)){
+			errorDisplay.postalCode = "￮ your postal code format should be like this A1A A1A";
+		}
+
+		if (!fields.phoneNumber){
+			errorDisplay.phoneNumber= "￮ You need to input your phone number"
+		}
+		else if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)){
+			errorDisplay.postalCode = "￮ your phone number is invalid";
+		}
+
+		setError(errorDisplay);
+		if (Object.keys(errorDisplay).length===0){
+			return true;
+		}else {
+			return false;
+		}
+
+
+	};
+
+	// instantiate user cart and user object
 	const cart = useContext(UserContext).contextData.cart;
 	let user = useContext(UserContext).contextData.user;
 
@@ -41,6 +115,11 @@ export default function CheckoutPage() {
 	function submitHandler(event) {
 		// prevent default submit behaviour
 		event.preventDefault();
+		if (validation(fields)){
+			setWork(true);
+		} else {
+			setWork(false);
+		}
 
 		// will hold later items
 		const formattedCart = [];
@@ -86,6 +165,7 @@ export default function CheckoutPage() {
 					type="text"
 					placeholder="john"
 					defaultValue={user.firstName}
+					className={Style.field}
 				/>
 			</FormGroup>
 
@@ -95,6 +175,7 @@ export default function CheckoutPage() {
 					type="text"
 					placeholder="Doe"
 					defaultValue={user.lastName}
+					className={Style.field}
 				/>
 			</FormGroup>
 
@@ -105,6 +186,7 @@ export default function CheckoutPage() {
 					placeholder="abcd@example.com"
 					ref={orderEmailRef}
 					defaultValue={user.email}
+					className={Style.field}
 				/>
 			</FormGroup>
 
