@@ -5,7 +5,7 @@ import axios from "axios";
 // Import Components
 import { UserContext } from "../../UserContext";
 import { Navigate, useNavigate } from "react-router-dom";
-import { Form, FormGroup, Button, Modal } from "react-bootstrap";
+import {Form, FormGroup, Button, Modal, Alert} from "react-bootstrap";
 import DeleteProfile from "./DeleteProfile";
 
 // import styles from
@@ -27,6 +27,79 @@ export default function EditProfile() {
 	const userPhoneRef = useRef();
 	const userAddressRef = useRef();
 	const userPostalCodeRef = useRef();
+
+	const [fields, setFields] = useState({
+		firstName: "",
+		lastName: "",
+		password: "",
+		confirmPass:"",
+		address: "",
+		postalCode: "",
+		phoneNumber: ""
+	});
+
+	const [error, setError] = useState({});
+
+	const [work, setWork] = useState(false);
+	if (work) {
+		return (
+			<Alert variant="success" onClose={() => setWork(false)} dismissible>
+				<Alert.Heading>Your changes have been saved!</Alert.Heading>
+				<p>
+					you can view your updated profile
+				</p>
+			</Alert>
+		);
+	}
+
+
+	const validation = () => {
+		let errorDisplay={};
+
+		if (!fields.firstName) {
+			errorDisplay.firstName = "￮ You need to input your first name";
+		}
+
+
+		if (!fields.lastName) {
+			errorDisplay.lastName = "￮ You need to input your last name";
+		}
+
+		if (!fields.password){
+			errorDisplay.password= "￮ You need to input your Password"
+		}
+
+		else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
+			errorDisplay.password = "￮ your password is invalid";
+		}
+		//TODO: have to check for the password matching donno how yet
+		if (!fields.address){
+			errorDisplay.address= "￮ You need to input your address"
+		}
+
+		if (!fields.postalCode){
+			errorDisplay.postalCode= "￮ You need to input your postal code"
+		}
+		else if (!/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(fields.postalCode)){
+			errorDisplay.postalCode = "￮ your postal code format should be like this A1A A1A";
+		}
+
+		if (!fields.phoneNumber){
+			errorDisplay.phoneNumber= "￮ You need to input your phone number"
+		}
+		else if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)){
+			errorDisplay.postalCode = "￮ your phone number is invalid";
+		}
+
+		setError(errorDisplay);
+		if (Object.keys(errorDisplay).length===0){
+			return true;
+		}else {
+			return false;
+		}
+
+
+	};
 
 	function checkPassword(givenEmail, givenPassword) {
 		// Post url used to verify password
@@ -59,6 +132,12 @@ export default function EditProfile() {
 
 	function submitHandler(event) {
 		event.preventDefault();
+
+		if (validation(fields)){
+			setShow(true);
+		} else {
+			setShow(false);
+		}
 		const returnedFirstName = userFirstNameRef.current.value;
 		const returnedLastName = userLastNameRef.current.value;
 		const retunedConfirmPassword = userConfirmPasswordRef.current.value;
@@ -110,11 +189,14 @@ export default function EditProfile() {
 		}
 	}
 
-	// check if user is null if so rendirec to home
+	// check if user is null if so redirect to home
 	if (!userContext) {
 		return <Navigate to="/" />;
 	} else {
 		return (
+
+			//todo: the only issue with this maybe cause it's submit handler on the whole form it might mess up the delete button cause the buttons are in the same form
+
 			<Form onSubmit={submitHandler} className={Style.centrize}>
 				<FormGroup className="mb-3" controlId="formFirstName">
 					<Form.Label>First Name:</Form.Label>
@@ -123,7 +205,12 @@ export default function EditProfile() {
 						placeholder="Enter First Name"
 						ref={userFirstNameRef}
 						defaultValue={userContext.firstName} /// TODO
+						value={fields.firstName}
 					/>
+
+					{error.firstName &&
+						<p className="text-danger"> {error.firstName}</p>
+					}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formLastName">
@@ -133,7 +220,12 @@ export default function EditProfile() {
 						placeholder="Enter Last Name"
 						ref={userLastNameRef}
 						defaultValue={userContext.lastName}
+						value={fields.lastName}
 					/>
+
+					{error.lastName &&
+						<p className="text-danger"> {error.lastName}</p>
+					}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formConfirmPassword">
@@ -142,7 +234,12 @@ export default function EditProfile() {
 						type="password"
 						placeholder="Confirm the Password"
 						ref={userConfirmPasswordRef}
+
+						value={fields.password}
 					/>
+					{error.password &&
+						<p className="text-danger"> {error.password}</p>
+					}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formCurrentPassword">
@@ -170,7 +267,11 @@ export default function EditProfile() {
 						placeholder="403-111-1111"
 						ref={userPhoneRef}
 						defaultValue={userContext.phoneNumber}
+						values={fields.phoneNumber}
 					/>
+					{error.phoneNumber &&
+						<p className="text-danger"> {error.phoneNumber}</p>
+					}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formAddress">
@@ -180,7 +281,11 @@ export default function EditProfile() {
 						placeholder="Enter Address"
 						ref={userAddressRef}
 						defaultValue={userContext.address}
+						value={fields.address}
 					/>
+					{error.address &&
+						<p className="text-danger"> {error.address}</p>
+					}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formPostalCode">
@@ -190,7 +295,12 @@ export default function EditProfile() {
 						placeholder="Enter Postal Code"
 						ref={userPostalCodeRef}
 						defaultValue={userContext.postalCode}
+						values={fields.postalCode}
 					/>
+
+					{error.postalCode &&
+						<p className="text-danger"> {error.postalCode}</p>
+					}
 				</FormGroup>
 
 				<Button type="submit" className="btn btn-success" >
