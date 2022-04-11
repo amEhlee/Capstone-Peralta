@@ -77,8 +77,15 @@ public class UserService implements UserDetailsService {
         log.info("Adding role {} to user {}", roleName, email);
         User user = userRepo.findUserByEmail(email);
         Role role = roleRepo.findByRoleName(roleName);
-        user.getRoles().add(role);
-        userRepo.save(user);
+        if (user.getRoles().contains(role)) {
+            log.info("User already has this role");
+        }
+        else {
+            log.info("User Role Added");
+            user.getRoles().add(role);
+            userRepo.save(user);
+        }
+
     }
 
     public Role getRoleById(int id) { return roleRepo.getById(id); }

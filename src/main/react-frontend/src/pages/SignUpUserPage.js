@@ -1,10 +1,11 @@
 // Import Dependencies
-import React, {Form, FormGroup, Button} from "react-bootstrap";
+import React, {Form, FormGroup, Button, Alert} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
 import {useContext, useRef} from "react";
 import axios from "axios";
 import {UserContext} from "../UserContext";
-import {validEmail, validPassword, validPostalCode, validPhoneNumber} from "../components/regex/RegEx.js";
+import {validEmail, validPassword, validPostalCode, validPhoneNumber} from "../components/validation/RegEx.js";
+import {validateEmail, validatePassword, validatePasswordsMatch, validatePostalCode, validatePhoneNumber} from "../components/validation/FormValidation.js";
 
 // Import Styling
 import userStyle from "../assets/styles/UserSide.module.css";
@@ -105,17 +106,17 @@ export default function  SignUpUserPage() {
 
             <FormGroup className="mb-3" controlId="emailForm">
                 <Form.Label>Email Address</Form.Label>
-                <Form.Control type="email" placeholder="Enter Email" required pattern="^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$" ref={emailRef} onChange={validateEmail}/>
+                <Form.Control type="email" placeholder="Enter Email" required pattern={validEmail} ref={emailRef} />
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="passwordForm">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Enter your password" required pattern="^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$" ref={passwordRef} onChange={validatePassword}/>
+                <Form.Control type="password" placeholder="Enter your password" required pattern={validPassword} ref={passwordRef} />
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="confirmPasswordForm">
                 <Form.Label>Confirm Password</Form.Label>
-                <Form.Control type="password" placeholder="Enter your password" required pattern="^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$" ref={confirmPasswordRef} onChange={validatePasswordsMatch}/>
+                <Form.Control type="password" placeholder="Enter your password" required pattern={validPassword} ref={confirmPasswordRef} />
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="addressForm">
@@ -125,12 +126,12 @@ export default function  SignUpUserPage() {
 
             <FormGroup className="mb-3" controlId="postalcodeForm">
                 <Form.Label>Postal Code: </Form.Label>
-                <Form.Control type="text" placeholder="Enter Postal Code" required pattern="^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$" ref={postalRef} onChange={validatePostalCode}/>
+                <Form.Control type="text" placeholder="Enter Postal Code" required pattern={validPostalCode} ref={postalRef} />
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="phoneNumberForm">
                 <Form.Label>Phone Number: </Form.Label>
-                <Form.Control type="tel" placeholder="Enter Phone Number" pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$" ref={phoneNumberRef} onChange={validatePhoneNumber}/>
+                <Form.Control type="tel" placeholder="Enter Phone Number" pattern={validPhoneNumber} ref={phoneNumberRef} />
             </FormGroup>
 
 
@@ -151,21 +152,34 @@ export default function  SignUpUserPage() {
 
 
     function validate() {
-        switch(true) {
-            case validatePassword():
-            case validatePasswordsMatch():
-            case validateEmail():
-            case validatePostalCode():
-            case validatePhoneNumber():
+            const validated = true;
+            if (validatePassword(passwordRef.current.value, confirmPasswordRef.current.value) == false) {
+                validated = false;
+            }
+            if (validatePasswordsMatch(passwordRef.current.value, confirmPasswordRef.current.value) == false) {
+                validated = false;
+            }
+            if (validateEmail(emailRef.current.value) == false) {
+                validated = false;
+            }
+            if (validatePostalCode(postalRef.current.value) == false) {
+                validated = false;
+            }
+            if (validatePhoneNumber(phoneNumberRef.current.value) == false) {
+                validated = false;
+            }
+
+            if (validated == true) {
                 return true;
-                break;
-            default:
+            }
+            else {
                 return false;
-        }
+            }
+
     }
 
 
-    function validateEmail() {
+/*    function validateEmail() {
         const returnedEmail = emailRef.current.value;
         if (!validEmail.test(returnedEmail)) {
             console.log("Email invalid!");
@@ -209,7 +223,7 @@ export default function  SignUpUserPage() {
             return false;
         }
         return true;
-    }
+    }*/
 
 
 }

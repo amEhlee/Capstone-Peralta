@@ -57,21 +57,31 @@ public class PeraltaApplication {
 				userService.addRole(new Role(null, "ROLE_ADMIN"));
 				log.info("Adding Owner Role");
 				userService.addRole(new Role(null, "ROLE_OWNER"));
+			}
+			catch (Exception e) {
+				log.info("Role Data already exists");
+			}
 
+			try {
 				log.info("Adding Admin User");
-				userService.addUser(new User (1, "admin@gmail.com", "password", "Mister", "Admin", "N/A", "T4R7F9", "403768456"));
+				userService.addUser(new User(1, "admin@gmail.com", "password", "Mister", "Admin", "N/A", "T4R7F9", "4037684562"));
 				log.info("Adding Basic User");
-				userService.addUser(new User (2, "john@gmail.com", "t100", "John", "Connor", "Santa Monica", "T1K4V7", "403789123"));
+				userService.addUser(new User(2, "john@gmail.com", "t100", "John", "Connor", "Santa Monica", "T1K4V7", "4037891234"));
+			}
+			catch (Exception e) {
+				log.info("User Data already exists");
+			}
 
-				log.info("Adding Admin Role to Admin");
+			try {
+				//log.info("Adding Admin Role to Admin");
 				userService.addRoleToUser("admin@gmail.com", "ROLE_ADMIN");
-				log.info("Adding User Role to Admin");
+				//log.info("Adding User Role to Admin");
 				userService.addRoleToUser("admin@gmail.com", "ROLE_USER");
-				log.info("Adding User Role to Basic User");
+				//log.info("Adding User Role to Basic User");
 				userService.addRoleToUser("john@gmail.com", "ROLE_USER");
 			}
 			catch (Exception e) {
-				log.info("Data already exists");
+				log.info("User Role Data already exists");
 			}
 
 		};
