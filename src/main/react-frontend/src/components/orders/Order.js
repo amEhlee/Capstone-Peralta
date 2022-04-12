@@ -10,14 +10,13 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 
 // Import Components
-import { Card, Button, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { useNavigate } from "react-router";
 
 // Import Styles
 import style from "../../assets/styles/ItemCardLayout.module.css";
 import { UserContext } from "../../UserContext";
 import OrderList from "./OrderList";
-import TotalCart from "./TotalCart";
 
 // Future update: add order id for dynamic navigation
 export default function Order(props) {

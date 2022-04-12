@@ -6,7 +6,7 @@ import { UserContext } from "./UserContext";
 import Layout from "./components/layout/Layout";
 
 // import admin pages
-import RequireAuth from "./RequireAuth"
+import RequireAuth from "./RequireAuth";
 import ViewAllItemsPage from "./pages/ViewAllItemsPage";
 import AdminLayout from "./components/layout/AdminLayout";
 import ManageItemsPage from "./pages/ManageItemsPage";
@@ -54,9 +54,9 @@ export default function App() {
 					<Route path="/userProfile" element={<UserProfile />} />
 					<Route path="/checkout" element={<CheckoutPage />} />
 					<Route path="/logout" element={<LogoutUserPage />} />
+					<Route path="/order" element={<OrderUser />} />
 				</Route>
 
-				<Route path="/order" element={<OrderUser />} />
 				<Route path="/login" element={<LoginUserPage />} />
 				<Route path="/signUp" element={<SignUpUserPage />} />
 				<Route path="/editProfile" element={<EditProfile />} />
