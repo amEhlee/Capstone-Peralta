@@ -23,11 +23,11 @@ export default function ManageItemsPage() {
 	const [itemsPerPage, setItemsPerPage] = useState(10); // initalize at 10 items per page change as required
 	var [datajson, setDataJson] = useState([]); // used to store data
 	var [searchName, setSearchName] = useState("");
-	const [work, setWork] = useState(true);
+	const [added, setAdded] = useState(false);
+	const [edited, setEdited] = useState(false);
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
-	let added = useParams();
 
 	// function that will be called when the page loads purpose is to handle and process the axios get request
 	function gatherData() {
@@ -61,18 +61,26 @@ export default function ManageItemsPage() {
         setCurrentPage(pageNumber);
     }
 
-	if(added === "added") {
-		setWork(true);
+	function showAdd() {
+		setAdded(true)
+	}
+
+	function showEdit() {
+		setEdited(true)
 	}
 
 	function conditionalAlertRender() {
-		if (work) {
+		if (added) {
 			return (
-				<Alert variant="success" onClose={() => setWork(false)} dismissible>
-					<Alert.Heading>Item added!</Alert.Heading>
-					<p>
-						you can view the item details in the table below.
-					</p>
+				<Alert variant="success" onClose={() => setAdded(false)} dismissible>
+					<Alert.Heading>Item added</Alert.Heading>
+				</Alert>
+			);
+		}
+		if (edited) {
+			return (
+				<Alert variant="success" onClose={() => setEdited(false)} dismissible>
+					<Alert.Heading>Item edited</Alert.Heading>
 				</Alert>
 			);
 		}
@@ -88,7 +96,9 @@ export default function ManageItemsPage() {
         return (
             <>
 				{/* render the alert based on given input */}
-				{conditionalAlertRender()}
+				<div style={{position: "fixed", zIndex: 1000, margin: "auto", marginLeft: "7%", width: "25%"}}>
+					{conditionalAlertRender()}
+				</div>
 				
 				{/* manage items form */}
                 <div className={style.manageItems}>
@@ -126,6 +136,7 @@ export default function ManageItemsPage() {
                         </thead>
                         <ItemList
 							gatherData={gatherData}
+							showAlert={showEdit}
                             items={currentDataChunk}
                             target="adminList"
                             search={searchName}
@@ -139,7 +150,7 @@ export default function ManageItemsPage() {
 						<Modal.Title>Add Item</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<AddItem handleClose={handleClose} gatherData={gatherData}/>
+						<AddItem handleClose={handleClose} gatherData={gatherData} showAlert={showAdd}/>
 					</Modal.Body>
 				</Modal>
 			</>

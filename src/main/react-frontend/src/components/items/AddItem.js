@@ -151,6 +151,9 @@ export default function AddItem(props) {
                     }
                     console.log(returnedCategoriesValue);
                     props.gatherData(); // if everything is successful, update the items list
+              
+                    props.showAlert();
+                    navigate("./manageItems");
             } catch (err) {
                 console.error(err);
             }

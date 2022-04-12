@@ -266,8 +266,8 @@ export default function CheckoutPage() {
 
             <FormGroup>
                 <Form.Control type="hidden" name="orderItems" value={formattedString}/>
-                <Button type="submit" className="mb-3 btn btn-success ">
-                    Checkout and send email
+                <Button type="submit" className="mb-3 mt-3 btn btn-success ">
+                    Checkout
                 </Button>
             </FormGroup>
         </Form>

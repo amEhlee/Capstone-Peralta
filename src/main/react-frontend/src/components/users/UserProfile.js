@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../UserContext";
 
 // Import Components
@@ -11,7 +11,7 @@ export default function UserProfile() {
 	const userContext = useContext(UserContext).contextData.user;
 
 	// initalize some state variables and store user parameters
-	const [work, setWork] = useState(true);
+	const [work, setWork] = useState(false);
 	let saved  = useParams();
 
 	function conditionalAlertRender() {
@@ -25,9 +25,11 @@ export default function UserProfile() {
 		}
 	}
 
-	if (saved === "saved") {
-		setWork(true);
-	}
+	useEffect(() => {
+		if (saved === "saved") {
+			setWork(true);
+		}
+	});
 
 	// check if user is null if so rendirec to home
 	if (!userContext) {

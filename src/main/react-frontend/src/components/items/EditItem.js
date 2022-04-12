@@ -152,6 +152,7 @@ export default function EditItem(props) {
 
 				// reload item list
 				props.gatherData();
+				props.showAlert();
 			} catch (err) {
 				console.error(err);
 			}
