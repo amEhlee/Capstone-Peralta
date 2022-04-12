@@ -46,7 +46,14 @@ public class UserService implements UserDetailsService {
 
     public User addUser(User user) {
         log.info("Saving new User into Database");
+        user.setEmail(user.getEmail().toLowerCase());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        String formattedPostalCode = user.getPostalCode().replaceAll("[\\s-]", "");
+        log.info(formattedPostalCode);
+        String formattedPhoneNumber = user.getPhoneNumber().replaceAll("[\\s\\D-]","");
+        log.info(formattedPhoneNumber);
+        user.setPostalCode(formattedPostalCode);
+        user.setPhoneNumber(formattedPhoneNumber);
         User returnUser = userRepo.save(user);
         addRoleToUser(user.getEmail(), "ROLE_USER");
         return returnUser;
@@ -58,8 +65,15 @@ public class UserService implements UserDetailsService {
     }
 
     public void updateUser(User user) { //TODO: Not done yet needs checks
+        user.setEmail(user.getEmail().toLowerCase());
         log.info("Updating User " + user.getEmail());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        String formattedPostalCode = user.getPostalCode().replaceAll("[\\s-]", "");
+        log.info(formattedPostalCode);
+        String formattedPhoneNumber = user.getPhoneNumber().replaceAll("[\\s\\D-]","");
+        log.info(formattedPhoneNumber);
+        user.setPostalCode(formattedPostalCode);
+        user.setPhoneNumber(formattedPhoneNumber);
         userRepo.save(user);
     }
 
@@ -77,8 +91,15 @@ public class UserService implements UserDetailsService {
         log.info("Adding role {} to user {}", roleName, email);
         User user = userRepo.findUserByEmail(email);
         Role role = roleRepo.findByRoleName(roleName);
-        user.getRoles().add(role);
-        userRepo.save(user);
+        if (user.getRoles().contains(role)) {
+            log.info("User already has this role");
+        }
+        else {
+            log.info("User Role Added");
+            user.getRoles().add(role);
+            userRepo.save(user);
+        }
+
     }
 
     public Role getRoleById(int id) { return roleRepo.getById(id); }

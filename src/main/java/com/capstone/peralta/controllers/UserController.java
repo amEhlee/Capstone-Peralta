@@ -44,7 +44,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @RequestMapping("/user")
 @CrossOrigin(origins = "3000")
 @RequiredArgsConstructor
-
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -103,21 +103,38 @@ public class UserController {
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         List<User> userList = userService.getAll();
 
+        user.setEmail(user.getEmail().toLowerCase());
+
         //Checks if email is already logged on database
         for (User value : userList) {
             if (user.getEmail().equals(value.getEmail())) {
+                log.info("User Already Exists");
                 return null;
             }
         }
 
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/signup").toUriString());
         return ResponseEntity.created(uri).body(userService.addUser(user));
+    }
+
+    @PostMapping("/userCheck")
+    public boolean userCheck(@RequestBody User user) {
+        user.setEmail(user.getEmail().toLowerCase());
+        log.info(user.toString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/userCheck").toUriString());
+        List<User> userList = userService.getAll();
+        for (User value : userList) {
+            if (user.getEmail().equals(value.getEmail())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @PostMapping("/verify")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
-    public boolean verify(@RequestBody User verifyUser) {
-        return verifyPassword(verifyUser.getEmail(), verifyUser.getPassword());
+    public boolean verify(@RequestBody User user) {
+        return verifyPassword(user.getEmail(), user.getPassword());
     }
 
     /*
@@ -125,13 +142,14 @@ public class UserController {
      */
     @PutMapping("/update")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
-    public Boolean updateUser(@RequestBody User user) {
+    public boolean updateUser(@RequestBody User user) {
         userService.updateUser(user); //Update the user (including password)
         return true; // return a true on success
     }
 
 
     @DeleteMapping("/delete")
+    @RolesAllowed({"ROLE_USER"})
     void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         try {
@@ -182,8 +200,8 @@ public class UserController {
     /*
         Verifies a password from our DB
      */
-    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public boolean verifyPassword (String email, String rawPassword) {
+        email = email.toLowerCase();
         User dbUserInstance = userService.getUserByName(email);
         String encryptedPassword = dbUserInstance.getPassword();
         return userService.getPasswordEncoder().matches(rawPassword, encryptedPassword);

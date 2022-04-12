@@ -1,13 +1,9 @@
-/**
- * This
- *
- *
- *
- */
 
 
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom"
+// Import Dependancies
+import React, { useState } from "react";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 // Import Components
 import {Form, FormGroup, InputGroup, Button, FormControl, Col, Row, Modal, Alert} from "react-bootstrap";
@@ -29,7 +25,7 @@ export default function DeleteProfile() {
     const [show, setShow] = useState(false);
     if (show) {
         return (
-            <Alert variant="success" onClose={() => setShow(false)} dismissible>
+            <Alert variant="success" onClose={() => {setShow(false)}} dismissible>
                 <Alert.Heading>Your account is deleted</Alert.Heading>
                 <p>
                     Account deletion was successful!
@@ -44,6 +40,9 @@ export default function DeleteProfile() {
             errorDisplay.password= "￮ You need to input your Password"
         }
 
+        //TODO: Call the verification method and return a boolean so you can delete the account
+        //if ()
+
         setError(errorDisplay);
         if (Object.keys(errorDisplay).length===0){
             return true;
@@ -52,15 +51,32 @@ export default function DeleteProfile() {
         }
     };
 
-    async function submitHandler (event) {
-        if (event) event.preventDefault();
 
-        if (validate(fields)){
+    //TODO: Make an axios call
+    async function submitHandler (event) {
+        event.preventDefault();
+
+        if (validate(fields) == true) {
             setShow(true);
-        } else {
+            const DELETE_URL = "http://localhost:8080/user/delete";
+
+            async function userDelete() {
+                await axios
+                    .delete(DELETE_URL, {
+                        headers: {
+                            Authorization: 'Bearer ${token}',
+                        },
+                    })
+                    .then((res) => {
+                        console.log(res);
+
+                    })
+                    .catch((err) => console.error(err));
+            }
+        }
+        else {
             setShow(false);
         }
-
     }
 
 
@@ -77,7 +93,7 @@ export default function DeleteProfile() {
 
             <FormGroup className="mb-3" controlId="">
                 <Form.Label>Password: </Form.Label>
-                <Form.Control type="password" placeholder="Enter your password" value={fields.password}/>
+                <Form.Control type="password" placeholder="Enter your password" value={fields.password} onChange={((e) => setFields({...fields, password: e.target.value}))} />
                 {error.password &&
                     <p className="text-danger"> {error.password}</p>
                 }

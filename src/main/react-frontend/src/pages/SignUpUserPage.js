@@ -1,190 +1,180 @@
 // Import Dependencies
-import React, {Form, FormGroup, Button, Alert} from "react-bootstrap";
-import {Link, useNavigate, } from "react-router-dom";
-import {useContext, useRef, useState} from "react";
+import React, { useRef, useState } from "react";
+import { Form, FormGroup, Button } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import {
+	validateEmail,
+	validatePassword,
+	validatePasswordsMatch,
+	validatePostalCode,
+	validatePhoneNumber,
+} from "../components/validation/FormValidation.js";
 import axios from "axios";
-import {UserContext} from "../UserContext";
-import {validEmail, validPassword, validPostalCode, validPhoneNumber} from "../components/regex/RegEx.js";
 
 // Import Styling
 import userStyle from "../assets/styles/UserSide.module.css";
 import cartE from "../assets/videos/cart.mp4";
 
-export default function  SignUpUserPage() {
-        const firstnameRef = useRef();
-        const lastnameRef = useRef();
-        const emailRef = useRef();
-        const passwordRef = useRef();
-        const confirmPasswordRef = useRef();
-        const addressRef = useRef();
-        const postalRef = useRef();
-        const phoneNumberRef = useRef();
+export default function SignUpUserPage() {
+	// gather form input
+	const firstnameRef = useRef();
+	const lastnameRef = useRef();
+	const emailRef = useRef();
+	const passwordRef = useRef();
+	const confirmPasswordRef = useRef();
+	const addressRef = useRef();
+	const postalRef = useRef();
+	const phoneNumberRef = useRef();
 
-
-        const givenContext = useContext(UserContext);
-        const navigate = useNavigate();
-
+	// get context informatino
+	const navigate = useNavigate();
+	
+	// declare error state variables
+	const [error, setError] = useState({});
 	const [fields, setFields] = useState({
 		firstName: "",
 		lastName: "",
 		email: "",
 		password: "",
-		confirmPass:"",
+		confirmPass: "",
 		address: "",
 		postalCode: "",
-		phoneNumber: ""
+		phoneNumber: "",
 	});
 
-	const [error, setError] = useState({});
 
-    const [show, setShow] = useState(false);
-    if (show) {
-        return (
-            <Alert variant="success" onClose={() => setShow(false)} dismissible>
-                <Alert.Heading>Your new Account is created!</Alert.Heading>
-                <p>
-                    Use login page to access your account
-                </p>
-            </Alert>
-        );
-    }
-
-
-
-	const validation = () => {
-		let errorDisplay={};
+	function validation() {
+		let errorDisplay = {};
 
 		if (!fields.firstName) {
-			errorDisplay.firstName = "￮ You need to input your first name";
+			errorDisplay.firstName = "￮ You need to enter your first name";
 		}
-
 
 		if (!fields.lastName) {
-			errorDisplay.lastName = "￮ You need to input your last name";
+			errorDisplay.lastName = "￮ You need to enter your last name";
 		}
 
-		if (!fields.email){
-			errorDisplay.email = "￮ You need to input your Email";
-		}
-		else if (!/^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/.test(fields.email)){
-			errorDisplay.email = "￮ your email format should be like this example@gmail.com";
+		if (!fields.email) {
+			errorDisplay.email = "￮ You need to enter your Email";
 		}
 
-		if (!fields.password){
-			errorDisplay.password= "￮ You need to input your Password"
+		if (!validateEmail(fields.email)) {
+			errorDisplay.email =
+				"￮ Your email format should follow example@gmail.com";
 		}
 
-		else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
-			errorDisplay.password = "￮ your password is invalid";
+		if (!fields.password) {
+			errorDisplay.password = "￮ You need to enter your password";
 		}
+
+		if (!validatePassword(fields.password)) {
+			errorDisplay.password =
+				"￮ Your password is invalid. Passwords need to at least be six characters long and require one digit"; //TODO: Make this message talk about password requirements
+		}
+
+		if (!fields.confirmPass) {
+			errorDisplay.confirmPass = "￮ Confirm your password";
+		}
+
+		if (!validatePasswordsMatch(fields.password, fields.confirmPass)) {
+			errorDisplay.confirmPass = "￮ Password does not match";
+		}
+
 		//TODO: have to check for the password matching donno how yet
-		if (!fields.address){
-			errorDisplay.address= "￮ You need to input your address"
+		if (!fields.address) {
+			errorDisplay.address = "￮ You need to enter your address";
 		}
 
-		if (!fields.postalCode){
-			errorDisplay.postalCode= "￮ You need to input your postal code"
-		}
-		 else if (!/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(fields.postalCode)){
-			errorDisplay.postalCode = "￮ your postal code format should be like this A1A A1A";
+		if (!fields.postalCode) {
+			errorDisplay.postalCode = "￮ You need to enter your postal code";
 		}
 
-		if (!fields.phoneNumber){
-			errorDisplay.phoneNumber= "￮ You need to input your phone number"
+		if (!validatePostalCode(fields.postalCode)) {
+			errorDisplay.postalCode =
+				"￮ Your postal code format should follow A1A 1A1, etc";
 		}
-		else if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)){
-			errorDisplay.postalCode = "￮ your phone number is invalid";
+
+		if (!fields.phoneNumber) {
+			errorDisplay.phoneNumber = "￮ You need to input your phone number";
+		}
+
+		if (!validatePhoneNumber(fields.phoneNumber)) {
+			errorDisplay.phoneNumber = "￮ Your phone number is invalid";
 		}
 
 		setError(errorDisplay);
-		if (Object.keys(errorDisplay).length===0){
+		if (Object.keys(errorDisplay).length === 0) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-
-
-
-
-
-
-	};
-
-	async function submitHandler (event) {
-		if (event) event.preventDefault();
-
-		if (validation(fields)){
-			setShow(true);
-		} else {
-			setShow(false);
-		}
-
 	}
 
-/*
-        async function submitHandler(event) {
-            event.preventDefault();
-            const returnedFirstName = firstnameRef.current.value;
-            const returnedLastName = lastnameRef.current.value;
-            const returnedEmail = emailRef.current.value;
-            const returnedPassword = passwordRef.current.value;
-            const returnedConfirmPassword = confirmPasswordRef.current.value;
-            const returnedAddress = addressRef.current.value;
-            const returnedPostal = postalRef.current.value;
-            const returnedPhoneNumber = phoneNumberRef.current.value;
+	// function to be called on form submit
+	async function submitHandler(event) {
+		event.preventDefault();
 
+		const returnedFirstName = firstnameRef.current.value;
+		const returnedLastName = lastnameRef.current.value;
+		const returnedEmail = emailRef.current.value;
+		const returnedPassword = passwordRef.current.value;
+		const returnedConfirmPassword = confirmPasswordRef.current.value;
+		const returnedAddress = addressRef.current.value;
+		const returnedPostalCode = postalRef.current.value;
+		const returnedPhoneNumber = phoneNumberRef.current.value;
 
-            console.log(returnedPassword);
-            console.log(returnedConfirmPassword);
+		if (validation(fields) == true) {
 
-            if (!(returnedPassword === returnedConfirmPassword)) {
-                //return Passwords do not match!
-            }
-            else if (validEmail.test(returnedEmail)) {
-                //return email invalid
-            }
-            else if (validPassword.test(returnedPassword)) {
-                //return password does not meet requirements and send requirements
-            }
-            else if (validPostalCode.test(returnedPostal)) {
-                //return postalcode does not meet requirements and send requirements
-            }
-            else if (validPhoneNumber.test(returnedPhoneNumber)) {
-                //return postalcode does not meet requirements and send requirements
-            }
-            else {
-                const user = {
-                    firstName: returnedFirstName,
-                    lastName: returnedLastName,
-                    email: returnedEmail,
-                    password: returnedPassword,
-                    address: returnedAddress,
-                    postalCode: returnedPostal,
-                    phoneNumber: returnedPhoneNumber,
-                };
+			// this function will attempt a signup using the users given email
+			async function attemptSignup() {
+				// fetch url and object to send
+				const USER_CHECK_URL = "http://localhost:8080/user/userCheck"; // fetch url
+				const userCheck = {
+					email: emailRef.current.value,
+				};
 
-			console.log(user);
+				// await response so we know what the user had in database
+				const response = await axios.post(USER_CHECK_URL,userCheck);
+				console.log(response.data);
+				// this block will only run if the users email isnt already present in database
+				if (!response.data) {
 
-			const POST_URL = "http://localhost:8080/user/signup"; // fetch url
-			const userExists = await axios.post(POST_URL, user).then((res) => {
-				console.log(res);
-				givenContext.setContextData((prevData) => {
-					return {
-						...prevData,
-						token: res.data.access_token,
+					// all checks have been passed! complete the signup
+					const user = {
+						firstName: returnedFirstName,
+						lastName: returnedLastName,
+						email: returnedEmail,
+						password: returnedPassword,
+						address: returnedAddress,
+						postalCode: returnedPostalCode,
+						phoneNumber: returnedPhoneNumber,
 					};
-				});
-			});
 
-			if (userExists !== null) {
-				alert("User Already Exists");
-			} else {
-				// on success navigtate back to login
-				navigate("/login");
+					// preform request
+					const POST_URL = "http://localhost:8080/user/signup"; // fetch url
+					await axios.post(POST_URL, user).then((res) => {
+						console.log(res.data);
+					});
+
+					// on success navigtate back to login
+					navigate("/login");
+				}
+				else {
+					setError((prevError) => {
+						return {
+							...prevError,
+							email: "￮ This email is already in use",
+						};
+					});
+				}
 			}
-		}
-	}*/
 
+			// call above function so we actually do stuff
+			attemptSignup();
+		} 
+	}
+
+	// form input fields and video background
 	return (
 		<div className="test">
 			<video
@@ -205,20 +195,21 @@ export default function  SignUpUserPage() {
 				<source src={cartE} type="video/mp4" />
 			</video>
 
+
 			<Form className={userStyle.centrize} onSubmit={submitHandler}>
 				<FormGroup className="mb-3" controlId="firstnameForm">
 					<Form.Label>First Name: </Form.Label>
 					<Form.Control
 						type="text"
 						placeholder="Input firstname"
-						required
-						ref={firstnameRef}
+						onChange={(e) =>
+							setFields({ ...fields, firstName: e.target.value })
+						}
 						value={fields.firstName}
+						ref={firstnameRef}
 					/>
 
-					{error.firstName &&
-						<p className="text-danger"> {error.firstName}</p>
-					}
+					{error.firstName && <p className="text-danger"> {error.firstName}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="lastnameForm">
@@ -226,16 +217,12 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="text"
 						placeholder="Enter lastname"
-						required
-						ref={lastnameRef}
+						onChange={(e) => setFields({ ...fields, lastName: e.target.value })}
 						value={fields.lastName}
-
-
+						ref={lastnameRef}
 					/>
 
-					{error.lastName &&
-						<p className="text-danger"> {error.lastName}</p>
-					}
+					{error.lastName && <p className="text-danger"> {error.lastName}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="emailForm">
@@ -243,18 +230,12 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="email"
 						placeholder="Enter Email"
-						required
-						pattern="^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$"
-						ref={emailRef}
-						onChange={validateEmail}
+						onChange={(e) => setFields({ ...fields, email: e.target.value })}
 						value={fields.email}
-
-
+						ref={emailRef}
 					/>
 
-					{error.email &&
-						<p className="text-danger"> {error.email}</p>
-					}
+					{error.email && <p className="text-danger"> {error.email}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="passwordForm">
@@ -262,33 +243,29 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="password"
 						placeholder="Enter your password"
-						required
-						pattern="^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$"
-						ref={passwordRef}
-						onChange={validatePassword}
-
+						onChange={(e) => setFields({ ...fields, password: e.target.value })}
 						value={fields.password}
-
-
-
+						ref={passwordRef}
 					/>
 
-					{error.password &&
-						<p className="text-danger"> {error.password}</p>
-					}
+					{error.password && <p className="text-danger"> {error.password}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="confirmPasswordForm">
 					<Form.Label>Confirm Password</Form.Label>
 					<Form.Control
 						type="password"
-						placeholder="Enter your password"
-						required
-						pattern="^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$"
+						placeholder="Confirm your password"
 						ref={confirmPasswordRef}
-						onChange={validatePasswordsMatch}
-
+						onChange={(e) =>
+							setFields({ ...fields, confirmPass: e.target.value })
+						}
+						value={fields.confirmPass}
 					/>
+
+					{error.confirmPass && (
+						<p className="text-danger"> {error.confirmPass}</p>
+					)}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="addressForm">
@@ -296,15 +273,11 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="text"
 						placeholder="Enter address"
-						required
-						ref={addressRef}
+						onChange={(e) => setFields({ ...fields, address: e.target.value })}
 						value={fields.address}
-
-
+						ref={addressRef}
 					/>
-					{error.address &&
-						<p className="text-danger"> {error.address}</p>
-					}
+					{error.address && <p className="text-danger"> {error.address}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="postalcodeForm">
@@ -312,17 +285,16 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="text"
 						placeholder="Enter Postal Code"
-						required
-						pattern="^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$"
-						ref={postalRef}
-						onChange={validatePostalCode}
+						onChange={(e) =>
+							setFields({ ...fields, postalCode: e.target.value })
+						}
 						values={fields.postalCode}
-
+						ref={postalRef}
 					/>
 
-					{error.postalCode &&
+					{error.postalCode && (
 						<p className="text-danger"> {error.postalCode}</p>
-					}
+					)}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="phoneNumberForm">
@@ -330,15 +302,16 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="tel"
 						placeholder="Enter Phone Number"
-						pattern="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
-						ref={phoneNumberRef}
-						onChange={validatePhoneNumber}
+						onChange={(e) =>
+							setFields({ ...fields, phoneNumber: e.target.value })
+						}
 						values={fields.phoneNumber}
+						ref={phoneNumberRef}
 					/>
 
-					{error.phoneNumber &&
+					{error.phoneNumber && (
 						<p className="text-danger"> {error.phoneNumber}</p>
-					}
+					)}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="haveAccount">
@@ -348,70 +321,10 @@ export default function  SignUpUserPage() {
 					</Link>
 				</FormGroup>
 
-				<Button type="submit" variant="warning" >
+				<Button type="submit" variant="warning">
 					Sign Up
 				</Button>
 			</Form>
 		</div>
 	);
-
-	function validate() {
-		switch (true) {
-			case validatePassword():
-			case validatePasswordsMatch():
-			case validateEmail():
-			case validatePostalCode():
-			case validatePhoneNumber():
-				return true;
-				break;
-			default:
-				return false;
-		}
-	}
-
-	function validateEmail() {
-		const returnedEmail = emailRef.current.value;
-		if (!validEmail.test(returnedEmail)) {
-			console.log("Email invalid!");
-			return false;
-		}
-		return true;
-	}
-
-	function validatePassword() {
-		const returnedPassword = passwordRef.current.value;
-		if (!validPassword.test(returnedPassword)) {
-			console.log("Password Invalid");
-			return false;
-		}
-		return validatePasswordsMatch();
-	}
-
-	function validatePasswordsMatch() {
-		const returnedPassword = passwordRef.current.value;
-		const returnedConfirmPassword = confirmPasswordRef.current.value;
-		if (!(returnedPassword === returnedConfirmPassword)) {
-			console.log("Passwords don't match");
-			return false;
-		}
-		return true;
-	}
-
-	function validatePostalCode() {
-		const returnedPostal = postalRef.current.value;
-		if (!validPostalCode.test(returnedPostal)) {
-			console.log("Postalcode invalid!");
-			return false;
-		}
-		return true;
-	}
-
-	function validatePhoneNumber() {
-		const returnedPhoneNumber = phoneNumberRef.current.value;
-		if (!validPhoneNumber.test(returnedPhoneNumber)) {
-			console.log("Phonenumber invalid!");
-			return false;
-		}
-		return true;
-	}
 }
