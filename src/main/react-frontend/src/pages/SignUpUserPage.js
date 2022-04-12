@@ -135,7 +135,7 @@ export default function SignUpUserPage() {
 
 				// await response so we know what the user had in database
 				const response = await axios.post(USER_CHECK_URL,userCheck);
-
+				console.log(response.data);
 				// this block will only run if the users email isnt already present in database
 				if (!response.data) {
 

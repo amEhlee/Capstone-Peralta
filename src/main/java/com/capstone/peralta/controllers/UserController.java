@@ -118,12 +118,13 @@ public class UserController {
     }
 
     @PostMapping("/userCheck")
-    public boolean userCheck(@RequestBody String email) {
+    public boolean userCheck(@RequestBody User user) {
+        user.setEmail(user.getEmail().toLowerCase());
+        log.info(user.toString());
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/userCheck").toUriString());
         List<User> userList = userService.getAll();
         for (User value : userList) {
-            if (email.equals(value.getEmail())) {
-
+            if (user.getEmail().equals(value.getEmail())) {
                 return true;
             }
         }
@@ -200,6 +201,7 @@ public class UserController {
         Verifies a password from our DB
      */
     public boolean verifyPassword (String email, String rawPassword) {
+        email = email.toLowerCase();
         User dbUserInstance = userService.getUserByName(email);
         String encryptedPassword = dbUserInstance.getPassword();
         return userService.getPasswordEncoder().matches(rawPassword, encryptedPassword);
