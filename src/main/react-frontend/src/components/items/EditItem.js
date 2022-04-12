@@ -118,6 +118,7 @@ export default function EditItem(props) {
 		};
 
 
+		// on success, update the image seperately from item
 		const UPLOAD_URL = "http://localhost:8080/image/upload/";
 		formData.append("image", imageData.files[0]);
 		const imagePost = async (itemId) => {
@@ -134,7 +135,7 @@ export default function EditItem(props) {
 			}
 		};
 
-		// put destination url
+		// try and update the item object
 		const PUT_URL = "http://localhost:8080/item/update/" + returnedCategoriesValue; 
 		const itemPost = async () => {
 			try {
@@ -144,9 +145,12 @@ export default function EditItem(props) {
 					},
 				});
 				console.log(res.data);
+				// if successful, run imagePost
 				if (imageData.files[0]){
 					imagePost(res.data.itemId);
 				}
+
+				// reload item list
 				props.gatherData();
 				props.showAlert();
 			} catch (err) {

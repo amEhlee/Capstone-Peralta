@@ -6,7 +6,7 @@ import { UserContext } from "./UserContext";
 import Layout from "./components/layout/Layout";
 
 // import admin pages
-import RequireAuth from "./RequireAuth"
+import RequireAuth from "./RequireAuth";
 import ViewAllItemsPage from "./pages/ViewAllItemsPage";
 import AdminLayout from "./components/layout/AdminLayout";
 import ManageItemsPage from "./pages/ManageItemsPage";
