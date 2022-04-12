@@ -44,7 +44,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @RequestMapping("/user")
 @CrossOrigin(origins = "3000")
 @RequiredArgsConstructor
-
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -106,12 +106,27 @@ public class UserController {
         //Checks if email is already logged on database
         for (User value : userList) {
             if (user.getEmail().equals(value.getEmail())) {
+                log.info("User Already Exists");
                 return null;
             }
         }
 
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/save").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/signup").toUriString());
         return ResponseEntity.created(uri).body(userService.addUser(user));
+    }
+
+    @PostMapping("/userCheck")
+    public boolean userCheck(@RequestBody String email) {
+        log.info(email);
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/userCheck").toUriString());
+        List<User> userList = userService.getAll();
+        for (User value : userList) {
+            if (email.equals(value.getEmail())) {
+
+                return true;
+            }
+        }
+        return false;
     }
 
     @PostMapping("/verify")
@@ -125,13 +140,14 @@ public class UserController {
      */
     @PutMapping("/update")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
-    public Boolean updateUser(@RequestBody User user) {
+    public boolean updateUser(@RequestBody User user) {
         userService.updateUser(user); //Update the user (including password)
         return true; // return a true on success
     }
 
 
     @DeleteMapping("/delete")
+    @RolesAllowed({"ROLE_USER"})
     void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         try {

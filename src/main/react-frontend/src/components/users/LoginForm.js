@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import axios from "axios";
 import { UserContext } from "../../UserContext";
+import {  }
 
 // Import Styles
 import userStyle from "../../assets/styles/UserSide.module.css";
@@ -48,7 +49,7 @@ export default function LoginForm() {
 			errorDisplay.password= "￮ You need to input your Password"
 		}
 
-		else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
+		else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/.test(fields.password)){
 			errorDisplay.password = "￮ your password is invalid";
 		}
 

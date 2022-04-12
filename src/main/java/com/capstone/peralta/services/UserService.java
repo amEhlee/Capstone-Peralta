@@ -46,7 +46,12 @@ public class UserService implements UserDetailsService {
 
     public User addUser(User user) {
         log.info("Saving new User into Database");
+        user.setEmail(user.getEmail().toLowerCase());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        String formattedPostalCode = user.getPostalCode().strip().replace("-", "");
+        String formattedPhoneNumber = user.getPhoneNumber().strip().replaceAll("\\D+","");
+        user.setPostalCode(formattedPostalCode);
+        user.setPhoneNumber(formattedPhoneNumber);
         User returnUser = userRepo.save(user);
         addRoleToUser(user.getEmail(), "ROLE_USER");
         return returnUser;
@@ -58,8 +63,14 @@ public class UserService implements UserDetailsService {
     }
 
     public void updateUser(User user) { //TODO: Not done yet needs checks
+        user.setEmail(user.getEmail().toLowerCase());
         log.info("Updating User " + user.getEmail());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        String formattedPostalCode = user.getPostalCode().strip().replace("-", "");
+        String formattedPhoneNumber = user.getPhoneNumber().strip().replaceAll("\\D+","");
+        user.setPostalCode(formattedPostalCode);
+        user.setPhoneNumber(formattedPhoneNumber);
+        User returnUser = userRepo.save(user);
         userRepo.save(user);
     }
 
