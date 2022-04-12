@@ -58,8 +58,8 @@ export default function ProductPage() {
 			// return this seperate success alert
 			return (
 				<Alert variant="success" onClose={() => setItemAddedAlert(false)} dismissible>
-					<Alert.Heading> You are almost there! </Alert.Heading>
-					<p>Click the Cart Button to View Your Newly Added Items</p>
+					<Alert.Heading>Item added to cart</Alert.Heading>
+					<p>Click the cart button to view your newly added items</p>
 				</Alert>
 			);
 		}

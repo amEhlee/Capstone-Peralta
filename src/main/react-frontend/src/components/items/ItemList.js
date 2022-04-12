@@ -54,6 +54,7 @@ export default function ItemList(props) {
 							available={i.itemAvailable}
 							item={i}
 							gatherData={props.gatherData}
+							showAlert={props.showAlert}
 						/>
 					))}
 			</tbody>

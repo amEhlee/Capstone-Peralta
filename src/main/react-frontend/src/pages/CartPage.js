@@ -30,7 +30,7 @@ function CartPage() {
 
     return (
         <>
-            <h1>Cart Page</h1>
+            <h1>Cart</h1>
             {/* Optinally display the below line to indicate empty cart */}
             {cart.length ? "" : <p>Your Cart is Empty! Add Items on Homepage</p>}
 

@@ -148,6 +148,7 @@ export default function EditItem(props) {
 					imagePost(res.data.itemId);
 				}
 				props.gatherData();
+				props.showAlert();
 			} catch (err) {
 				console.error(err);
 			}

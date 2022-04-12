@@ -51,12 +51,13 @@ export default function App() {
 					{/* fix actual exported function first please */}
 					{/* <Route path="/orderhistory" element={<OrderHistoryPage />} /> */}
 
-					<Route path="/userProfile" element={<UserProfile />} />
+					<Route path="/userProfile/:saved" element={<UserProfile />} />
+					<Route path="/userProfile/" element={<UserProfile />} />
 					<Route path="/checkout" element={<CheckoutPage />} />
 					<Route path="/logout" element={<LogoutUserPage />} />
+					<Route path="/order" element={<OrderUser />} />
 				</Route>
 
-				<Route path="/order" element={<OrderUser />} />
 				<Route path="/login" element={<LoginUserPage />} />
 				<Route path="/signUp" element={<SignUpUserPage />} />
 				<Route path="/editProfile" element={<EditProfile />} />
