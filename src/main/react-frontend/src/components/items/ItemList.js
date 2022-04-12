@@ -9,10 +9,13 @@ import ManageItemsTable from "./ManageItemsTable";
 import style from "../../assets/styles/ItemCardLayout.module.css";
 
 export default function ItemList(props) {
+
+	// for regular users render out item cards for each item
 	function regularList() {
 		return (
 			<ul className={style.unorderedList}>
 				{props.items.map((i) => (
+					// send items away to be made into cards
 					<Item
 						key={i.itemId}
 						id={i.itemId}
@@ -28,11 +31,13 @@ export default function ItemList(props) {
 		);
 	}
 
+	// for admins render a table version of the item list
 	function adminList() {
 		return (
 			<tbody>
 				{props.items
 					.filter((val) => {
+						// filter the information to send based on search query
 						if (props.search == "") {
 							return val;
 						} else if (
@@ -42,6 +47,7 @@ export default function ItemList(props) {
 						}
 					})
 					.map((i) => (
+						// send input to be processed into a table
 						<ManageItemsTable
 							key={i.itemId}
 							id={i.itemId}
@@ -60,6 +66,10 @@ export default function ItemList(props) {
 		);
 	}
 
+	/*
+		since our backend uses the same call between admin and regular users
+		here we can figure out which list to render based on the props.admin
+	*/
 	if (props.target === "regularList") {
 		return regularList();
 	} else if (props.target === "adminList") {
