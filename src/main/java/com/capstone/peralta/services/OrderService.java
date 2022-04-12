@@ -81,7 +81,7 @@ public class OrderService {
         for (int i = 0; i < orderList.size(); i++) {
             orderTotal += orderList.get(i).getItemPrice();
         }
-        order.setOrderTotal(orderTotal);
+        order.setOrderTotal((Math.round(orderTotal*100.0)/100.0));
         return orderRepo.save(order);
     }
 
