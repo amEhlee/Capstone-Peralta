@@ -12,18 +12,22 @@ import { validateEmail } from "../validation/FormValidation";
 
 // TODO: revise neccessity
 export default function LoginForm() {
+	// initalize form refrences
 	const emailRef = useRef();
 	const passwordRef = useRef();
+
+	// initalize user context refrences
 	const givenContext = useContext(UserContext);
 	const navigate = useNavigate();
 
+	// initalize state variables
+	const [error, setError] = useState({});
 	const [work, setWork] = useState(false);
 	const [fields, setFields] = useState({
 		email: "",
 		password: "",
 	});
 
-	const [error, setError] = useState({});
 
 	if (work) {
 		return (
@@ -73,21 +77,22 @@ export default function LoginForm() {
 
 	}*/
 
-    async function submitHandler(event, token) {
+    async function submitHandler(event) {
 		event.preventDefault();
 		const returnedEmail = emailRef.current.value;
 		const returnedPassword = passwordRef.current.value;
 		let givenToken = null;
 
 		if (validation(fields) === true)	{
-			console.log("test")
+			// build a new user object to be sent to the backend
 			const user = new URLSearchParams();
 			user.append("email", returnedEmail);
 			user.append("password", returnedPassword);
 
+			// send a request to backend to attempt login
 			const POST_URL = "http://localhost:8080/user/login"; // fetch url
 			await axios.post(POST_URL, user).then((res) => {
-				console.log(res);
+				// if login is successful store associated access token
 				givenToken = res.data.access_token;
 				givenContext.setContextData((prevData) => {
 					return {
@@ -100,6 +105,7 @@ export default function LoginForm() {
 				setWork(true);
 			});
 
+			// should the users login request be valid load the associated user data too
 			await axios
 				.get("http://localhost:8080/user/load", {
 					headers: {
@@ -108,6 +114,7 @@ export default function LoginForm() {
 				})
 				.then((res) => {
 					console.log(res);
+					// store the loaded user data into context
 					givenContext.setContextData((prevData) => {
 						return {
 							...prevData,

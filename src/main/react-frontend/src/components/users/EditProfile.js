@@ -106,8 +106,6 @@ export default function EditProfile() {
 
 	};
 
-
-
 	function checkPassword(givenEmail, givenPassword) {
 		// Post url used to verify password
 		const POST_URL = "http://localhost:8080/user/verify";
