@@ -2,23 +2,23 @@ import {validEmail, validPassword, validPostalCode, validPhoneNumber} from "./Re
 
 export function validateEmail(email) {
     if (!validEmail.test(email)) {
-        console.log("Email invalid!");
+        //console.log("Email invalid!");
         return false;
     }
     return true;
 }
 
-export function validatePassword(password, confirmPassword) {
+export function validatePassword(password) {
     if (!validPassword.test(password)) {
-        console.log("Password Invalid");
+        //console.log("Password Invalid");
         return false;
     }
-    return validatePasswordsMatch(password, confirmPassword);
+    return true;
 }
 
 export function validatePasswordsMatch(password, confirmPassword) {
     if (!(password === confirmPassword)) {
-        console.log("Passwords don't match");
+        //console.log("Passwords don't match");
         return false;
     }
     return true;
@@ -26,7 +26,7 @@ export function validatePasswordsMatch(password, confirmPassword) {
 
 export function validatePostalCode(postalCode) {
     if (!validPostalCode.test(postalCode)) {
-        console.log("Postalcode invalid!");
+        //console.log("Postalcode invalid!");
         return false;
     }
     return true;
@@ -34,7 +34,7 @@ export function validatePostalCode(postalCode) {
 
 export function validatePhoneNumber(phoneNumber) {
     if (!validPhoneNumber.test(phoneNumber)) {
-        console.log("Phonenumber invalid!");
+        //console.log("Phonenumber invalid!");
         return false;
     }
     return true;
