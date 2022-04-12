@@ -7,7 +7,10 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import Style from "../../assets/styles/UserSide.module.css";
 
 export default function UserProfile() {
+	// gather context information
 	const userContext = useContext(UserContext).contextData.user;
+
+	// initalize some state variables and store user parameters
 	const [work, setWork] = useState(true);
 	let saved  = useParams();
 

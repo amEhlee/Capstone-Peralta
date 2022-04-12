@@ -1,32 +1,19 @@
-import { Button, Card, ListGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
+// import dependencies 
 import React, { useContext } from "react";
 import { UserContext } from "../UserContext";
+
+// Import Components
+import { Button, Card, ListGroup } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import styles from "../assets/styles/CartPageCardLayout.module.css";
 import Image from "../components/items/Image";
-import axios from "axios";
-
 function CartPage() {
-    const givenContext = useContext(UserContext);
-    const token = givenContext.token;
+    // get context information regarding cart
+    const givenContext = useContext(UserContext) 
     const cart = givenContext.contextData.cart;
     let totalPrice = 0.0;
 
-    // testing for email service
-    /*
-    const EMAILSERV_URL = "http://localhost:8080/email/send";
-    function sendEmail(){
-        axios.post(EMAILSERV_URL, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((res) => {
-                console.log(res) // return response
-            })
-    }
-    */
-
+    // removes selected item from cart
     function removeFromCart(givenIndex) {
         // remove item from cart
         cart.splice(givenIndex, 1);
@@ -62,6 +49,7 @@ function CartPage() {
                             <div key={givenItem.itemName}>
                                 <ListGroup.Item className={styles.cartSpacing}>
                                     <div className={styles.itemDisplay}>
+                                        {/* give an image and a seperate div for item price, quantity and remove from cart button */}
                                         <Image itemID={givenItem.itemId} size={"150px"} />
                                         <div className={styles.itemDetails}>
                                             <b>{givenItem.itemName}</b> <br />
@@ -71,6 +59,7 @@ function CartPage() {
                                         </div>
                                     </div>
                                 </ListGroup.Item>
+                                <hr/>
                             </div>
                         );
                     })}
