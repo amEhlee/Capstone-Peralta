@@ -195,7 +195,6 @@ export default function SignUpUserPage() {
 				<source src={cartE} type="video/mp4" />
 			</video>
 
-			{showSuccess()}
 
 			<Form className={userStyle.centrize} onSubmit={submitHandler}>
 				<FormGroup className="mb-3" controlId="firstnameForm">

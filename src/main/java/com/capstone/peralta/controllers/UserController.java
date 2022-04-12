@@ -103,6 +103,8 @@ public class UserController {
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         List<User> userList = userService.getAll();
 
+        user.setEmail(user.getEmail().toLowerCase());
+
         //Checks if email is already logged on database
         for (User value : userList) {
             if (user.getEmail().equals(value.getEmail())) {
@@ -117,7 +119,6 @@ public class UserController {
 
     @PostMapping("/userCheck")
     public boolean userCheck(@RequestBody String email) {
-        log.info(email);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/userCheck").toUriString());
         List<User> userList = userService.getAll();
         for (User value : userList) {
@@ -131,8 +132,8 @@ public class UserController {
 
     @PostMapping("/verify")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
-    public boolean verify(@RequestBody User verifyUser) {
-        return verifyPassword(verifyUser.getEmail(), verifyUser.getPassword());
+    public boolean verify(@RequestBody User user) {
+        return verifyPassword(user.getEmail(), user.getPassword());
     }
 
     /*
@@ -198,7 +199,6 @@ public class UserController {
     /*
         Verifies a password from our DB
      */
-    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public boolean verifyPassword (String email, String rawPassword) {
         User dbUserInstance = userService.getUserByName(email);
         String encryptedPassword = dbUserInstance.getPassword();

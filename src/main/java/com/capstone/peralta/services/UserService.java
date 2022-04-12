@@ -48,8 +48,10 @@ public class UserService implements UserDetailsService {
         log.info("Saving new User into Database");
         user.setEmail(user.getEmail().toLowerCase());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        String formattedPostalCode = user.getPostalCode().strip().replace("-", "");
-        String formattedPhoneNumber = user.getPhoneNumber().strip().replaceAll("\\D+","");
+        String formattedPostalCode = user.getPostalCode().replaceAll("[\\s-]", "");
+        log.info(formattedPostalCode);
+        String formattedPhoneNumber = user.getPhoneNumber().replaceAll("[\\s\\D-]","");
+        log.info(formattedPhoneNumber);
         user.setPostalCode(formattedPostalCode);
         user.setPhoneNumber(formattedPhoneNumber);
         User returnUser = userRepo.save(user);
@@ -66,11 +68,12 @@ public class UserService implements UserDetailsService {
         user.setEmail(user.getEmail().toLowerCase());
         log.info("Updating User " + user.getEmail());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        String formattedPostalCode = user.getPostalCode().strip().replace("-", "");
-        String formattedPhoneNumber = user.getPhoneNumber().strip().replaceAll("\\D+","");
+        String formattedPostalCode = user.getPostalCode().replaceAll("[\\s-]", "");
+        log.info(formattedPostalCode);
+        String formattedPhoneNumber = user.getPhoneNumber().replaceAll("[\\s\\D-]","");
+        log.info(formattedPhoneNumber);
         user.setPostalCode(formattedPostalCode);
         user.setPhoneNumber(formattedPhoneNumber);
-        User returnUser = userRepo.save(user);
         userRepo.save(user);
     }
 

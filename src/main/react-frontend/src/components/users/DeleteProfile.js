@@ -1,13 +1,9 @@
-/**
- * This
- *
- *
- *
- */
 
 
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom"
+// Import Dependancies
+import React, { useState } from "react";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 // Import Components
 import {Form, FormGroup, InputGroup, Button, FormControl, Col, Row, Modal, Alert} from "react-bootstrap";
@@ -29,7 +25,7 @@ export default function DeleteProfile() {
     const [show, setShow] = useState(false);
     if (show) {
         return (
-            <Alert variant="success" onClose={() => setShow(false)} dismissible>
+            <Alert variant="success" onClose={() => {setShow(false)}} dismissible>
                 <Alert.Heading>Your account is deleted</Alert.Heading>
                 <p>
                     Account deletion was successful!
@@ -58,14 +54,29 @@ export default function DeleteProfile() {
 
     //TODO: Make an axios call
     async function submitHandler (event) {
-        if (event) event.preventDefault();
+        event.preventDefault();
 
-        if (validate(fields)){
+        if (validate(fields) == true) {
             setShow(true);
-        } else {
+            const DELETE_URL = "http://localhost:8080/user/delete";
+
+            async function userDelete() {
+                await axios
+                    .delete(DELETE_URL, {
+                        headers: {
+                            Authorization: 'Bearer ${token}',
+                        },
+                    })
+                    .then((res) => {
+                        console.log(res);
+
+                    })
+                    .catch((err) => console.error(err));
+            }
+        }
+        else {
             setShow(false);
         }
-
     }
 
 
