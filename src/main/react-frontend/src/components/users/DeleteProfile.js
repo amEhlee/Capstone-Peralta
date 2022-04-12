@@ -44,6 +44,9 @@ export default function DeleteProfile() {
             errorDisplay.password= "￮ You need to input your Password"
         }
 
+        //TODO: Call the verification method and return a boolean so you can delete the account
+        //if ()
+
         setError(errorDisplay);
         if (Object.keys(errorDisplay).length===0){
             return true;
@@ -52,6 +55,8 @@ export default function DeleteProfile() {
         }
     };
 
+
+    //TODO: Make an axios call
     async function submitHandler (event) {
         if (event) event.preventDefault();
 
@@ -77,7 +82,7 @@ export default function DeleteProfile() {
 
             <FormGroup className="mb-3" controlId="">
                 <Form.Label>Password: </Form.Label>
-                <Form.Control type="password" placeholder="Enter your password" value={fields.password}/>
+                <Form.Control type="password" placeholder="Enter your password" value={fields.password} onChange={((e) => setFields({...fields, password: e.target.value}))} />
                 {error.password &&
                     <p className="text-danger"> {error.password}</p>
                 }

@@ -7,10 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import axios from "axios";
 import { UserContext } from "../../UserContext";
-import {  }
+import { validateEmail } from "../validation/FormValidation";
 
-// Import Styles
-import userStyle from "../../assets/styles/UserSide.module.css";
 
 // TODO: revise neccessity
 export default function LoginForm() {
@@ -38,19 +36,17 @@ export default function LoginForm() {
 	const validation = () => {
 		let errorDisplay={};
 
+
+		if (!validateEmail(fields.email)) {
+			errorDisplay.email = "￮ Your email format should be like this example@gmail.com";
+		}
+
 		if (!fields.email){
 			errorDisplay.email = "￮ You need to input your Email";
-		}
-		else if (!/^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/.test(fields.email)){
-			errorDisplay.email = "￮ your email format should be like this example@gmail.com";
 		}
 
 		if (!fields.password){
 			errorDisplay.password= "￮ You need to input your Password"
-		}
-
-		else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/.test(fields.password)){
-			errorDisplay.password = "￮ your password is invalid";
 		}
 
 
@@ -64,7 +60,7 @@ export default function LoginForm() {
 		}
 	};
 
-	//if it doesn't validate correctly show the alert
+/*	//if it doesn't validate correctly show the alert
 	//if it renders don't show and proceed to homepage
 	async function submitHandler (event) {
 		if (event) event.preventDefault();
@@ -75,52 +71,58 @@ export default function LoginForm() {
 			setWork(true);
 		}
 
-	}
+	}*/
 
-/*	async function submitHandler(event, token) {
+    async function submitHandler(event, token) {
 		event.preventDefault();
 		const returnedEmail = emailRef.current.value;
 		const returnedPassword = passwordRef.current.value;
 		let givenToken = null;
 
-		const user = new URLSearchParams();
-		user.append("email", returnedEmail);
-		user.append("password", returnedPassword);
+		if (validation(fields) === true)	{
+			console.log("test")
+			const user = new URLSearchParams();
+			user.append("email", returnedEmail);
+			user.append("password", returnedPassword);
 
-		const POST_URL = "http://localhost:8080/user/login"; // fetch url
-		await axios.post(POST_URL, user).then((res) => {
-			console.log(res);
-			givenToken = res.data.access_token;
-			givenContext.setContextData((prevData) => {
-				return {
-					...prevData,
-					token: res.data.access_token,
-				};
-			});
-		}).catch((err) => {
-			console.log(err);
-			setWork(true);
-		});
- 
-		await axios
-			.get("http://localhost:8080/user/load", {
-				headers: {
-					Authorization: `Bearer ${givenToken}`,
-				},
-			})
-			.then((res) => {
+			const POST_URL = "http://localhost:8080/user/login"; // fetch url
+			await axios.post(POST_URL, user).then((res) => {
 				console.log(res);
+				givenToken = res.data.access_token;
 				givenContext.setContextData((prevData) => {
 					return {
 						...prevData,
-						user: res.data, // get the user after successful login
+						token: res.data.access_token,
 					};
 				});
+			}).catch((err) => {
+				console.log(err);
+				setWork(true);
 			});
 
-		// goto homepage after logging in
-		navigate("/");
-	}*/
+			await axios
+				.get("http://localhost:8080/user/load", {
+					headers: {
+						Authorization: `Bearer ${givenToken}`,
+					},
+				})
+				.then((res) => {
+					console.log(res);
+					givenContext.setContextData((prevData) => {
+						return {
+							...prevData,
+							user: res.data, // get the user after successful login
+						};
+					});
+				});
+			setWork(false);
+			// goto homepage after logging in
+			navigate("/");
+		}
+		else {
+
+		}
+	}
 
 
 
@@ -131,8 +133,12 @@ export default function LoginForm() {
 			<Form onSubmit={submitHandler}>
 				<FormGroup className="mb-3" controlId="emailForm">
 					<Form.Label>Email Address</Form.Label>
-					<Form.Control type="email" placeholder="Enter Email" ref={emailRef}
-								  value={fields.email}
+					<Form.Control
+						type="text"
+						placeholder="Enter Email"
+						ref={emailRef}
+						value={fields.email}
+						onChange={((e) => setFields({...fields, email: e.target.value}))}
 					/>
 
 					{error.email &&
@@ -147,6 +153,7 @@ export default function LoginForm() {
 						placeholder="Enter your password"
 						ref={passwordRef}
 						value={fields.password}
+						onChange={((e) => setFields({...fields, password: e.target.value}))}
 					/>
 					{error.password &&
 						<p className="text-danger"> {error.password}</p>
@@ -162,7 +169,7 @@ export default function LoginForm() {
 					</Link>
 				</FormGroup>
 
-				<Button type="submit" variant="primary" onClick={() => setWork(true)}>
+				<Button type="submit" variant="primary" >
 					Login
 				</Button>
 			</Form>
