@@ -16,16 +16,37 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The Report service. Contains all business logic for generating reports
+ *
+ * @author Jared Smith
+ */
 @Service
 public class ReportService {
 
     @Autowired
     private final OrderRepo orderRepo;
 
+    /**
+     * Instantiates a new Report service.
+     *
+     * @param orderRepo the order repo auto-injected by Spring
+     */
     public ReportService(OrderRepo orderRepo) {
         this.orderRepo = orderRepo;
     }
 
+    /**
+     * Generates a report as an Excel sheet.
+     * The Excel file is named as the date in which the report is generated.
+     * The Excel file contains all orders, their id, the date they were placed,
+     * the status of the order, the amount of items in the order,
+     * the order total price, the customer who placed the order,
+     * the customers email, and the customers address. It also sums the total
+     * number of items purchased, and the total price of all orders
+     *
+     * @throws FileNotFoundException the file not found exception
+     */
     public void generateReport() throws FileNotFoundException {
 
         List<Order> orders = orderRepo.findAll();

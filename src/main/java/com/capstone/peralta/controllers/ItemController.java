@@ -14,6 +14,8 @@ import java.util.stream.Stream;
 
 /**
  * Controller class for the Item mode. Contains all the REST endpoints
+ * @author Jared Smith
+ * @author Nicholas Tan
  */
 @RestController
 @RequestMapping("/item")
@@ -28,19 +30,36 @@ public class ItemController {
     @Autowired
     private final CategoryService categoryService;
 
-//    Constructor that is automatically injected with an ImageService and a CategoryService object
+    /**
+     * Class constructor for the ItemController
+     * @param itemService the itemService is used for all business logic,
+     *                    auto-injected byt Spring when calling the constructor
+     * @param categoryService the categoryService is used for all business logic,
+     *                        auto-injected byt Spring when calling the constructor
+     */
     public ItemController(ItemService itemService, CategoryService categoryService) {
         this.itemService = itemService;
         this.categoryService = categoryService;
     }
 
-//    Returns an item, takes in an item id as the path variable at /item/get/{itemId}
+
+    /**
+     * This method is used to retrieve a specific item from the database
+     * using the items id
+     * @param itemId the id of the item to be retrieved, specified in the path
+     *               of the endpoint
+     * @return the item with the specified id
+     */
     @GetMapping("/get/{itemId}")
     Item getById(@PathVariable Integer itemId) {
         return itemService.getItemById(itemId);
     }
 
-//    Returns a list of all items at path /item/get/all
+
+    /**
+     * This method returns a List of all items in the database
+     * @return a list of all items
+     */
     @GetMapping("/get/all")
     List<Item> getAll() {
         return itemService.getAll();
@@ -48,21 +67,38 @@ public class ItemController {
 
 //    Takes an Item object in the body of the request, and a categoryId as a path variable at /item/add/{categoryId}
 //    Saves the item to the database
+
+    /**
+     * This method creates an item from JSON and persists it
+     * @param item the item object to be persisted
+     * @param categoryId the id of the category for the item
+     * @return the item after it has been successfully persisted
+     */
     @RolesAllowed({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping("/add/{categoryId}")
     Item createItem(@RequestBody Item item, @PathVariable Integer categoryId) {
         return itemService.addItem(item, categoryId);
     }
 
-//    Adds multiple Item objects to the database from the body of the request
+    /**
+     * This method is only to be used for testing and with test data. We only used
+     * this method while initially adding test data through PostMan
+     * @param itemList a list of item objects sent as JSON
+     * @return the list of items after they have been successfully persisted
+     */
     @RolesAllowed({"ROLE_ADMIN", "ROLE_OWNER"})
     @PostMapping("/addMultiple")
     List<Item> addMultiple(@RequestBody List<Item> itemList) {
         return itemService.addMultiple(itemList);
     }
 
-//    Takes an already existing item in the database in the body of the request body and updates
-//    its values in the database
+    /**
+     * This method takes an updated item object and persists the changes
+     * to the database
+     * @param item the updated item
+     * @param categoryId the id of the category the item is attached to
+     * @return the item after it has been successfully updated in the database
+     */
     @RolesAllowed({"ROLE_ADMIN", "ROLE_OWNER"})
     @PutMapping("/update/{categoryId}")
     Item updateItem(@RequestBody Item item, @PathVariable Integer categoryId) {
@@ -70,6 +106,13 @@ public class ItemController {
     }
 
 //     returns a list of items that match the search query
+
+    /**
+     * This method searches through items in the database and returns them
+     * if the name of the item matches a certain string
+     * @param query the string query used to find items
+     * @return a list of items which have names matching the query
+     */
     @GetMapping("/search/{query}")
     List<Item> searchItems(@PathVariable String query) {
         List<Item> listOne = itemService.searchItems(query);
@@ -86,8 +129,10 @@ public class ItemController {
         return result;
     }
 
-
-
+    /**
+     * This method deletes an item from the database
+     * @param id the id of the item to be deleted.
+     */
     @DeleteMapping("/delete/{id}")
     void deleteItem(@PathVariable int id) {
         itemService.deleteItem(id);

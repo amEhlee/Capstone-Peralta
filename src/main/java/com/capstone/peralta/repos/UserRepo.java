@@ -4,14 +4,20 @@ import com.capstone.peralta.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-import java.util.List;
 
+/**
+ * The interface User repository.
+ *
+ * @author Don Laliberte
+ */
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
+    /**
+     * Find user by email.
+     *
+     * @param email the email
+     * @return the user
+     */
     User findUserByEmail(String email);
-    List<User> findAll();
 
-    //void update(User user);
-    //Void removeUserById(Integer id);
 }
