@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext, useRef, useState } from "react";
 import axios from "axios";
 import {UserContext} from "../UserContext";
-import {validEmail, validPassword, validPostalCode, validPhoneNumber} from "../components/validation/RegEx.js";
 import {validateEmail, validatePassword, validatePasswordsMatch, validatePostalCode, validatePhoneNumber} from "../components/validation/FormValidation.js";
 
 // Import Styling
@@ -50,33 +49,6 @@ export default function  SignUpUserPage() {
         );
     }
 
-/*	function validate() {
-		const validated = true;
-		if (validatePassword(passwordRef.current.value, confirmPasswordRef.current.value) == false) {
-			validated = false;
-		}
-		if (validatePasswordsMatch(passwordRef.current.value, confirmPasswordRef.current.value) == false) {
-			validated = false;
-		}
-		if ((emailRef.current.value) == false) {
-			validated = false;
-		}
-		if (validatePostalCode(postalRef.current.value) == false) {
-			validated = false;
-		}
-		if (validatePhoneNumber(phoneNumberRef.current.value) == false) {
-			validated = false;
-		}
-
-		if (validated == true) {
-			return true;
-		}
-		else {
-			return false;
-		}
-
-	}*/
-
 	const validation = () => {
 		let errorDisplay={};
 
@@ -91,39 +63,61 @@ export default function  SignUpUserPage() {
 		if (!fields.email) {
 			errorDisplay.email = "￮ You need to enter your Email";
 		}
-		else if (!validateEmail(fields.email)){
+
+		//TODO FIX THIS V
+
+		const POST_URL = "http://localhost:8080/user/userCheck"; // fetch url
+		const emailIsTaken = axios.post(POST_URL, emailRef.current.value).then((res) => {
+			console.log(res.data);
+			return res.data;
+		}).catch((err) => console.error(err)).value;
+		console.log(emailIsTaken);
+
+		if (emailIsTaken) {
+			errorDisplay.email = "￮ Email is already taken";
+		}
+
+		//FIX THIS ^
+
+		if (!validateEmail(fields.email)){
 			errorDisplay.email = "￮ Your email format should follow example@gmail.com";
 		}
 
 		if (!fields.password) {
-			errorDisplay.password = "￮ You need to enter your password"
+			errorDisplay.password = "￮ You need to enter your password";
 		}
 
-		else if (!validatePassword(fields.password)) {
-			errorDisplay.password = "￮ Your password is invalid"; //TODO: Make this message talk about password requirements
+		if (!validatePassword(fields.password)) {
+			errorDisplay.password = "￮ Your password is invalid. Passwords need to at least be six characters long and require one digit"; //TODO: Make this message talk about password requirements
 		}
 
 		if (!fields.confirmPass) {
-			errorDisplay.confirmPass = "￮ Confirm your password"
+			errorDisplay.confirmPass = "￮ Confirm your password";
+		}
+
+		if (!validatePasswordsMatch(fields.password, fields.confirmPass)) {
+			errorDisplay.confirmPass = "￮ Password does not match";
 		}
 
 		//TODO: have to check for the password matching donno how yet
 		if (!fields.address){
-			errorDisplay.address= "￮ You need to enter your address"
+			errorDisplay.address= "￮ You need to enter your address";
 		}
 
 		if (!fields.postalCode) {
-			errorDisplay.postalCode = "￮ You need to enter your postal code"
+			errorDisplay.postalCode = "￮ You need to enter your postal code";
 		}
-		 else if (!validatePostalCode(fields.postalCode)) {
+
+		if (!validatePostalCode(fields.postalCode)) {
 			errorDisplay.postalCode = "￮ Your postal code format should follow A1A 1A1, etc";
 		}
 
 		if (!fields.phoneNumber) {
-			errorDisplay.phoneNumber = "￮ You need to input your phone number"
+			errorDisplay.phoneNumber = "￮ You need to input your phone number";
 		}
-		else if (!validatePhoneNumber(fields.phoneNumber)) {
-			errorDisplay.postalCode = "￮ Your phone number is invalid";
+
+		if (!validatePhoneNumber(fields.phoneNumber)) {
+			errorDisplay.phoneNumber = "￮ Your phone number is invalid";
 		}
 
 		setError(errorDisplay);
@@ -135,50 +129,39 @@ export default function  SignUpUserPage() {
 
 	}
 
-
-
-
-	};
-
 	async function submitHandler(event) {
-		if (event) event.preventDefault();
-
-		if (validation(fields)){
-			setShow(true);
-		} else {
-			setShow(false);
-		}
-
-
 		event.preventDefault();
+
 		const returnedFirstName = firstnameRef.current.value;
 		const returnedLastName = lastnameRef.current.value;
 		const returnedEmail = emailRef.current.value;
 		const returnedPassword = passwordRef.current.value;
 		const returnedConfirmPassword = confirmPasswordRef.current.value;
 		const returnedAddress = addressRef.current.value;
-		const returnedPostal = postalRef.current.value;
+		const returnedPostalCode = postalRef.current.value;
 		const returnedPhoneNumber = phoneNumberRef.current.value;
 
-		console.log(returnedPassword);
-		console.log(returnedConfirmPassword);
 
-		if (validation == true) {
+		//console.log(returnedPassword);
+		//console.log(returnedConfirmPassword);
+
+		if (validation(fields) == true) {
+			setShow(true); //TODO: FIX THIS
 			const user = {
 				firstName: returnedFirstName,
 				lastName: returnedLastName,
 				email: returnedEmail,
 				password: returnedPassword,
 				address: returnedAddress,
-				postalCode: returnedPostal,
+				postalCode: returnedPostalCode,
 				phoneNumber: returnedPhoneNumber,
 			};
-
+			console.log("test 2");
 			console.log(user);
 
 			const POST_URL = "http://localhost:8080/user/signup"; // fetch url
-			const userExists = await axios.post(POST_URL, user).then((res) => {
-				console.log(res);
+			await axios.post(POST_URL, user).then((res) => {
+				//console.log(res);
 				givenContext.setContextData((prevData) => {
 					return {
 						...prevData,
@@ -187,12 +170,12 @@ export default function  SignUpUserPage() {
 				});
 			});
 
-			if (userExists == null) {
-				alert("User Already Exists");
-			} else {
-				// on success navigtate back to login
-				navigate("/login");
-			}
+			// on success navigtate back to login
+			await navigate("/login");
+
+		}
+		else {
+			setShow(false); //TODO: FIX THIS
 		}
 	}
 
@@ -222,9 +205,9 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="text"
 						placeholder="Input firstname"
-						required
-						ref={firstnameRef}
+						onChange={((e) => setFields({...fields, firstName: e.target.value}))}
 						value={fields.firstName}
+						ref={firstnameRef}
 					/>
 
 					{error.firstName &&
@@ -237,9 +220,9 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="text"
 						placeholder="Enter lastname"
-						required
-						ref={lastnameRef}
+						onChange={((e) => setFields({...fields, lastName: e.target.value}))}
 						value={fields.lastName}
+						ref={lastnameRef}
 					/>
 
 					{error.lastName &&
@@ -252,11 +235,9 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="email"
 						placeholder="Enter Email"
-						required
-						pattern={validEmail}
-						ref={emailRef}
-						//onChange={validateEmail}
+						onChange={((e) => setFields({...fields, email: e.target.value}))}
 						value={fields.email}
+						ref={emailRef}
 					/>
 
 					{error.email &&
@@ -269,11 +250,9 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="password"
 						placeholder="Enter your password"
-						required
-						pattern={validPassword}
-						ref={passwordRef}
-						//onChange={validatePassword}
+						onChange={((e) => setFields({...fields, password: e.target.value}))}
 						value={fields.password}
+						ref={passwordRef}
 					/>
 
 					{error.password &&
@@ -286,11 +265,15 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="password"
 						placeholder="Confirm your password"
-						required
-						pattern={validPassword}
 						ref={confirmPasswordRef}
-						//onChange={validatePasswordsMatch}
+						onChange={((e) => setFields({...fields, confirmPass: e.target.value}))}
+						value={fields.confirmPass}
+						ref={confirmPasswordRef}
 					/>
+
+					{error.confirmPass &&
+						<p className="text-danger"> {error.confirmPass}</p>
+					}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="addressForm">
@@ -298,9 +281,9 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="text"
 						placeholder="Enter address"
-						required
-						ref={addressRef}
+						onChange={((e) => setFields({...fields, address: e.target.value}))}
 						value={fields.address}
+						ref={addressRef}
 					/>
 					{error.address &&
 						<p className="text-danger"> {error.address}</p>
@@ -312,12 +295,9 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="text"
 						placeholder="Enter Postal Code"
-						required
-						pattern={validPostalCode}
-						ref={postalRef}
-						//onChange={validatePostalCode}
+						onChange={((e) => setFields({...fields, postalCode: e.target.value}))}
 						values={fields.postalCode}
-
+						ref={postalRef}
 					/>
 
 					{error.postalCode &&
@@ -330,10 +310,9 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="tel"
 						placeholder="Enter Phone Number"
-						pattern={validPhoneNumber}
-						ref={phoneNumberRef}
-						//onChange={validatePhoneNumber}
+						onChange={((e) => setFields({...fields, phoneNumber: e.target.value}))}
 						values={fields.phoneNumber}
+						ref={phoneNumberRef}
 					/>
 
 					{error.phoneNumber &&
@@ -352,7 +331,7 @@ export default function  SignUpUserPage() {
 			</Form>
 		</div>
 	);
-
+}
 
 
 

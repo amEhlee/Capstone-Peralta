@@ -11,11 +11,23 @@ import axios from "axios";
 import emailjs from "emailjs-com";
 
 // Import Components
-import {Form, FormGroup, Button} from "react-bootstrap";
+import {Form, FormGroup, Button, Alert} from "react-bootstrap";
 import {UserContext} from "../UserContext";
 import Style from "../assets/styles/UserSide.module.css";
 
 export default function CheckoutPage() {
+
+    // setup refs for the form
+    const orderFirstNameRef = useRef();
+    const orderLastNameRef = useRef();
+    const orderEmailRef = useRef();
+    const orderAddressRef = useRef();
+    const orderPostalCodeRef = useRef();
+
+
+    // instansiate user cart and user object
+    const cart = useContext(UserContext).contextData.cart;
+    let user = useContext(UserContext).contextData.user;
 
     const [fields, setFields] = useState({
 		firstName: "",
@@ -43,6 +55,7 @@ export default function CheckoutPage() {
 
 
 	function validation() {
+
 		let errorDisplay={};
 
 		if (!fields.firstName) {
@@ -58,7 +71,7 @@ export default function CheckoutPage() {
 			errorDisplay.password= "￮ You need to input your Password"
 		}
 
-		else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
+		if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
 			errorDisplay.password = "￮ your password is invalid";
 		}
 		//TODO: have to check for the password matching donno how yet
@@ -76,7 +89,7 @@ export default function CheckoutPage() {
 		if (!fields.phoneNumber){
 			errorDisplay.phoneNumber= "￮ You need to input your phone number"
 		}
-		else if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)){
+		if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)){
 			errorDisplay.postalCode = "￮ your phone number is invalid";
 		}
 
@@ -90,9 +103,7 @@ export default function CheckoutPage() {
 
 	};
 
-    // instansiate user cart and user object
-    const cart = useContext(UserContext).contextData.cart;
-    let user = useContext(UserContext).contextData.user;
+
 
     // add each individual item for email receipt
     let formattedString = "";
@@ -100,12 +111,7 @@ export default function CheckoutPage() {
         formattedString += i.item.itemName + " Quantity:" + i.quantity + '<hr/>';
     })
 
-    // setup refs for the form
-    const orderFirstNameRef = useRef();
-    const orderLastNameRef = useRef();
-    const orderEmailRef = useRef();
-    const orderAddressRef = useRef();
-    const orderPostalCodeRef = useRef();
+
 
     // set blank user if information is null
     if (user === null) {
@@ -122,6 +128,9 @@ export default function CheckoutPage() {
     }
 
     function submitHandler(event) {
+
+
+
         // prevent default submit behaviour
         event.preventDefault();
 

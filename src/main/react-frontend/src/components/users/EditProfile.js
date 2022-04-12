@@ -12,6 +12,21 @@ import DeleteProfile from "./DeleteProfile";
 import Style from "../../assets/styles/UserSide.module.css";
 
 export default function EditProfile() {
+
+	const userContext = useContext(UserContext).contextData.user;
+	const token = useContext(UserContext).contextData.token;
+	const userFirstNameRef = useRef();
+	const userLastNameRef = useRef();
+	const userConfirmPasswordRef = useRef();
+	const userNewPasswordRef = useRef();
+	const userNewPasswordConfirmRef = useRef();
+	const userPhoneRef = useRef();
+	const userAddressRef = useRef();
+	const userPostalCodeRef = useRef();
+
+
+
+
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
@@ -49,7 +64,6 @@ export default function EditProfile() {
 			errorDisplay.firstName = "￮ You need to input your first name";
 		}
 
-
 		if (!fields.lastName) {
 			errorDisplay.lastName = "￮ You need to input your last name";
 		}
@@ -58,7 +72,7 @@ export default function EditProfile() {
 			errorDisplay.password= "￮ You need to input your Password"
 		}
 
-		else if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
+		if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
 			errorDisplay.password = "￮ your password is invalid";
 		}
 		//TODO: have to check for the password matching donno how yet
@@ -69,14 +83,16 @@ export default function EditProfile() {
 		if (!fields.postalCode){
 			errorDisplay.postalCode= "￮ You need to input your postal code"
 		}
-		else if (!/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(fields.postalCode)){
+
+		if (!/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(fields.postalCode)){
 			errorDisplay.postalCode = "￮ your postal code format should be like this A1A A1A";
 		}
 
 		if (!fields.phoneNumber){
 			errorDisplay.phoneNumber= "￮ You need to input your phone number"
 		}
-		else if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)){
+
+		if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)){
 			errorDisplay.postalCode = "￮ your phone number is invalid";
 		}
 
@@ -90,16 +106,7 @@ export default function EditProfile() {
 
 	};
 
-	const userContext = useContext(UserContext).contextData.user;
-	const token = useContext(UserContext).contextData.token;
-	const userFirstNameRef = useRef();
-	const userLastNameRef = useRef();
-	const userConfirmPasswordRef = useRef();
-	const userNewPasswordRef = useRef();
-	const userNewPasswordConfirmRef = useRef();
-	const userPhoneRef = useRef();
-	const userAddressRef = useRef();
-	const userPostalCodeRef = useRef();
+
 
 	function checkPassword(givenEmail, givenPassword) {
 		// Post url used to verify password
