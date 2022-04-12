@@ -1,56 +1,50 @@
 // Import Dependencies
-import React, { Form, FormGroup, Button, Alert } from "react-bootstrap";
+import React, { useRef, useState } from "react";
+import { Form, FormGroup, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useRef, useState } from "react";
+import {
+	validateEmail,
+	validatePassword,
+	validatePasswordsMatch,
+	validatePostalCode,
+	validatePhoneNumber,
+} from "../components/validation/FormValidation.js";
 import axios from "axios";
-import {UserContext} from "../UserContext";
-import {validateEmail, validatePassword, validatePasswordsMatch, validatePostalCode, validatePhoneNumber} from "../components/validation/FormValidation.js";
 
 // Import Styling
 import userStyle from "../assets/styles/UserSide.module.css";
 import cartE from "../assets/videos/cart.mp4";
 
-export default function  SignUpUserPage() {
-        const firstnameRef = useRef();
-        const lastnameRef = useRef();
-        const emailRef = useRef();
-        const passwordRef = useRef();
-        const confirmPasswordRef = useRef();
-        const addressRef = useRef();
-        const postalRef = useRef();
-        const phoneNumberRef = useRef();
+export default function SignUpUserPage() {
+	// gather form input
+	const firstnameRef = useRef();
+	const lastnameRef = useRef();
+	const emailRef = useRef();
+	const passwordRef = useRef();
+	const confirmPasswordRef = useRef();
+	const addressRef = useRef();
+	const postalRef = useRef();
+	const phoneNumberRef = useRef();
 
-
-        const givenContext = useContext(UserContext);
-        const navigate = useNavigate();
-
+	// get context informatino
+	const navigate = useNavigate();
+	
+	// declare error state variables
+	const [error, setError] = useState({});
 	const [fields, setFields] = useState({
 		firstName: "",
 		lastName: "",
 		email: "",
 		password: "",
-		confirmPass:"",
+		confirmPass: "",
 		address: "",
 		postalCode: "",
-		phoneNumber: ""
+		phoneNumber: "",
 	});
 
-	const [error, setError] = useState({});
 
-    const [show, setShow] = useState(false);
-    if (show) {
-        return (
-            <Alert variant="success" onClose={() => setShow(false)} dismissible>
-                <Alert.Heading>Your new Account is created!</Alert.Heading>
-                <p>
-                    Use login page to access your account
-                </p>
-            </Alert>
-        );
-    }
-
-	const validation = () => {
-		let errorDisplay={};
+	function validation() {
+		let errorDisplay = {};
 
 		if (!fields.firstName) {
 			errorDisplay.firstName = "￮ You need to enter your first name";
@@ -64,23 +58,9 @@ export default function  SignUpUserPage() {
 			errorDisplay.email = "￮ You need to enter your Email";
 		}
 
-		//TODO FIX THIS V
-
-		const POST_URL = "http://localhost:8080/user/userCheck"; // fetch url
-		const emailIsTaken = axios.post(POST_URL, emailRef.current.value).then((res) => {
-			console.log(res.data);
-			return res.data;
-		}).catch((err) => console.error(err)).value;
-		console.log(emailIsTaken);
-
-		if (emailIsTaken) {
-			errorDisplay.email = "￮ Email is already taken";
-		}
-
-		//FIX THIS ^
-
-		if (!validateEmail(fields.email)){
-			errorDisplay.email = "￮ Your email format should follow example@gmail.com";
+		if (!validateEmail(fields.email)) {
+			errorDisplay.email =
+				"￮ Your email format should follow example@gmail.com";
 		}
 
 		if (!fields.password) {
@@ -88,7 +68,8 @@ export default function  SignUpUserPage() {
 		}
 
 		if (!validatePassword(fields.password)) {
-			errorDisplay.password = "￮ Your password is invalid. Passwords need to at least be six characters long and require one digit"; //TODO: Make this message talk about password requirements
+			errorDisplay.password =
+				"￮ Your password is invalid. Passwords need to at least be six characters long and require one digit"; //TODO: Make this message talk about password requirements
 		}
 
 		if (!fields.confirmPass) {
@@ -100,8 +81,8 @@ export default function  SignUpUserPage() {
 		}
 
 		//TODO: have to check for the password matching donno how yet
-		if (!fields.address){
-			errorDisplay.address= "￮ You need to enter your address";
+		if (!fields.address) {
+			errorDisplay.address = "￮ You need to enter your address";
 		}
 
 		if (!fields.postalCode) {
@@ -109,7 +90,8 @@ export default function  SignUpUserPage() {
 		}
 
 		if (!validatePostalCode(fields.postalCode)) {
-			errorDisplay.postalCode = "￮ Your postal code format should follow A1A 1A1, etc";
+			errorDisplay.postalCode =
+				"￮ Your postal code format should follow A1A 1A1, etc";
 		}
 
 		if (!fields.phoneNumber) {
@@ -121,14 +103,14 @@ export default function  SignUpUserPage() {
 		}
 
 		setError(errorDisplay);
-		if (Object.keys(errorDisplay).length===0){
+		if (Object.keys(errorDisplay).length === 0) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-
 	}
 
+	// function to be called on form submit
 	async function submitHandler(event) {
 		event.preventDefault();
 
@@ -141,44 +123,58 @@ export default function  SignUpUserPage() {
 		const returnedPostalCode = postalRef.current.value;
 		const returnedPhoneNumber = phoneNumberRef.current.value;
 
-
-		//console.log(returnedPassword);
-		//console.log(returnedConfirmPassword);
-
 		if (validation(fields) == true) {
-			setShow(true); //TODO: FIX THIS
-			const user = {
-				firstName: returnedFirstName,
-				lastName: returnedLastName,
-				email: returnedEmail,
-				password: returnedPassword,
-				address: returnedAddress,
-				postalCode: returnedPostalCode,
-				phoneNumber: returnedPhoneNumber,
-			};
-			console.log("test 2");
-			console.log(user);
 
-			const POST_URL = "http://localhost:8080/user/signup"; // fetch url
-			await axios.post(POST_URL, user).then((res) => {
-				//console.log(res);
-				givenContext.setContextData((prevData) => {
-					return {
-						...prevData,
-						token: res.data.access_token,
+			// this function will attempt a signup using the users given email
+			async function attemptSignup() {
+				// fetch url and object to send
+				const USER_CHECK_URL = "http://localhost:8080/user/userCheck"; // fetch url
+				const userCheck = {
+					email: emailRef.current.value,
+				};
+
+				// await response so we know what the user had in database
+				const response = await axios.post(USER_CHECK_URL,userCheck);
+
+				// this block will only run if the users email isnt already present in database
+				if (!response.data) {
+
+					// all checks have been passed! complete the signup
+					const user = {
+						firstName: returnedFirstName,
+						lastName: returnedLastName,
+						email: returnedEmail,
+						password: returnedPassword,
+						address: returnedAddress,
+						postalCode: returnedPostalCode,
+						phoneNumber: returnedPhoneNumber,
 					};
-				});
-			});
 
-			// on success navigtate back to login
-			await navigate("/login");
+					// preform request
+					const POST_URL = "http://localhost:8080/user/signup"; // fetch url
+					await axios.post(POST_URL, user).then((res) => {
+						console.log(res.data);
+					});
 
-		}
-		else {
-			setShow(false); //TODO: FIX THIS
-		}
+					// on success navigtate back to login
+					navigate("/login");
+				}
+				else {
+					setError((prevError) => {
+						return {
+							...prevError,
+							email: "￮ This email is already in use",
+						};
+					});
+				}
+			}
+
+			// call above function so we actually do stuff
+			attemptSignup();
+		} 
 	}
 
+	// form input fields and video background
 	return (
 		<div className="test">
 			<video
@@ -199,20 +195,22 @@ export default function  SignUpUserPage() {
 				<source src={cartE} type="video/mp4" />
 			</video>
 
+			{showSuccess()}
+
 			<Form className={userStyle.centrize} onSubmit={submitHandler}>
 				<FormGroup className="mb-3" controlId="firstnameForm">
 					<Form.Label>First Name: </Form.Label>
 					<Form.Control
 						type="text"
 						placeholder="Input firstname"
-						onChange={((e) => setFields({...fields, firstName: e.target.value}))}
+						onChange={(e) =>
+							setFields({ ...fields, firstName: e.target.value })
+						}
 						value={fields.firstName}
 						ref={firstnameRef}
 					/>
 
-					{error.firstName &&
-						<p className="text-danger"> {error.firstName}</p>
-					}
+					{error.firstName && <p className="text-danger"> {error.firstName}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="lastnameForm">
@@ -220,14 +218,12 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="text"
 						placeholder="Enter lastname"
-						onChange={((e) => setFields({...fields, lastName: e.target.value}))}
+						onChange={(e) => setFields({ ...fields, lastName: e.target.value })}
 						value={fields.lastName}
 						ref={lastnameRef}
 					/>
 
-					{error.lastName &&
-						<p className="text-danger"> {error.lastName}</p>
-					}
+					{error.lastName && <p className="text-danger"> {error.lastName}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="emailForm">
@@ -235,14 +231,12 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="email"
 						placeholder="Enter Email"
-						onChange={((e) => setFields({...fields, email: e.target.value}))}
+						onChange={(e) => setFields({ ...fields, email: e.target.value })}
 						value={fields.email}
 						ref={emailRef}
 					/>
 
-					{error.email &&
-						<p className="text-danger"> {error.email}</p>
-					}
+					{error.email && <p className="text-danger"> {error.email}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="passwordForm">
@@ -250,14 +244,12 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="password"
 						placeholder="Enter your password"
-						onChange={((e) => setFields({...fields, password: e.target.value}))}
+						onChange={(e) => setFields({ ...fields, password: e.target.value })}
 						value={fields.password}
 						ref={passwordRef}
 					/>
 
-					{error.password &&
-						<p className="text-danger"> {error.password}</p>
-					}
+					{error.password && <p className="text-danger"> {error.password}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="confirmPasswordForm">
@@ -266,14 +258,15 @@ export default function  SignUpUserPage() {
 						type="password"
 						placeholder="Confirm your password"
 						ref={confirmPasswordRef}
-						onChange={((e) => setFields({...fields, confirmPass: e.target.value}))}
+						onChange={(e) =>
+							setFields({ ...fields, confirmPass: e.target.value })
+						}
 						value={fields.confirmPass}
-						ref={confirmPasswordRef}
 					/>
 
-					{error.confirmPass &&
+					{error.confirmPass && (
 						<p className="text-danger"> {error.confirmPass}</p>
-					}
+					)}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="addressForm">
@@ -281,13 +274,11 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="text"
 						placeholder="Enter address"
-						onChange={((e) => setFields({...fields, address: e.target.value}))}
+						onChange={(e) => setFields({ ...fields, address: e.target.value })}
 						value={fields.address}
 						ref={addressRef}
 					/>
-					{error.address &&
-						<p className="text-danger"> {error.address}</p>
-					}
+					{error.address && <p className="text-danger"> {error.address}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="postalcodeForm">
@@ -295,14 +286,16 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="text"
 						placeholder="Enter Postal Code"
-						onChange={((e) => setFields({...fields, postalCode: e.target.value}))}
+						onChange={(e) =>
+							setFields({ ...fields, postalCode: e.target.value })
+						}
 						values={fields.postalCode}
 						ref={postalRef}
 					/>
 
-					{error.postalCode &&
+					{error.postalCode && (
 						<p className="text-danger"> {error.postalCode}</p>
-					}
+					)}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="phoneNumberForm">
@@ -310,28 +303,29 @@ export default function  SignUpUserPage() {
 					<Form.Control
 						type="tel"
 						placeholder="Enter Phone Number"
-						onChange={((e) => setFields({...fields, phoneNumber: e.target.value}))}
+						onChange={(e) =>
+							setFields({ ...fields, phoneNumber: e.target.value })
+						}
 						values={fields.phoneNumber}
 						ref={phoneNumberRef}
 					/>
 
-					{error.phoneNumber &&
+					{error.phoneNumber && (
 						<p className="text-danger"> {error.phoneNumber}</p>
-					}
+					)}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="haveAccount">
 					<Form.Text className="text-muted">Already have an account?</Form.Text>
-					<Link to="/login" className="ml-2">Login</Link>
+					<Link to="/login" className="ml-2">
+						Login
+					</Link>
 				</FormGroup>
 
-				<Button type="submit" variant="warning" >
+				<Button type="submit" variant="warning">
 					Sign Up
 				</Button>
 			</Form>
 		</div>
 	);
 }
-
-
-
