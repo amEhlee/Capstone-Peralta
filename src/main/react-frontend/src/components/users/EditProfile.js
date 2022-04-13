@@ -7,6 +7,12 @@ import { UserContext } from "../../UserContext";
 import { Navigate, useNavigate } from "react-router-dom";
 import {Form, FormGroup, Button, Modal, Alert} from "react-bootstrap";
 import DeleteProfile from "./DeleteProfile";
+import {
+	validatePassword,
+	validatePasswordsMatch,
+	validatePostalCode,
+	validatePhoneNumber,
+} from "../validation/FormValidation";
 
 // import styles from
 import Style from "../../assets/styles/UserSide.module.css";
@@ -17,7 +23,7 @@ export default function EditProfile() {
 	const token = useContext(UserContext).contextData.token;
 	const userFirstNameRef = useRef();
 	const userLastNameRef = useRef();
-	const userConfirmPasswordRef = useRef();
+	const userCurrentPasswordRef = useRef();
 	const userNewPasswordRef = useRef();
 	const userNewPasswordConfirmRef = useRef();
 	const userPhoneRef = useRef();
@@ -35,7 +41,8 @@ export default function EditProfile() {
 	const [fields, setFields] = useState({
 		firstName: "",
 		lastName: "",
-		password: "",
+		currentPass: "",
+		newPassword: "",
 		confirmPass:"",
 		address: "",
 		postalCode: "",
@@ -61,40 +68,54 @@ export default function EditProfile() {
 		let errorDisplay={};
 
 		if (!fields.firstName) {
-			errorDisplay.firstName = "￮ You need to input your first name";
+			errorDisplay.firstName = "￮ You need to enter your first name";
 		}
 
 		if (!fields.lastName) {
-			errorDisplay.lastName = "￮ You need to input your last name";
+			errorDisplay.lastName = "￮ You need to enter your last name";
 		}
 
-		if (!fields.password){
-			errorDisplay.password= "￮ You need to input your Password"
+		if (!fields.currentPass){
+			errorDisplay.currentPass= "￮ You need to enter your current Password"
 		}
 
-		if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
-			errorDisplay.password = "￮ your password is invalid";
-		}
-		//TODO: have to check for the password matching donno how yet
-		if (!fields.address){
-			errorDisplay.address= "￮ You need to input your address"
+		if (!validatePassword(fields.currentPass)) {
+			errorDisplay.currentPass = "￮ Your current password is invalid";
 		}
 
-		if (!fields.postalCode){
-			errorDisplay.postalCode= "￮ You need to input your postal code"
+		if (!validatePassword(fields.newPassword)) {
+			if (!fields.newPassword === "") {
+				errorDisplay.newPassword = "￮ Your new password is invalid";
+			}
 		}
 
-		if (!/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(fields.postalCode)){
-			errorDisplay.postalCode = "￮ your postal code format should be like this A1A A1A";
+		if (!validatePasswordsMatch(fields.newPassword, fields.confirmPass)) {
+			if (!fields.newPassword === "") {
+				errorDisplay.confirmPass = "￮ Your passwords do not match";
+			}
 		}
 
-		if (!fields.phoneNumber){
-			errorDisplay.phoneNumber= "￮ You need to input your phone number"
+		if (!fields.phoneNumber) {
+			errorDisplay.phoneNumber= "￮ You need to enter your phone number";
 		}
 
-		if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)){
-			errorDisplay.postalCode = "￮ your phone number is invalid";
+		if (!validatePhoneNumber(fields.phoneNumber)) {
+			errorDisplay.phoneNumber = "￮ Your phone number is invalid";
 		}
+
+		if (!fields.address) {
+			errorDisplay.address= "￮ You need to enter your address";
+		}
+
+		if (!fields.postalCode) {
+			errorDisplay.postalCode= "￮ You need to enter your postal code";
+		}
+
+		if (!validatePostalCode(fields.postalCode)) {
+			errorDisplay.postalCode = "￮ Your postal code format should follow A1A A1A";
+		}
+
+
 
 		setError(errorDisplay);
 		if (Object.keys(errorDisplay).length===0){
@@ -106,9 +127,7 @@ export default function EditProfile() {
 
 	};
 
-
-
-	function checkPassword(givenEmail, givenPassword) {
+	async function checkPassword(givenEmail, givenPassword) {
 		// Post url used to verify password
 		const POST_URL = "http://localhost:8080/user/verify";
 
@@ -118,17 +137,15 @@ export default function EditProfile() {
 			password: givenPassword,
 		};
 
-		let returnedResponse = true;
-
-		// try post request
-		axios
+		let returnedResponse = false;
+		returnedResponse = await axios
 			.post(POST_URL, content, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			})
 			.then((res) => {
-				returnedResponse = res.data; // boolean depending on result of pass verify
+				return res.data; // boolean depending on result of pass verify
 			})
 			.catch((err) => {
 				console.log(err);
@@ -140,59 +157,73 @@ export default function EditProfile() {
 	function submitHandler(event) {
 		event.preventDefault();
 
-		if (validation(fields)){
-			setShow(true);
-		} else {
-			setShow(false);
-		}
-		const returnedFirstName = userFirstNameRef.current.value;
-		const returnedLastName = userLastNameRef.current.value;
-		const retunedConfirmPassword = userConfirmPasswordRef.current.value;
-		const retunedNewPassword = userNewPasswordRef.current.value;
-		const returnedUserNewPasswordConfirm = userNewPasswordConfirmRef.current.value;
-		const returnedPhone = userPhoneRef.current.value;
-		const returnedAddress = userAddressRef.current.value;
-		const returnedPostalCode = userPostalCodeRef.current.value;
-		const returnedEmail = userContext.email;
+		if (validation(fields)) {
 
-		const updatedUser = {
-			userId: userContext.userId,
-			firstName: returnedFirstName,
-			lastName: returnedLastName,
-			password: retunedNewPassword,
-			email: returnedEmail,
-			phoneNumber: returnedPhone,
-			address: returnedAddress,
-			postalCode: returnedPostalCode,
-			roles: userContext.roles,
-		};
+			const returnedFirstName = userFirstNameRef.current.value;
+			const returnedLastName = userLastNameRef.current.value;
+			const returnedCurrentPassword = userCurrentPasswordRef.current.value;
+			const returnedNewPassword = userNewPasswordRef.current.value;
+			const returnedUserNewPasswordConfirm = userNewPasswordConfirmRef.current.value;
+			const returnedPhone = userPhoneRef.current.value;
+			const returnedAddress = userAddressRef.current.value;
+			const returnedPostalCode = userPostalCodeRef.current.value;
+			const returnedEmail = userContext.email;
 
-		if(retunedNewPassword !== returnedUserNewPasswordConfirm) {
-			console.log("Passwords do not match");
-			return;
-		}
+			const updatedUser = {
+				userId: userContext.userId,
+				firstName: returnedFirstName,
+				lastName: returnedLastName,
+				password: returnedCurrentPassword,
+				email: returnedEmail,
+				phoneNumber: returnedPhone,
+				address: returnedAddress,
+				postalCode: returnedPostalCode,
+				roles: userContext.roles,
+			};
 
-		console.log("checking pass");
-		console.log(checkPassword(returnedEmail, retunedConfirmPassword));
-		if (checkPassword(returnedEmail, retunedConfirmPassword)) {
-			console.log("trying to do update now");
-			const PUT_URL = "http://localhost:8080/user/update"; // fetch url
-
-			async function userPost() {
-				await axios
-					.put(PUT_URL, updatedUser, {
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-					})
-					.then((res) => {
-						console.log(res);
-						navigate("./userProfile/saved");
-					})
-					.catch((err) => console.error(err));
+			if (returnedNewPassword != null || !returnedNewPassword.equals("")) {
+				const updatedUser = {
+					userId: userContext.userId,
+					firstName: returnedFirstName,
+					lastName: returnedLastName,
+					password: returnedNewPassword,
+					email: returnedEmail,
+					phoneNumber: returnedPhone,
+					address: returnedAddress,
+					postalCode: returnedPostalCode,
+					roles: userContext.roles,
+				};
 			}
 
-			userPost();
+			console.log("Testing Pass: " + returnedCurrentPassword);
+			console.log(checkPassword(returnedEmail, returnedCurrentPassword));
+			if (checkPassword(returnedEmail, returnedCurrentPassword)) {
+				console.log("Trying Update")
+				const PUT_URL = "http://localhost:8080/user/update"; // fetch url
+
+				async function userPost() {
+					await axios
+						.put(PUT_URL, updatedUser, {
+							headers: {
+								Authorization: `Bearer ${token}`,
+							},
+						})
+						.then((res) => {
+							navigate("/userProfile?saved='saved'");
+						})
+						.catch((err) => console.error(err));
+				}
+
+				userPost();
+			}
+			else {
+				setError((prevError) => {
+					return {
+						...prevError,
+						currentPass: "￮ This password is inavlid",
+					};
+				});
+			}
 		}
 	}
 
@@ -211,8 +242,9 @@ export default function EditProfile() {
 						type="text"
 						placeholder="Enter First Name"
 						ref={userFirstNameRef}
-						defaultValue={userContext.firstName} /// TODO
+						defaultValue={userContext.firstName}
 						value={fields.firstName}
+						onChange={((e) => setFields({...fields, firstName: e.target.value}))}
 					/>
 
 					{error.firstName &&
@@ -228,6 +260,7 @@ export default function EditProfile() {
 						ref={userLastNameRef}
 						defaultValue={userContext.lastName}
 						value={fields.lastName}
+						onChange={((e) => setFields({...fields, lastName: e.target.value}))}
 					/>
 
 					{error.lastName &&
@@ -235,36 +268,46 @@ export default function EditProfile() {
 					}
 				</FormGroup>
 
-				<FormGroup className="mb-3" controlId="formConfirmPassword">
-					<Form.Label>Confirm Previous Password: </Form.Label>
+				<FormGroup className="mb-3" controlId="formCurrentPassword">
+					<Form.Label>Confirm Current Password: </Form.Label>
 					<Form.Control
 						type="password"
-						placeholder="Confirm the Password"
-						ref={userConfirmPasswordRef}
-
-						value={fields.password}
+						placeholder="Enter Current Password"
+						ref={userCurrentPasswordRef}
+						value={fields.currentPass}
+						onChange={((e) => setFields({...fields, currentPass: e.target.value}))}
 					/>
-					{error.password &&
-						<p className="text-danger"> {error.password}</p>
+					{error.currentPass &&
+						<p className="text-danger"> {error.currentPass}</p>
 					}
 				</FormGroup>
 
-				<FormGroup className="mb-3" controlId="formCurrentPassword">
+				<FormGroup className="mb-3" controlId="formNewPassword">
 					<Form.Label>New Password: </Form.Label>
 					<Form.Control
 						type="password"
 						placeholder="Enter New Password"
 						ref={userNewPasswordRef}
+						value={fields.newPpassword}
+						onChange={((e) => setFields({...fields, newPassword: e.target.value}))}
 					/>
+					{error.newPassword &&
+						<p className="text-danger"> {error.newPassword}</p>
+					}
 				</FormGroup>
 
-				<FormGroup className="mb-3" controlId="formCurrentPassword">
+				<FormGroup className="mb-3" controlId="formConfirmPassword">
 					<Form.Label>Confirm New Password: </Form.Label>
 					<Form.Control
 						type="password"
-						placeholder="Enter New Password"
+						placeholder="Confirm New Password"
 						ref={userNewPasswordConfirmRef}
+						value={fields.confirmPass}
+						onChange={((e) => setFields({...fields, confirmPass: e.target.value}))}
 					/>
+					{error.password &&
+						<p className="text-danger"> {error.confirmPass}</p>
+					}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formPhone">
@@ -274,7 +317,8 @@ export default function EditProfile() {
 						placeholder="403-111-1111"
 						ref={userPhoneRef}
 						defaultValue={userContext.phoneNumber}
-						values={fields.phoneNumber}
+						value={fields.phoneNumber}
+						onChange={((e) => setFields({...fields, phoneNumber: e.target.value}))}
 					/>
 					{error.phoneNumber &&
 						<p className="text-danger"> {error.phoneNumber}</p>
@@ -289,6 +333,7 @@ export default function EditProfile() {
 						ref={userAddressRef}
 						defaultValue={userContext.address}
 						value={fields.address}
+						onChange={((e) => setFields({...fields, address: e.target.value}))}
 					/>
 					{error.address &&
 						<p className="text-danger"> {error.address}</p>
@@ -302,7 +347,7 @@ export default function EditProfile() {
 						placeholder="Enter Postal Code"
 						ref={userPostalCodeRef}
 						defaultValue={userContext.postalCode}
-						values={fields.postalCode}
+						value={fields.postalCode} onChange={((e) => setFields({...fields, postalCode: e.target.value}))}
 					/>
 
 					{error.postalCode &&

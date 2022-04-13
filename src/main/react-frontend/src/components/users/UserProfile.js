@@ -8,7 +8,7 @@ import Style from "../../assets/styles/UserSide.module.css";
 
 export default function UserProfile() {
 	const userContext = useContext(UserContext).contextData.user;
-	const [work, setWork] = useState(true);
+	const [work, setWork] = useState(false);
 	let saved  = useParams();
 
 	function conditionalAlertRender() {
@@ -23,6 +23,7 @@ export default function UserProfile() {
 	}
 
 	if (saved === "saved") {
+		console.log(saved);
 		setWork(true);
 	}
 
