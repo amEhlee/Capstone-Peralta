@@ -2,10 +2,7 @@ package com.capstone.peralta.controllers;
 
 import com.capstone.peralta.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
 
@@ -34,7 +31,7 @@ public class ReportController {
      * This method calls for the ReportService to generate a report of all
      * persisted orders
      */
-    @PostMapping("/generate")
+    @GetMapping("/generate")
     void generateReport() {
         try {
             reportService.generateReport();

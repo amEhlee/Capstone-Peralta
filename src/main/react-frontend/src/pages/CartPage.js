@@ -50,7 +50,7 @@ function CartPage() {
                                 <ListGroup.Item className={styles.cartSpacing}>
                                     <div className={styles.itemDisplay}>
                                         {/* give an image and a seperate div for item price, quantity and remove from cart button */}
-                                        <Image itemID={givenItem.itemId} size={"150px"} />
+                                        <Image itemId={givenItem.itemId} size={"150px"} />
                                         <div className={styles.itemDetails}>
                                             <b>{givenItem.itemName}</b> <br />
                                             Price ${givenItem.itemPrice} <br />

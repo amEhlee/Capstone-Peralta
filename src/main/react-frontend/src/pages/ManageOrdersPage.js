@@ -15,6 +15,7 @@ import { UserContext } from "../UserContext";
 export default function ManageUsersPage() {
 	// requests
 	const FETCH_URL = "http://localhost:8080/order/all"; // fetch url
+	const REPORT_URL = "http://localhost:8080/report/generate";
 	const token = useContext(UserContext).contextData.token;
 	var [datajson, setDataJson] = useState([]); // used to store data
 
@@ -38,6 +39,20 @@ export default function ManageUsersPage() {
 				return res.data; // return response
 			})
 			.catch((err) => console.error(err));
+	}
+
+	function generateReport() {
+		return axios
+		.get(REPORT_URL, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		}) // preform post request
+		.then((res) => {
+			console.log(res);
+			return res.data; // return response
+		})
+		.catch((err) => console.error(err));
 	}
 
 	// pagination
@@ -81,6 +96,9 @@ export default function ManageUsersPage() {
 						/>
 						<BsSearch />
 					</div>
+					<Button onClick={generateReport}>
+							Generate Report
+					</Button>
 					<Table striped bordered hover>
 						<thead>
 							<tr>
