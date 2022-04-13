@@ -147,6 +147,7 @@ export default function CheckoutPage() {
 			user.address = orderAddressRef.current.value;
 			user.postalCode = orderPostalCodeRef.current.value;
 
+			console.log(user.email);
 			// add itemIds to cart
 			for (let i = 0; i < cart.length; i++) {
 				for (let j = 0; j < cart[i].quantity; j++) {
@@ -175,7 +176,7 @@ export default function CheckoutPage() {
 				console.log(res);
 			});
 
-			emailjs.sendForm('service_4u1fh14', 'template_d489nzh', event.target, 'QitERWWr6H0DNKr-1')
+			emailjs.sendForm("service_4u1fh14", "template_d489nzh", event.target, "QitERWWr6H0DNKr-1")
 				.then((result) => {
 					console.log(result.text);
 				}, (error) => {
