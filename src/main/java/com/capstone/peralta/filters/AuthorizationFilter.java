@@ -53,6 +53,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             case "/category/add" :
             case "/category/addMultiple" :
             case "/item/addMultiple" :
+            case "/report/generate":
             case "/order/all" :
             case "/user/load" :
             case "/user/verify" :
