@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .and().sessionManagement().sessionCreationPolicy(STATELESS)
                 //TODO:Fix Authentication and normalize URL's
-                .and().authorizeRequests().antMatchers("/user/login", "/user/signup", "/user/auth/refreshtoken", "/user/userCheck", "/item/get/**", "order/**" ,"/order/get/user/{userId}", "/order/add", "/category/{categoryId}", "category/all", "/email/send" , "/item/search/{query}").permitAll()
+                .and().authorizeRequests().antMatchers("/user/login", "/user/signup", "/user/auth/refreshtoken", "/user/userCheck", "/user/disableCheck", "/item/get/**", "order/**" ,"/order/get/user/{userId}", "/order/add", "/category/{categoryId}", "category/all", "/email/send" , "/item/search/{query}").permitAll()
                 .and().authorizeRequests().antMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER")
                 .and().authorizeRequests().antMatchers("/admin/**", "/item/add/{categoryId}", "item/addMultiple", "/item/update", "/report/generate", "image/upload/{itemId}", "category/add/{categoryId}", "category/addMultiple", "/admin/get/allItems").hasAnyAuthority("ROLE_ADMIN", "ROLE_OWNER")
                 .and().authorizeRequests().anyRequest().authenticated()
