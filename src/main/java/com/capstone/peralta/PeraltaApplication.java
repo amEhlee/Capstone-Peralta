@@ -66,7 +66,7 @@ public class PeraltaApplication {
 				log.info("Adding Admin User");
 				userService.addUser(new User(1, "admin@gmail.com", "password", "Mister", "Admin", "N/A", "T4R7F9", "4037684562"));
 				log.info("Adding Basic User");
-				userService.addUser(new User(2, "john@gmail.com", "t100", "John", "Connor", "Santa Monica", "T1K4V7", "4037891234"));
+				userService.addUser(new User(2, "john@gmail.com", "terminator100", "John", "Connor", "Santa Monica", "T1K4V7", "4037891234"));
 			}
 			catch (Exception e) {
 				log.info("User Data already exists");

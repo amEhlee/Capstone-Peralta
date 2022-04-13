@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../../UserContext";
 
 // Import Components
@@ -7,29 +7,24 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import Style from "../../assets/styles/UserSide.module.css";
 
 export default function UserProfile() {
-	// gather context information
 	const userContext = useContext(UserContext).contextData.user;
-
-	// initalize some state variables and store user parameters
 	const [work, setWork] = useState(false);
-	let saved  = useParams();
-
+	let params = useParams();
 	function conditionalAlertRender() {
 		if (work) {
 			return (
 				<Alert variant="success" onClose={() => setWork(false)} dismissible>
 					<Alert.Heading>You changes have been saved!</Alert.Heading>
-					<p>you can view your updated profile</p>
+					<p>You can view your updated profile</p>
 				</Alert>
 			);
 		}
 	}
 
-	useEffect(() => {
-		if (saved === "saved") {
-			setWork(true);
-		}
-	});
+	if (params.saved === "saved") {
+		setWork(true);
+		params.saved = "";
+	}
 
 	// check if user is null if so rendirec to home
 	if (!userContext) {
