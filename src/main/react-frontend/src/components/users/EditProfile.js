@@ -18,6 +18,7 @@ import {
 import Style from "../../assets/styles/UserSide.module.css";
 
 export default function EditProfile() {
+	const givenContext = useContext(UserContext);
 	const userContext = useContext(UserContext).contextData.user;
 	const token = useContext(UserContext).contextData.token;
 	const userFirstNameRef = useRef();
@@ -126,7 +127,8 @@ export default function EditProfile() {
 				const returnedLastName = userLastNameRef.current.value;
 				const returnedCurrentPassword = userCurrentPasswordRef.current.value;
 				const returnedNewPassword = userNewPasswordRef.current.value;
-				const returnedUserNewPasswordConfirm = userNewPasswordConfirmRef.current.value;
+				const returnedUserNewPasswordConfirm =
+					userNewPasswordConfirmRef.current.value;
 				const returnedPhone = userPhoneRef.current.value;
 				const returnedAddress = userAddressRef.current.value;
 				const returnedPostalCode = userPostalCodeRef.current.value;
@@ -175,25 +177,41 @@ export default function EditProfile() {
 				});
 
 				// BASED ON ABOVE AWAIT FUNCTION, IF PASSWORD IS CORRECT, THEN WE CAN UPDATE USER
-				if (responseCheck.data) { // makes the next block entirely dependent on responseCheck variable 
-					// this entire block is called after the await is complete 
-					console.log("Trying Update");
-					const PUT_URL = "http://localhost:8080/user/update"; // fetch url
+				if (responseCheck.data) {
+					// makes the next block entirely dependent on responseCheck variable
+					// this entire block is called after the await is complete
+					console.log("Trying Update and New User Load");
 
-					async function userPost() {
-						await axios
-							.put(PUT_URL, updatedUser, {
-								headers: {
-									Authorization: `Bearer ${token}`,
-								},
-							})
-							.then((res) => {
-								navigate("/userProfile?saved='saved'");
-							})
-							.catch((err) => console.error(err));
-					}
+					await axios
+						.put("http://localhost:8080/user/update", updatedUser, {
+							headers: {
+								Authorization: `Bearer ${token}`,
+							},
+						})
+						.then((res) => {
+							console.log("successfully updated user");
+						})
+						.catch((err) => console.error(err));
 
-					userPost();
+					await axios
+						.get("http://localhost:8080/user/load", {
+							headers: {
+								Authorization: `Bearer ${token}`,
+							},
+						})
+						.then((res) => {
+							console.log(res);
+							givenContext.setContextData((prevData) => {
+								return {
+									...prevData,
+									user: res.data, // get the user after successful login
+								};
+							});
+						})
+						.catch((err) => console.error(err));
+
+					// if everyone is good navigate back to user profile
+					navigate("/userProfile?saved='saved'");
 				} else {
 					setError((prevError) => {
 						return {
