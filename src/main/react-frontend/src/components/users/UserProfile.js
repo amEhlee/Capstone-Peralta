@@ -9,22 +9,21 @@ import Style from "../../assets/styles/UserSide.module.css";
 export default function UserProfile() {
 	const userContext = useContext(UserContext).contextData.user;
 	const [work, setWork] = useState(false);
-	let saved  = useParams();
-
+	let params = useParams();
 	function conditionalAlertRender() {
 		if (work) {
 			return (
 				<Alert variant="success" onClose={() => setWork(false)} dismissible>
 					<Alert.Heading>You changes have been saved!</Alert.Heading>
-					<p>you can view your updated profile</p>
+					<p>You can view your updated profile</p>
 				</Alert>
 			);
 		}
 	}
 
-	if (saved === "saved") {
-		console.log(saved);
+	if (params.saved === "saved") {
 		setWork(true);
+		params.saved = "";
 	}
 
 	// check if user is null if so rendirec to home

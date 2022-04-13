@@ -53,6 +53,7 @@ export default function App() {
 					{/* <Route path="/orderhistory" element={<OrderHistoryPage />} /> */}
 
 					<Route path="/userProfile" element={<UserProfile />} />
+					<Route path="/userProfile/:saved" element={<UserProfile />} />
 					<Route path="/checkout" element={<CheckoutPage />} />
 				</Route>
 

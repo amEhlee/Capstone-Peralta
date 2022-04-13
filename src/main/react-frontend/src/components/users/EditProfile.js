@@ -208,7 +208,7 @@ export default function EditProfile() {
 						.catch((err) => console.error(err));
 
 					// if everyone is good navigate back to user profile
-					navigate("/userProfile?saved='saved'");
+					navigate("/userProfile/saved");
 				} else {
 					setError((prevError) => {
 						return {
