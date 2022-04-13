@@ -25,14 +25,23 @@ import java.util.Map;
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
-
-
-/*
-Filter intercepts EVERY request that enters the application and needs authentication
+/**
+ * Filter intercepts EVERY request that enters the application and needs authentication
+ * @author Don Laliberte
  */
 @Slf4j
 public class AuthorizationFilter extends OncePerRequestFilter {
 
+    /**
+     * Override the doFilterInternal method to check the credentials
+     * Based on authenticate status, granted user roles etc choose what 
+     * filters get applied
+     * @param request associated request
+     * @param response associated response
+     * @param filterChain the filter chain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         /*-If the url path is on a login page, bypass filter. 
@@ -88,6 +97,14 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
     }
 
+    /**
+     * Check the authorization of the user by directly parsing their token
+     * For one this verifys if the user themselves has a valid token
+     * Second it verifies if the user has the correct role to access the page
+     * @param request associated request
+     * @param response associated response
+     * @param filterChain the filter chain
+     */
     public void checkAuthorizations(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION); //Grabs the authorization header in the request body
         /*Checks if the Authorization section starts with "Bearer " which shows that the sender "bears" a token. Very important*/

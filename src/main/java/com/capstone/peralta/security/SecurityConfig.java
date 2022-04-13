@@ -21,20 +21,36 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-
 import static org.springframework.http.HttpMethod.GET;
 
+/**
+ * Security configuration for the application.
+ * handles larger scale permit alls and when any given resource should pass through filters
+ * also sets up larger cors configuration for the entire application
+ * @author Don Laliberte
+ * @author Elie Kabengele
+ */
 @Configuration @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /**
+     * Configures the authentication manager to use the user details service
+     * @param auth the authentication manager
+     * @throws Exception if there is an error
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder); //Loads password encoder to encode and decode passwords
     }
 
+    /**
+     * Configures the http security to use the authentication filter and the authorization filter
+     * sets up default permit alls and also paths that are only allowed for certain roles
+     * @param http the http security
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean()); //Creates authentication filter NOTE: Refer to Authentication Filter class
@@ -65,13 +81,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().anyRequest().permitAll();*/
 
     }
-
+    
+    /**
+     * Configures the authentication manager to use the user details service
+     * @return the authentication manager
+     * @throws Exception if there is an error
+     */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
+    /**
+     * Configures the cors configuration source to be used for requests
+     * @return the cors configuration source
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
