@@ -11,7 +11,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 // Import Components
 import { Table } from "react-bootstrap";
-import { useNavigate } from "react-router";
+import { useNavigate, Navigate } from "react-router";
 
 // Import Styles
 import style from "../../assets/styles/ItemCardLayout.module.css";
@@ -25,6 +25,16 @@ export default function Order(props) {
     const token = useContext(UserContext).contextData.token;
     const userContext = useContext(UserContext).contextData.user;
     var [orderJson, setOrderJson] = useState([]);
+
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (userContext.userId == null) {
+            navigate("/login");
+        }
+    })
+
 
     const FETCH_URL =
         "http://localhost:8080/order/get/user/" + userContext.userId;
@@ -50,13 +60,15 @@ export default function Order(props) {
     }, []);
 
 
+
     if (orderJson === "no data returned") {
         return (
             <section>
                 <p>No Orders Found</p>
             </section>
         );
-    } else {
+    }
+    else {
         return (
             <div>
                 <h1>All Orders</h1>
