@@ -13,7 +13,6 @@ import emailjs from "emailjs-com";
 // Import Components
 import { Form, FormGroup, Button, Alert } from "react-bootstrap";
 import { UserContext } from "../UserContext";
-import Style from "../assets/styles/UserSide.module.css";
 
 export default function CheckoutPage() {
 	// setup refs for the form
@@ -97,11 +96,7 @@ export default function CheckoutPage() {
 		}
 
 		setError(errorDisplay);
-		if (Object.keys(errorDisplay).length === 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return Object.keys(errorDisplay).length === 0;
 	}
 
 	let orderDetails = "";
