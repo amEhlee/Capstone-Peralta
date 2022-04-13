@@ -77,15 +77,12 @@ export default function EditProfile() {
 			errorDisplay.currentPass = "￮ Your current password is invalid";
 		}
 
-		if (!validatePassword(fields.newPassword)) {
-			if (!fields.newPassword === "") {
-				errorDisplay.newPassword = "￮ Your new password is invalid";
-			}
-		}
-
-		if (!validatePasswordsMatch(fields.newPassword, fields.confirmPass)) {
-			if (!fields.newPassword === "") {
+		if (fields.newPassword) {
+			if (!validatePasswordsMatch(fields.newPassword, fields.confirmPass)) {
 				errorDisplay.confirmPass = "￮ Your passwords do not match";
+			}
+			if (!validatePassword(fields.newPassword)) {
+				errorDisplay.newPassword = "￮ Your new password is invalid";
 			}
 		}
 
@@ -146,7 +143,7 @@ export default function EditProfile() {
 					roles: userContext.roles,
 				};
 
-				if (!returnedNewPassword === "") {
+				if (!(returnedNewPassword === "")) {
 					updatedUser = {
 						userId: userContext.userId,
 						firstName: returnedFirstName,
@@ -284,7 +281,7 @@ export default function EditProfile() {
 					<Form.Label>New Password: </Form.Label>
 					<Form.Control
 						type="password"
-						placeholder="Enter New Password"
+						placeholder="Enter New Password (Optional)"
 						ref={userNewPasswordRef}
 						value={fields.newPpassword}
 						onChange={(e) =>
@@ -300,14 +297,14 @@ export default function EditProfile() {
 					<Form.Label>Confirm New Password: </Form.Label>
 					<Form.Control
 						type="password"
-						placeholder="Confirm New Password"
+						placeholder="Confirm New Password (Optional)"
 						ref={userNewPasswordConfirmRef}
 						value={fields.confirmPass}
 						onChange={(e) =>
 							setFields({ ...fields, confirmPass: e.target.value })
 						}
 					/>
-					{error.password && (
+					{error.confirmPass && (
 						<p className="text-danger"> {error.confirmPass}</p>
 					)}
 				</FormGroup>
