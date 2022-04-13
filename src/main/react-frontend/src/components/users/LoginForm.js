@@ -23,6 +23,7 @@ export default function LoginForm() {
 	// initalize state variables
 	const [error, setError] = useState({});
 	const [work, setWork] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
 	const [fields, setFields] = useState({
 		email: "",
 		password: "",
@@ -33,7 +34,7 @@ export default function LoginForm() {
 		return (
 			<Alert variant="Danger" onClose={() => setWork(false)} dismissible>
 				<Alert.Heading>Failed Login attempt</Alert.Heading>
-				<p>Wrong credentials, try again!</p>
+				<p>{errorMsg}</p>
 			</Alert>
 		);
 	}
@@ -82,6 +83,9 @@ export default function LoginForm() {
 		const returnedEmail = emailRef.current.value;
 		const returnedPassword = passwordRef.current.value;
 		let givenToken = null;
+		let loginCheck = true;
+		let loadCheck = true;
+		let errorMsg = "";
 
 		if (validation(fields) === true)	{
 			// build a new user object to be sent to the backend
@@ -89,42 +93,85 @@ export default function LoginForm() {
 			user.append("email", returnedEmail);
 			user.append("password", returnedPassword);
 
-			// send a request to backend to attempt login
-			const POST_URL = "http://localhost:8080/user/login"; // fetch url
-			await axios.post(POST_URL, user).then((res) => {
-				// if login is successful store associated access token
-				givenToken = res.data.access_token;
-				givenContext.setContextData((prevData) => {
-					return {
-						...prevData,
-						token: res.data.access_token,
-					};
-				});
-			}).catch((err) => {
-				console.log(err);
-				setWork(true);
-			});
+			const USER_CHECK_URL = "http://localhost:8080/user/userCheck"; // fetch url
+			const userForChecks = {
+				email: emailRef.current.value,
+			};
 
-			// should the users login request be valid load the associated user data too
-			await axios
-				.get("http://localhost:8080/user/load", {
-					headers: {
-						Authorization: `Bearer ${givenToken}`,
-					},
-				})
-				.then((res) => {
-					console.log(res);
-					// store the loaded user data into context
+			// await response so we know what the user had in database
+			const response = await axios.post(USER_CHECK_URL,userForChecks);
+			console.log(response.data);
+			// this block will only run if the users email is already present in database
+			if (response.data) {
+
+				// send a request to backend to attempt login
+				const POST_URL = "http://localhost:8080/user/login"; // fetch url
+				await axios.post(POST_URL, user).then((res) => {
+					// if login is successful store associated access token
+					givenToken = res.data.access_token;
 					givenContext.setContextData((prevData) => {
 						return {
 							...prevData,
-							user: res.data, // get the user after successful login
+							token: res.data.access_token,
 						};
 					});
+				}).catch((err) => {
+					console.log(err);
+					errorMsg = "Wrong credentials, try again!";
+					setWork(true);
+					loginCheck = false;
 				});
-			setWork(false);
-			// goto homepage after logging in
-			navigate("/");
+
+				// should the users login request be valid load the associated user data too
+				await axios
+					.get("http://localhost:8080/user/load", {
+						headers: {
+							Authorization: `Bearer ${givenToken}`,
+						},
+					})
+					.then((res) => {
+						console.log(res);
+						// store the loaded user data into context
+						givenContext.setContextData((prevData) => {
+							return {
+								...prevData,
+								user: res.data, // get the user after successful login
+
+							};
+						});
+					}).catch((err) => {
+						if (loginCheck == false) {
+							loadCheck = false;
+						}
+						console.log(err);
+					});
+					// goto homepage after logging in
+
+				if (loadCheck == true && loginCheck == true) {
+					navigate("/");
+				}
+				else if (loadCheck == false && loginCheck == false) {
+					const DISABLE_CHECK_URL = "http://localhost:8080/user/disableCheck"; // fetch url
+					// await response so we know what the user had in database
+					const response = await axios.post(DISABLE_CHECK_URL,userForChecks);
+					if (response.data) {
+						errorMsg = "Account Disabled!";
+						setWork(true);
+					}
+				}
+				if (errorMsg !== "") {
+					setErrorMsg(errorMsg);
+				}
+			}
+			else {
+				setError((prevError) => {
+					return {
+						...prevError,
+						email: "￮ This email doesn't exist",
+					};
+				});
+			}
+
 		}
 		else {
 

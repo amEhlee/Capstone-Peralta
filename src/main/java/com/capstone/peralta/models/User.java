@@ -101,8 +101,9 @@ public class User {
      *
      * @param userId the user id
      */
-    public User(Integer userId) {
+    public User(Integer userId, String email) {
         this.userId = userId;
+        this.email = email;
     }
 
     /**

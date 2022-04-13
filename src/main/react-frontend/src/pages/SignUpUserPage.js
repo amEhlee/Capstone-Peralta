@@ -90,7 +90,6 @@ export default function SignUpUserPage() {
 			errorDisplay.confirmPass = "￮ Password does not match";
 		}
 
-		//TODO: have to check for the password matching donno how yet
 		if (!fields.address) {
 			errorDisplay.address = "￮ You need to enter your address";
 		}

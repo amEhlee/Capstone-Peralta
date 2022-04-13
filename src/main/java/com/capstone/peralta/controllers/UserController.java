@@ -121,7 +121,6 @@ public class UserController {
     public boolean userCheck(@RequestBody User user) {
         user.setEmail(user.getEmail().toLowerCase());
         log.info(user.toString());
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/userCheck").toUriString());
         List<User> userList = userService.getAll();
         for (User value : userList) {
             if (user.getEmail().equals(value.getEmail())) {
@@ -129,6 +128,15 @@ public class UserController {
             }
         }
         return false;
+    }
+
+    @PostMapping("/disableCheck")
+    public boolean disableCheck(@RequestBody User user) {
+        log.info(user.toString());
+        user.setEmail(user.getEmail().toLowerCase());
+        User dbUser = userService.getUserByName(user.getEmail());
+        log.info(String.valueOf(dbUser.getPassword() == null));
+        return dbUser.getPassword() == null;
     }
 
     @PostMapping("/verify")
@@ -154,9 +162,11 @@ public class UserController {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         try {
             User user = loadUser(authorizationHeader, authorizationHeader.substring("Bearer ".length()), Algorithm.HMAC256("JanePeraltaShopSecret".getBytes()));
+            log.info(String.valueOf(user));
             userService.deleteUser(user);
         } catch (Exception exception) {
             //Basically, error logging to web browser terminal and IDE console for Debugging etc.
+            log.info(String.valueOf(exception));
             response.setHeader("error", exception.getMessage());
             response.setStatus(FORBIDDEN.value());
             //response.sendError(FORBIDDEN.value()); //Old code for sending an error new code is below

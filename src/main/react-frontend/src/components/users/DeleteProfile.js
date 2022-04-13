@@ -61,7 +61,6 @@ export default function DeleteProfile() {
 	//TODO: Make an axios call
 	async function submitHandler(event) {
 		event.preventDefault();
-		console.log("we are here!");
 
 		if (validate(fields)) {
 			async function attemptDelete() {
@@ -101,7 +100,7 @@ export default function DeleteProfile() {
 					setError((prevError) => {
 						return {
 							...prevError,
-							currentPass: "￮ This password is inavlid",
+							password: "￮ This password is inavlid",
 						};
 					});
 				}
