@@ -228,8 +228,7 @@ export default function EditProfile() {
 		return <Navigate to="/" />;
 	} else {
 		return (
-			//todo: the only issue with this maybe cause it's submit handler on the whole form it might mess up the delete button cause the buttons are in the same form
-
+			<>
 			<Form onSubmit={submitHandler} className={Style.centrize}>
 				<FormGroup className="mb-3" controlId="formFirstName">
 					<Form.Label>First Name:</Form.Label>
@@ -362,7 +361,7 @@ export default function EditProfile() {
 				</Button>
 
 				<Button
-					type="submit"
+					type="button"
 					className="btn btn-warning"
 					onClick={handleShow}
 					variant="primary"
@@ -371,15 +370,18 @@ export default function EditProfile() {
 					Delete Account
 				</Button>
 
-				<Modal show={show} onHide={handleClose}>
-					<Modal.Header closeButton>
-						<Modal.Title>Delete Account</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<DeleteProfile />
-					</Modal.Body>
-				</Modal>
 			</Form>
+			<Modal show={show} onHide={handleClose} >
+				<Modal.Header closeButton>
+					<Modal.Title>Delete Account</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<DeleteProfile />
+				</Modal.Body>
+			</Modal>
+		</>
 		);
+
+
 	}
 }

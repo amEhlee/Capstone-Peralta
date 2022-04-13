@@ -113,7 +113,7 @@ export default function SignUpUserPage() {
 	// function to be called on form submit
 	async function submitHandler(event) {
 		event.preventDefault();
-
+		console.log("edit")
 		const returnedFirstName = firstnameRef.current.value;
 		const returnedLastName = lastnameRef.current.value;
 		const returnedEmail = emailRef.current.value;
