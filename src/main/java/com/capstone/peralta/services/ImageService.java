@@ -10,11 +10,19 @@ import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.util.stream.Stream;
 
+/**
+ * The Image service. Contains all business logic for Images.
+ *
+ * @author Jared Smith
+ */
 @Service
 public class ImageService {
 
     private final Path root = Paths.get("src/main/react-frontend/src/assets/images");
 
+    /**
+     * Init.
+     */
     public void init() {
         try {
             Files.createDirectory(root);
@@ -23,6 +31,13 @@ public class ImageService {
         }
     }
 
+    /**
+     * Saves an image locally, and renames the file to the format
+     * (itemId)_(imageNumber).*
+     *
+     * @param image  the image object
+     * @param itemId the item id
+     */
     public void save(MultipartFile image, int itemId) {
 
         try {
@@ -35,6 +50,12 @@ public class ImageService {
         }
     }
 
+    /**
+     * Loads a locally saved image
+     *
+     * @param filename the filename of the image
+     * @return the image as a resource object
+     */
     public Resource load(String filename) {
         Path image = root.resolve(filename);
         Resource resource;
@@ -50,6 +71,12 @@ public class ImageService {
         }
     }
 
+    /**
+     * Counts the amount of images associated with an item
+     *
+     * @param id the item id
+     * @return the amount of images for an item
+     */
     public long loadItemPhotos(Integer id) {
         try {
             long count = Files.walk(this.root, 1)
@@ -63,6 +90,11 @@ public class ImageService {
         }
     }
 
+    /**
+     * Loads all images saved locally.
+     *
+     * @return the stream of images
+     */
     public Stream<Path> loadAll() {
         try {
             return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);

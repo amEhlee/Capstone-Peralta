@@ -23,9 +23,7 @@ export default function ProductPage() {
 	const token = useContext(UserContext).contextData.token;
 	var [datajson, setDataJson] = useState([]);
 	var [itemCategory, setItemCategory] = useState();
-	/*
-	const [show, setShow] = useState(true);
-	*/
+	const [itemAddedAlert, setItemAddedAlert] = useState(false);
 
 	// form refs
 	const selectedQuantity = useRef(); // quantity that the user selects
@@ -53,18 +51,19 @@ export default function ProductPage() {
 		});
 	}, []);
 
-	/* Move to checkout?
+	// this function will itemAddedAlert the alert in a seperate div when a user adds an item to their cart
 	function conditionalAlertRender() {
-		if (show) {
+		// let us know if item was added
+		if (itemAddedAlert) {
+			// return this seperate success alert
 			return (
-				<Alert variant="success" onClose={() => setShow(false)} dismissible>
-					<Alert.Heading> You are almost there! </Alert.Heading>
-					<p>fill out this form to proceed with your purchase.</p>
+				<Alert variant="success" onClose={() => setItemAddedAlert(false)} dismissible>
+					<Alert.Heading>Item added to cart</Alert.Heading>
+					<p>Click the cart button to view your newly added items</p>
 				</Alert>
 			);
 		}
 	}
-	*/
 
 	//if no data is found return NO DATA FOUND
 	if (datajson === "no data returned") {
@@ -78,6 +77,7 @@ export default function ProductPage() {
 		//if data is found return the data (item information)
 		return (
 			<>
+				{conditionalAlertRender()}
 				<Container fluid={"xxl"}>
 					<Row>
 						<Col md="auto" xs={10}>
@@ -107,10 +107,10 @@ export default function ProductPage() {
 								<UserContext.Consumer>
 									{(value) => {
 										function AddToCart() {
-											//TODO checking should be done here to make sure quantity is valid
-											const givenQuantity = parseInt(
-												selectedQuantity.current.value
-											);
+											// get the quantity from the form
+											const givenQuantity = parseInt(selectedQuantity.current.value);
+
+											// new cart that will replace the one saved in context
 											let newCart = value.contextData.cart;
 
 											// check to see if item is already in cart if so update quantity
@@ -123,6 +123,11 @@ export default function ProductPage() {
 
 											// if item is not in cart push a new entry
 											newCart.push({ item: datajson, quantity: givenQuantity });
+
+											// inform the user that the item has been added
+											setItemAddedAlert(true);
+
+											// return the cart
 											return newCart;
 										}
 
@@ -145,7 +150,6 @@ export default function ProductPage() {
 										);
 									}}
 								</UserContext.Consumer>
-								{/*TODO Add Logic for Buy Now Button*/}
 							</Form>
 						</Col>
 					</Row>

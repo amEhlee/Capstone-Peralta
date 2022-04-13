@@ -11,6 +11,7 @@ import java.util.UUID;
 
 /**
  * Controller class for the Order model. Contains all REST endpoints
+ * @author Jared Smith
  */
 @RestController
 @RequestMapping("/order")
@@ -21,35 +22,64 @@ public class OrderController {
     @Autowired
     private final OrderService orderService;
 
-//    Constructor that is automatically injected with an OrderService object
+    /**
+     * Class constructor for the OrderController
+     * @param orderService The OrderService is used for all business logic,
+     *                     auto-injected by Spring when calling the constructor.
+     */
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
-//    Returns an order, takes in an order id as the variable at path /order/{orderId}
+    /**
+     * This method is used to retrieve a specific order from the database using
+     * the order's id
+     * @param orderId the id of the order to be retrieved, specified in the
+     *                path of the endpoint
+     * @return the order with the specified id
+     */
     @GetMapping("/get/{orderId}")
     Order getById(@PathVariable Integer orderId) {
         return orderService.getOrderById(orderId);
     }
 
+    /**
+     * This method is used to retrieve all orders from the database attached to a
+     * specific user
+     * @param userId the id of the user whose orders are being retrieved from the
+     *               database
+     * @return a list of all orders attached to the specified user
+     */
     @GetMapping("/get/user/{userId}")
     List<Order> getByUser(@PathVariable Integer userId) {
         return orderService.getByUser(userId);
     }
 
-//    Returns a list of all orders in the database
+    /**
+     * This method is used to retrieve all orders from the database
+     * @return a list of all orders in the database
+     */
     @GetMapping("/all")
     List<Order> getAll() {
         return orderService.getAll();
     }
 
-//    Takes an Order object in the body of the request and adds it to the database
+    /**
+     * This method creates an order from JSON and persists it
+     * @param order the Order object to be persisted
+     * @return the category after it has been successfully persisted
+     */
     @PostMapping("/add")
     Order createOrder(@RequestBody Order order) {
         return orderService.addOrder(order);
     }
 
-//    Adds multiple Order objects to the database from the body of the request
+    /**
+     * This method is only to be used for testing and with test data. We only used
+     * this method while initially adding test data through PostMan
+     * @param orderList a list of order objects sent as JSON
+     * @return the list of orders after they have been successfully persisted
+     */
     @PostMapping("/addMultiple")
     List<Order> addMultiple(@RequestBody List<Order> orderList) {
         return orderService.addMultiple(orderList);

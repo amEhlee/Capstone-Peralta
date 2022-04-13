@@ -5,6 +5,7 @@ import React, { useContext } from "react";
 import { Button, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
+import styles from "../assets/styles/LogoutPage.module.css";
 
 export default function LogoutUserPage() {
 	// obtain user context
@@ -24,8 +25,10 @@ export default function LogoutUserPage() {
 
 	// inform the user of the logout and redirect to the home page
 	return (
-		<Container>
-			<div>You have Successfully Signed Off</div>
+		<Container className={styles.logoutContainer}>
+			<h1>Thank You for Your Visit</h1>
+			<div>You have Been Successfully Signed Off</div>
+			<p>Come Shop With us Again!</p>
 			<Link to="/">
 				<Button>Back To Homepage</Button>
 			</Link>

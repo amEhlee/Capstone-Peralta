@@ -118,12 +118,11 @@ export default function SignUpUserPage() {
 		const returnedLastName = lastnameRef.current.value;
 		const returnedEmail = emailRef.current.value;
 		const returnedPassword = passwordRef.current.value;
-		const returnedConfirmPassword = confirmPasswordRef.current.value;
 		const returnedAddress = addressRef.current.value;
 		const returnedPostalCode = postalRef.current.value;
 		const returnedPhoneNumber = phoneNumberRef.current.value;
 
-		if (validation(fields) == true) {
+		if (validation(fields) === true) {
 
 			// this function will attempt a signup using the users given email
 			async function attemptSignup() {

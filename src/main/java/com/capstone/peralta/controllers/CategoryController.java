@@ -11,6 +11,7 @@ import java.util.UUID;
 
 /**
  * Controller class for the Category model. Contains all the REST endpoints
+ * @author Jared Smith
  */
 @RestController
 @RequestMapping("/category")
@@ -21,30 +22,52 @@ public class CategoryController {
     @Autowired
     private final CategoryService categoryService;
 
-//    Constructor that is automatically injected with a CategoryService object
+    /**
+     * Class constructor for the CategoryController
+     * @param categoryService the CategoryService is used for all business logic,
+     *                        auto-injected by Spring when calling the constructor.
+     */
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
-//    Returns a category, takes in a cart id as the variable at the path /category/{categoryId}
+    /**
+     * This method is used to retrieve a specific category from the database using
+     * the category's id
+     * @param categoryId the id of the category to be retrieved, specified in the
+     *                   path of the endpoint
+     * @return the category with the specified id
+     */
     @GetMapping("/{categoryId}")
     Category getById(@PathVariable Integer categoryId) {
         return categoryService.getCategoryById(categoryId);
     }
 
-//    Returns a list of al carts at path /category/all
+    /**
+     * This method returns a List of all the categories in the database
+     * @return a list of all categories
+     */
     @GetMapping("/all")
     List<Category> getAll() {
         return categoryService.getAll();
     }
 
-//    Takes a Category object sent in the body of a request and adds it to the database
+    /**
+     * This method creates a category from JSON and persists it
+     * @param category the Category object to be persisted
+     * @return the category after it has been successfully persisted
+     */
     @PostMapping("/add")
     Category createCategory(@RequestBody Category category) {
         return categoryService.addCategory(category);
     }
 
-//    Adds multiple Category objects to the database from the body of the request
+    /**
+     * This method is only to be used for testing and with test data. We only used
+     * this method while initially adding test data through PostMan
+     * @param categoryList a list of category objects sent as JSON
+     * @return the list of categories after they have been successfully persisted
+     */
     @PostMapping("/addMultiple")
     List<Category> addMultiple(@RequestBody List<Category> categoryList) {
         return categoryService.addMultiple(categoryList);

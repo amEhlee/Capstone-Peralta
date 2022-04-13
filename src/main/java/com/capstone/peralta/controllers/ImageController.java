@@ -10,8 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
 
-/*
- * Controller class for the Image model. Contains one REST endpoint to save the image locally
+/**
+ * Controller class for the Image model. Contains all the REST endpoints
+ * @author Jared Smith
  */
 @Controller
 @RequestMapping("/image")
@@ -23,13 +24,24 @@ public class ImageController {
     @Autowired
     private final ImageService imageService;
 
-//    Constructor that is automatically with an ImageService object
+    /**
+     * Class constructor for the ImageController
+     * @param imageService the ImageService is used for all business logic,
+     *                     auto-injected by Spring when calling the constructor.
+     */
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
 
-//    Takes in an Image object in the request body, and an itemId as a path variable.
-//    Saves the image to the database, renaming it to connect it to an item.
+    /**
+     * This method takes in an Image object through the body of the request, and
+     * saves the image to the database. It also renames the image in the format of
+     * (itemId)_(imageNumber).*
+     * @param image the image to be persisted
+     * @param itemId the id of the item the image is attached to
+     * @return a ResponseEntity object, declaring whether or not the persistence
+     * was successful
+     */
     @PostMapping("/upload/{itemId}")
     public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image, @PathVariable("itemId") String itemId) {
         ResponseEntity<String> res = ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not save file");

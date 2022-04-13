@@ -6,8 +6,7 @@ import { UserContext } from "./UserContext";
 import Layout from "./components/layout/Layout";
 
 // import admin pages
-import RequireAuth from "./RequireAuth"
-import AdminPage from "./pages/AdminPage";
+import RequireAuth from "./RequireAuth";
 import ViewAllItemsPage from "./pages/ViewAllItemsPage";
 import AdminLayout from "./components/layout/AdminLayout";
 import ManageItemsPage from "./pages/ManageItemsPage";
@@ -52,21 +51,20 @@ export default function App() {
 					{/* fix actual exported function first please */}
 					{/* <Route path="/orderhistory" element={<OrderHistoryPage />} /> */}
 
-					<Route path="/userProfile" element={<UserProfile />} />
 					<Route path="/userProfile/:saved" element={<UserProfile />} />
+					<Route path="/userProfile/" element={<UserProfile />} />
 					<Route path="/checkout" element={<CheckoutPage />} />
+					<Route path="/logout" element={<LogoutUserPage />} />
+					<Route path="/order" element={<OrderUser />} />
 				</Route>
 
-				<Route path="/order" element={<OrderUser />} />
 				<Route path="/login" element={<LoginUserPage />} />
-				<Route path="/logout" element={<LogoutUserPage />} />
 				<Route path="/signUp" element={<SignUpUserPage />} />
 				<Route path="/editProfile" element={<EditProfile />} />
 
 				{/* Example Path Would Be e.g /admin/inventory */}
 				<Route exact path="/admin" element={<RequireAuth />}>
 					<Route path="/admin" element={<AdminLayout />}>
-						<Route index element={<AdminPage />} />
 						<Route path="manageItems" element={<ManageItemsPage />} />
 						<Route path="manageOrders" element={<ManageOrdersPage />} />
 						<Route path="manageUsers" element={<ManageUsersPage />} />
