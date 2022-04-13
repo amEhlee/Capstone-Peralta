@@ -58,25 +58,9 @@ export default function LoginForm() {
 		setError(errorDisplay);
 		//if there are any errors show the message
 		//if there are none don't show
-		if (Object.keys(errorDisplay).length===0){
-			return true;
-		}else {
-			return false;
-		}
+		return Object.keys(errorDisplay).length === 0;
 	};
 
-/*	//if it doesn't validate correctly show the alert
-	//if it renders don't show and proceed to homepage
-	async function submitHandler (event) {
-		if (event) event.preventDefault();
-
-		if (validation(fields)){
-			setWork(false);
-		} else {
-			setWork(true);
-		}
-
-	}*/
 
     async function submitHandler(event) {
 		event.preventDefault();
@@ -140,17 +124,17 @@ export default function LoginForm() {
 							};
 						});
 					}).catch((err) => {
-						if (loginCheck == false) {
+						if (loginCheck === false) {
 							loadCheck = false;
 						}
 						console.log(err);
 					});
 					// goto homepage after logging in
 
-				if (loadCheck == true && loginCheck == true) {
+				if (loadCheck === true && loginCheck === true) {
 					navigate("/");
 				}
-				else if (loadCheck == false && loginCheck == false) {
+				else if (loadCheck === false && loginCheck === false) {
 					const DISABLE_CHECK_URL = "http://localhost:8080/user/disableCheck"; // fetch url
 					// await response so we know what the user had in database
 					const response = await axios.post(DISABLE_CHECK_URL,userForChecks);
