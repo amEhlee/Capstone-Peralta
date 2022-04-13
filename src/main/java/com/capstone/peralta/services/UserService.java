@@ -45,13 +45,10 @@ public class UserService implements UserDetailsService {
     }
 
     public User addUser(User user) {
-        log.info("Saving new User into Database");
         user.setEmail(user.getEmail().toLowerCase());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         String formattedPostalCode = user.getPostalCode().replaceAll("[\\s-]", "");
-        log.info(formattedPostalCode);
         String formattedPhoneNumber = user.getPhoneNumber().replaceAll("[\\s\\D-]","");
-        log.info(formattedPhoneNumber);
         user.setPostalCode(formattedPostalCode);
         user.setPhoneNumber(formattedPhoneNumber);
         User returnUser = userRepo.save(user);
@@ -69,9 +66,7 @@ public class UserService implements UserDetailsService {
         log.info("Updating User " + user.getEmail());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         String formattedPostalCode = user.getPostalCode().replaceAll("[\\s-]", "");
-        log.info(formattedPostalCode);
         String formattedPhoneNumber = user.getPhoneNumber().replaceAll("[\\s\\D-]","");
-        log.info(formattedPhoneNumber);
         user.setPostalCode(formattedPostalCode);
         user.setPhoneNumber(formattedPhoneNumber);
         userRepo.save(user);

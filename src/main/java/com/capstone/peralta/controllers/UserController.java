@@ -204,6 +204,7 @@ public class UserController {
         email = email.toLowerCase();
         User dbUserInstance = userService.getUserByName(email);
         String encryptedPassword = dbUserInstance.getPassword();
+        //log.info(String.valueOf(userService.getPasswordEncoder().matches(rawPassword, encryptedPassword)));
         return userService.getPasswordEncoder().matches(rawPassword, encryptedPassword);
     }
 

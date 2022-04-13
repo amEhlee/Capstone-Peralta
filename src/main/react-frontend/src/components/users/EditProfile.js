@@ -5,27 +5,30 @@ import axios from "axios";
 // Import Components
 import { UserContext } from "../../UserContext";
 import { Navigate, useNavigate } from "react-router-dom";
-import {Form, FormGroup, Button, Modal, Alert} from "react-bootstrap";
+import { Form, FormGroup, Button, Modal, Alert } from "react-bootstrap";
 import DeleteProfile from "./DeleteProfile";
+import {
+	validatePassword,
+	validatePasswordsMatch,
+	validatePostalCode,
+	validatePhoneNumber,
+} from "../validation/FormValidation";
 
 // import styles from
 import Style from "../../assets/styles/UserSide.module.css";
 
 export default function EditProfile() {
-
+	const givenContext = useContext(UserContext);
 	const userContext = useContext(UserContext).contextData.user;
 	const token = useContext(UserContext).contextData.token;
 	const userFirstNameRef = useRef();
 	const userLastNameRef = useRef();
-	const userConfirmPasswordRef = useRef();
+	const userCurrentPasswordRef = useRef();
 	const userNewPasswordRef = useRef();
 	const userNewPasswordConfirmRef = useRef();
 	const userPhoneRef = useRef();
 	const userAddressRef = useRef();
 	const userPostalCodeRef = useRef();
-
-
-
 
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
@@ -35,11 +38,12 @@ export default function EditProfile() {
 	const [fields, setFields] = useState({
 		firstName: "",
 		lastName: "",
-		password: "",
-		confirmPass:"",
+		currentPass: "",
+		newPassword: "",
+		confirmPass: "",
 		address: "",
 		postalCode: "",
-		phoneNumber: ""
+		phoneNumber: "",
 	});
 
 	const [error, setError] = useState({});
@@ -49,148 +53,173 @@ export default function EditProfile() {
 		return (
 			<Alert variant="success" onClose={() => setWork(false)} dismissible>
 				<Alert.Heading>Your changes have been saved!</Alert.Heading>
-				<p>
-					you can view your updated profile
-				</p>
+				<p>you can view your updated profile</p>
 			</Alert>
 		);
 	}
 
-
 	const validation = () => {
-		let errorDisplay={};
+		let errorDisplay = {};
 
 		if (!fields.firstName) {
-			errorDisplay.firstName = "￮ You need to input your first name";
+			errorDisplay.firstName = "￮ You need to enter your first name";
 		}
 
 		if (!fields.lastName) {
-			errorDisplay.lastName = "￮ You need to input your last name";
+			errorDisplay.lastName = "￮ You need to enter your last name";
 		}
 
-		if (!fields.password){
-			errorDisplay.password= "￮ You need to input your Password"
+		if (!fields.currentPass) {
+			errorDisplay.currentPass = "￮ You need to enter your current Password";
 		}
 
-		if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/ .test(fields.password)){
-			errorDisplay.password = "￮ your password is invalid";
-		}
-		//TODO: have to check for the password matching donno how yet
-		if (!fields.address){
-			errorDisplay.address= "￮ You need to input your address"
+		if (!validatePassword(fields.currentPass)) {
+			errorDisplay.currentPass = "￮ Your current password is invalid";
 		}
 
-		if (!fields.postalCode){
-			errorDisplay.postalCode= "￮ You need to input your postal code"
+		if (fields.newPassword) {
+			if (!validatePasswordsMatch(fields.newPassword, fields.confirmPass)) {
+				errorDisplay.confirmPass = "￮ Your passwords do not match";
+			}
+			if (!validatePassword(fields.newPassword)) {
+				errorDisplay.newPassword = "￮ Your new password is invalid";
+			}
 		}
 
-		if (!/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(fields.postalCode)){
-			errorDisplay.postalCode = "￮ your postal code format should be like this A1A A1A";
+		if (!fields.phoneNumber) {
+			errorDisplay.phoneNumber = "￮ You need to enter your phone number";
 		}
 
-		if (!fields.phoneNumber){
-			errorDisplay.phoneNumber= "￮ You need to input your phone number"
+		if (!validatePhoneNumber(fields.phoneNumber)) {
+			errorDisplay.phoneNumber = "￮ Your phone number is invalid";
 		}
 
-		if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(fields.phoneNumber)){
-			errorDisplay.postalCode = "￮ your phone number is invalid";
+		if (!fields.address) {
+			errorDisplay.address = "￮ You need to enter your address";
+		}
+
+		if (!fields.postalCode) {
+			errorDisplay.postalCode = "￮ You need to enter your postal code";
+		}
+
+		if (!validatePostalCode(fields.postalCode)) {
+			errorDisplay.postalCode =
+				"￮ Your postal code format should follow A1A A1A";
 		}
 
 		setError(errorDisplay);
-		if (Object.keys(errorDisplay).length===0){
+		if (Object.keys(errorDisplay).length === 0) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
-
-
 	};
-
-	function checkPassword(givenEmail, givenPassword) {
-		// Post url used to verify password
-		const POST_URL = "http://localhost:8080/user/verify";
-
-		// content we will pass to post url
-		const content = {
-			email: givenEmail,
-			password: givenPassword,
-		};
-
-		let returnedResponse = true;
-
-		// try post request
-		axios
-			.post(POST_URL, content, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			})
-			.then((res) => {
-				returnedResponse = res.data; // boolean depending on result of pass verify
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-
-		return returnedResponse;
-	}
 
 	function submitHandler(event) {
 		event.preventDefault();
 
-		if (validation(fields)){
-			setShow(true);
-		} else {
-			setShow(false);
-		}
-		const returnedFirstName = userFirstNameRef.current.value;
-		const returnedLastName = userLastNameRef.current.value;
-		const retunedConfirmPassword = userConfirmPasswordRef.current.value;
-		const retunedNewPassword = userNewPasswordRef.current.value;
-		const returnedUserNewPasswordConfirm = userNewPasswordConfirmRef.current.value;
-		const returnedPhone = userPhoneRef.current.value;
-		const returnedAddress = userAddressRef.current.value;
-		const returnedPostalCode = userPostalCodeRef.current.value;
-		const returnedEmail = userContext.email;
+		if (validation(fields)) {
+			async function attemptUpdate() {
+				const returnedFirstName = userFirstNameRef.current.value;
+				const returnedLastName = userLastNameRef.current.value;
+				const returnedCurrentPassword = userCurrentPasswordRef.current.value;
+				const returnedNewPassword = userNewPasswordRef.current.value;
+				const returnedUserNewPasswordConfirm =
+					userNewPasswordConfirmRef.current.value;
+				const returnedPhone = userPhoneRef.current.value;
+				const returnedAddress = userAddressRef.current.value;
+				const returnedPostalCode = userPostalCodeRef.current.value;
+				const returnedEmail = userContext.email;
 
-		const updatedUser = {
-			userId: userContext.userId,
-			firstName: returnedFirstName,
-			lastName: returnedLastName,
-			password: retunedNewPassword,
-			email: returnedEmail,
-			phoneNumber: returnedPhone,
-			address: returnedAddress,
-			postalCode: returnedPostalCode,
-			roles: userContext.roles,
-		};
+				let updatedUser = {
+					userId: userContext.userId,
+					firstName: returnedFirstName,
+					lastName: returnedLastName,
+					password: returnedCurrentPassword,
+					email: returnedEmail,
+					phoneNumber: returnedPhone,
+					address: returnedAddress,
+					postalCode: returnedPostalCode,
+					roles: userContext.roles,
+				};
 
-		if(retunedNewPassword !== returnedUserNewPasswordConfirm) {
-			console.log("Passwords do not match");
-			return;
-		}
+				if (!(returnedNewPassword === "")) {
+					updatedUser = {
+						userId: userContext.userId,
+						firstName: returnedFirstName,
+						lastName: returnedLastName,
+						password: returnedNewPassword,
+						email: returnedEmail,
+						phoneNumber: returnedPhone,
+						address: returnedAddress,
+						postalCode: returnedPostalCode,
+						roles: userContext.roles,
+					};
+				}
 
-		console.log("checking pass");
-		console.log(checkPassword(returnedEmail, retunedConfirmPassword));
-		if (checkPassword(returnedEmail, retunedConfirmPassword)) {
-			console.log("trying to do update now");
-			const PUT_URL = "http://localhost:8080/user/update"; // fetch url
+				// Post url used to verify password
+				const CHECK_PASSWORD_URL = "http://localhost:8080/user/verify";
 
-			async function userPost() {
-				await axios
-					.put(PUT_URL, updatedUser, {
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-					})
-					.then((res) => {
-						console.log(res);
-						navigate("./userProfile/saved");
-					})
-					.catch((err) => console.error(err));
+				// content we will pass to post url
+				const content = {
+					email: returnedEmail,
+					password: returnedCurrentPassword,
+				};
+
+				// expect boolean confirming wherher password is correct or not
+				const responseCheck = await axios.post(CHECK_PASSWORD_URL, content, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+
+				// BASED ON ABOVE AWAIT FUNCTION, IF PASSWORD IS CORRECT, THEN WE CAN UPDATE USER
+				if (responseCheck.data) {
+					// makes the next block entirely dependent on responseCheck variable
+					// this entire block is called after the await is complete
+					console.log("Trying Update and New User Load");
+
+					await axios
+						.put("http://localhost:8080/user/update", updatedUser, {
+							headers: {
+								Authorization: `Bearer ${token}`,
+							},
+						})
+						.then((res) => {
+							console.log("successfully updated user");
+						})
+						.catch((err) => console.error(err));
+
+					await axios
+						.get("http://localhost:8080/user/load", {
+							headers: {
+								Authorization: `Bearer ${token}`,
+							},
+						})
+						.then((res) => {
+							console.log(res);
+							givenContext.setContextData((prevData) => {
+								return {
+									...prevData,
+									user: res.data, // get the user after successful login
+								};
+							});
+						})
+						.catch((err) => console.error(err));
+
+					// if everyone is good navigate back to user profile
+					navigate("/userProfile/saved");
+				} else {
+					setError((prevError) => {
+						return {
+							...prevError,
+							currentPass: "￮ This password is inavlid",
+						};
+					});
+				}
 			}
 
-			userPost();
+			attemptUpdate();
 		}
 	}
 
@@ -199,9 +228,7 @@ export default function EditProfile() {
 		return <Navigate to="/" />;
 	} else {
 		return (
-
-			//todo: the only issue with this maybe cause it's submit handler on the whole form it might mess up the delete button cause the buttons are in the same form
-
+			<>
 			<Form onSubmit={submitHandler} className={Style.centrize}>
 				<FormGroup className="mb-3" controlId="formFirstName">
 					<Form.Label>First Name:</Form.Label>
@@ -209,13 +236,14 @@ export default function EditProfile() {
 						type="text"
 						placeholder="Enter First Name"
 						ref={userFirstNameRef}
-						defaultValue={userContext.firstName} /// TODO
+						defaultValue={userContext.firstName}
 						value={fields.firstName}
+						onChange={(e) =>
+							setFields({ ...fields, firstName: e.target.value })
+						}
 					/>
 
-					{error.firstName &&
-						<p className="text-danger"> {error.firstName}</p>
-					}
+					{error.firstName && <p className="text-danger"> {error.firstName}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formLastName">
@@ -226,43 +254,58 @@ export default function EditProfile() {
 						ref={userLastNameRef}
 						defaultValue={userContext.lastName}
 						value={fields.lastName}
+						onChange={(e) => setFields({ ...fields, lastName: e.target.value })}
 					/>
 
-					{error.lastName &&
-						<p className="text-danger"> {error.lastName}</p>
-					}
-				</FormGroup>
-
-				<FormGroup className="mb-3" controlId="formConfirmPassword">
-					<Form.Label>Confirm Previous Password: </Form.Label>
-					<Form.Control
-						type="password"
-						placeholder="Confirm the Password"
-						ref={userConfirmPasswordRef}
-
-						value={fields.password}
-					/>
-					{error.password &&
-						<p className="text-danger"> {error.password}</p>
-					}
+					{error.lastName && <p className="text-danger"> {error.lastName}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formCurrentPassword">
+					<Form.Label>Confirm Current Password: </Form.Label>
+					<Form.Control
+						type="password"
+						placeholder="Enter Current Password"
+						ref={userCurrentPasswordRef}
+						value={fields.currentPass}
+						onChange={(e) =>
+							setFields({ ...fields, currentPass: e.target.value })
+						}
+					/>
+					{error.currentPass && (
+						<p className="text-danger"> {error.currentPass}</p>
+					)}
+				</FormGroup>
+
+				<FormGroup className="mb-3" controlId="formNewPassword">
 					<Form.Label>New Password: </Form.Label>
 					<Form.Control
 						type="password"
-						placeholder="Enter New Password"
+						placeholder="Enter New Password (Optional)"
 						ref={userNewPasswordRef}
+						value={fields.newPpassword}
+						onChange={(e) =>
+							setFields({ ...fields, newPassword: e.target.value })
+						}
 					/>
+					{error.newPassword && (
+						<p className="text-danger"> {error.newPassword}</p>
+					)}
 				</FormGroup>
 
-				<FormGroup className="mb-3" controlId="formCurrentPassword">
+				<FormGroup className="mb-3" controlId="formConfirmPassword">
 					<Form.Label>Confirm New Password: </Form.Label>
 					<Form.Control
 						type="password"
-						placeholder="Enter New Password"
+						placeholder="Confirm New Password (Optional)"
 						ref={userNewPasswordConfirmRef}
+						value={fields.confirmPass}
+						onChange={(e) =>
+							setFields({ ...fields, confirmPass: e.target.value })
+						}
 					/>
+					{error.confirmPass && (
+						<p className="text-danger"> {error.confirmPass}</p>
+					)}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formPhone">
@@ -272,11 +315,14 @@ export default function EditProfile() {
 						placeholder="403-111-1111"
 						ref={userPhoneRef}
 						defaultValue={userContext.phoneNumber}
-						values={fields.phoneNumber}
+						value={fields.phoneNumber}
+						onChange={(e) =>
+							setFields({ ...fields, phoneNumber: e.target.value })
+						}
 					/>
-					{error.phoneNumber &&
+					{error.phoneNumber && (
 						<p className="text-danger"> {error.phoneNumber}</p>
-					}
+					)}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formAddress">
@@ -287,10 +333,9 @@ export default function EditProfile() {
 						ref={userAddressRef}
 						defaultValue={userContext.address}
 						value={fields.address}
+						onChange={(e) => setFields({ ...fields, address: e.target.value })}
 					/>
-					{error.address &&
-						<p className="text-danger"> {error.address}</p>
-					}
+					{error.address && <p className="text-danger"> {error.address}</p>}
 				</FormGroup>
 
 				<FormGroup className="mb-3" controlId="formPostalCode">
@@ -300,20 +345,23 @@ export default function EditProfile() {
 						placeholder="Enter Postal Code"
 						ref={userPostalCodeRef}
 						defaultValue={userContext.postalCode}
-						values={fields.postalCode}
+						value={fields.postalCode}
+						onChange={(e) =>
+							setFields({ ...fields, postalCode: e.target.value })
+						}
 					/>
 
-					{error.postalCode &&
+					{error.postalCode && (
 						<p className="text-danger"> {error.postalCode}</p>
-					}
+					)}
 				</FormGroup>
 
-				<Button type="submit" className="btn btn-success" >
+				<Button type="submit" className="btn btn-success">
 					Save Changes
 				</Button>
 
 				<Button
-					type="submit"
+					type="button"
 					className="btn btn-warning"
 					onClick={handleShow}
 					variant="primary"
@@ -322,15 +370,18 @@ export default function EditProfile() {
 					Delete Account
 				</Button>
 
-				<Modal show={show} onHide={handleClose}>
-					<Modal.Header closeButton>
-						<Modal.Title>Delete Account</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<DeleteProfile />
-					</Modal.Body>
-				</Modal>
 			</Form>
+			<Modal show={show} onHide={handleClose} >
+				<Modal.Header closeButton>
+					<Modal.Title>Delete Account</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<DeleteProfile />
+				</Modal.Body>
+			</Modal>
+		</>
 		);
+
+
 	}
 }
