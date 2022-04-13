@@ -104,11 +104,31 @@ export default function CheckoutPage() {
 		}
 	}
 
-	// add each individual item for email receipt
-	let formattedString = "";
-	cart.map((i) => {
-		formattedString += i.item.itemName + " Quantity:" + i.quantity + "<hr/>";
-	});
+	let orderDetails = "";
+	let orderTtlPrice = 0;
+
+	// Acquire each individual cart item and place the order detail into HTML table rows
+	cart.map((cartObject) => {
+		orderDetails +=
+			'<tr>' +
+			'<td>' + cartObject.item.itemName + '</td>' +
+			'<td>' + cartObject.quantity + '</td>' +
+			'<td>' + (cartObject.item.itemPrice * cartObject.quantity) + '</td>' +
+			'</tr>';
+		orderTtlPrice += (cartObject.item.itemPrice * cartObject.quantity);
+	})
+	orderTtlPrice = orderTtlPrice.toFixed(2);
+
+	// Combine cart item rows to the table for formatting the email receipt
+	let orderHTML =
+		'<table>' +
+		'<tr>' +
+		'<th>Product</th>' +
+		'<th>Quantity</th>' +
+		'<th>Price</th>' +
+		'</tr>' +  orderDetails +
+		'</table>';
+
 
 	// set blank user if information is null
 	if (user === null) {
@@ -269,11 +289,8 @@ export default function CheckoutPage() {
 				</FormGroup>
 
 				<FormGroup>
-					<Form.Control
-						type="hidden"
-						name="orderItems"
-						value={formattedString}
-					/>
+					<Form.Control type="hidden" name="orderItems" value={orderHTML}/>
+					<Form.Control type="hidden" name="orderTotal" value={orderTtlPrice}/>
 					<Button type="submit" className="mb-3 mt-3 btn btn-success ">
 						Checkout
 					</Button>
