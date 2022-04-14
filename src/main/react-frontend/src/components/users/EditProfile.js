@@ -25,7 +25,6 @@ export default function EditProfile() {
 	const userLastNameRef = useRef();
 	const userCurrentPasswordRef = useRef();
 	const userNewPasswordRef = useRef();
-	const userNewPasswordConfirmRef = useRef();
 	const userPhoneRef = useRef();
 	const userAddressRef = useRef();
 	const userPostalCodeRef = useRef();
@@ -108,11 +107,7 @@ export default function EditProfile() {
 		}
 
 		setError(errorDisplay);
-		if (Object.keys(errorDisplay).length === 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return Object.keys(errorDisplay).length === 0;
 	};
 
 	function submitHandler(event) {
@@ -124,8 +119,6 @@ export default function EditProfile() {
 				const returnedLastName = userLastNameRef.current.value;
 				const returnedCurrentPassword = userCurrentPasswordRef.current.value;
 				const returnedNewPassword = userNewPasswordRef.current.value;
-				const returnedUserNewPasswordConfirm =
-					userNewPasswordConfirmRef.current.value;
 				const returnedPhone = userPhoneRef.current.value;
 				const returnedAddress = userAddressRef.current.value;
 				const returnedPostalCode = userPostalCodeRef.current.value;
@@ -185,8 +178,8 @@ export default function EditProfile() {
 								Authorization: `Bearer ${token}`,
 							},
 						})
-						.then((res) => {
-							console.log("successfully updated user");
+						.then(() => {
+							console.log("Successfully Updated User");
 						})
 						.catch((err) => console.error(err));
 
@@ -201,7 +194,7 @@ export default function EditProfile() {
 							givenContext.setContextData((prevData) => {
 								return {
 									...prevData,
-									user: res.data, // get the user after successful login
+									user: res.data, // get the user after successful edit
 								};
 							});
 						})
@@ -297,7 +290,6 @@ export default function EditProfile() {
 					<Form.Control
 						type="password"
 						placeholder="Confirm New Password (Optional)"
-						ref={userNewPasswordConfirmRef}
 						value={fields.confirmPass}
 						onChange={(e) =>
 							setFields({ ...fields, confirmPass: e.target.value })

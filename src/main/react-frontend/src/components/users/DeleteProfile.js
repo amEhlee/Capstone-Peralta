@@ -23,7 +23,6 @@ export default function DeleteProfile() {
 	const [fields, setFields] = useState({password: "",});
 	const navigate = useNavigate();
 
-
 	if (show) {
 		return (
 			<Alert
@@ -44,16 +43,11 @@ export default function DeleteProfile() {
 		}
 
 		setError(errorDisplay);
-		if (Object.keys(errorDisplay).length === 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return Object.keys(errorDisplay).length === 0;
 	};
 
 	async function submitHandler(event) {
 		event.preventDefault();
-		console.log("we are here!");
 
 		if (validate(fields)) {
 			async function attemptDelete() {
@@ -93,7 +87,7 @@ export default function DeleteProfile() {
 					setError((prevError) => {
 						return {
 							...prevError,
-							currentPass: "￮ This password is inavlid",
+							password: "￮ This password is inavlid",
 						};
 					});
 				}

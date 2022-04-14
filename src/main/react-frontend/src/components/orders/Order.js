@@ -11,7 +11,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 // Import Components
 import { Table } from "react-bootstrap";
-import { useNavigate } from "react-router";
+import { useNavigate, Navigate } from "react-router";
 
 // Import Styles
 import style from "../../assets/styles/ItemCardLayout.module.css";
@@ -24,12 +24,20 @@ export default function Order(props) {
     const { order } = props;
     const token = useContext(UserContext).contextData.token;
     const userContext = useContext(UserContext).contextData.user;
+    const navigate = useNavigate();
     var [orderJson, setOrderJson] = useState([]);
 
-    const FETCH_URL =
-        "http://localhost:8080/order/get/user/" + userContext.userId;
 
     function gatherData() {
+
+        // if the user is null redirect back to home
+        if(userContext === null) {
+            navigate("/");
+            return;
+        }
+
+        // if the user has proper values attempt to get their order information
+        const FETCH_URL ="http://localhost:8080/order/get/user/" + userContext.userId;
         return axios
             .get(FETCH_URL, {
                 headers: {
@@ -37,17 +45,15 @@ export default function Order(props) {
                 },
             })
             .then((res) => {
-                console.log(res.data);
-                return res.data;
+                setOrderJson(res.data || "no data returned");
             })
-            .catch((err) => console.error(err));
+            .catch((err) => console.error(err))
     }
 
     useEffect(() => {
-        gatherData().then((data) => {
-            setOrderJson(data || "no data returned");
-        });
+        gatherData();
     }, []);
+
 
 
     if (orderJson === "no data returned") {
@@ -56,7 +62,8 @@ export default function Order(props) {
                 <p>No Orders Found</p>
             </section>
         );
-    } else {
+    }
+    else {
         return (
             <div>
                 <h1>All Orders</h1>

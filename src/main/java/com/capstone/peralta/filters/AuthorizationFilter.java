@@ -67,6 +67,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             case "/user/load" :
             case "/user/verify" :
             case "/user/update" :
+            case "/user/delete" :
             case "/admin/get/allItems" :
                 log.info("AuthF: Check Auth");
                 checkAuthorizations(request, response, filterChain);

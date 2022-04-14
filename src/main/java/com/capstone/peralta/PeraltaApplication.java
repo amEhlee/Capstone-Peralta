@@ -63,22 +63,29 @@ public class PeraltaApplication {
 			}
 
 			try {
+				log.info("Adding Guest User");
+				userService.addUser(new User(69, "guest", "", "", "", "", "", ""));
 				log.info("Adding Admin User");
 				userService.addUser(new User(1, "admin@gmail.com", "password", "Mister", "Admin", "N/A", "T4R7F9", "4037684562"));
 				log.info("Adding Basic User");
 				userService.addUser(new User(2, "john@gmail.com", "terminator100", "John", "Connor", "Santa Monica", "T1K4V7", "4037891234"));
+
+
+
 			}
 			catch (Exception e) {
 				log.info("User Data already exists");
 			}
 
 			try {
+				userService.addRoleToUser("guest", "ROLE_USER");
 				//log.info("Adding Admin Role to Admin");
 				userService.addRoleToUser("admin@gmail.com", "ROLE_ADMIN");
 				//log.info("Adding User Role to Admin");
 				userService.addRoleToUser("admin@gmail.com", "ROLE_USER");
 				//log.info("Adding User Role to Basic User");
 				userService.addRoleToUser("john@gmail.com", "ROLE_USER");
+
 			}
 			catch (Exception e) {
 				log.info("User Role Data already exists");
