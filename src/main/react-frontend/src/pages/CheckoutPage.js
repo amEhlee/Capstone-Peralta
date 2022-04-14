@@ -6,7 +6,7 @@
  *
  */
 // import dependencies
-import React, { useContext, useRef, useState } from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import emailjs from "emailjs-com";
 import {
@@ -33,6 +33,7 @@ export default function CheckoutPage() {
 	const cart = useContext(UserContext).contextData.cart;
 	let user = useContext(UserContext).contextData.user;
 
+
 	const [fields, setFields] = useState({
 		firstName: "",
 		lastName: "",
@@ -44,8 +45,18 @@ export default function CheckoutPage() {
 	let emailToggle = false;
 
 
-	const [error, setError] = useState({});
+	function emptyRedirect() {
+		if (cart.length === 0) {
+			navigate("/");
+			return;
+		}
+	}
 
+	useEffect(() => {
+		emptyRedirect();
+	}, []);
+
+	const [error, setError] = useState({});
 	const [work, setWork] = useState(false);
 	function conditionalAlertRender() {
 		if (work) {
@@ -119,17 +130,19 @@ export default function CheckoutPage() {
 
 	// set blank user if information is null
 	if (user === null) {
-		emailToggle = true;
 		user = {
 			userId: 1,
 			firstName: "",
 			lastName: "",
 			password: "",
-			email: "guest",
+			email: "",
 			address: "",
 			postalCode: "",
 			phoneNumber: "",
 		};
+	}
+	else {
+		emailToggle = true;
 	}
 
 	function submitHandler(event) {
@@ -202,7 +215,7 @@ export default function CheckoutPage() {
 						ref={orderFirstNameRef}
 						defaultValue={user.firstName}
 						onChange={(e) => setFields({ ...fields, firstName: e.target.value })}
-						id="firstName"
+						name="firstName"
 					/>
 				</FormGroup>
 				{error.firstName && (
@@ -216,7 +229,7 @@ export default function CheckoutPage() {
 						ref={orderLastNameRef}
 						defaultValue={user.lastName}
 						onChange={(e) => setFields({ ...fields, lastName: e.target.value })}
-						id="lastName"
+						name="lastName"
 					/>
 				</FormGroup>
 				{error.lastName && (
@@ -230,7 +243,7 @@ export default function CheckoutPage() {
 						ref={orderEmailRef}
 						defaultValue={user.email}
 						onChange={(e) => setFields({ ...fields, email: e.target.value })}
-						id="email"
+						name="email"
 						readOnly={emailToggle}
 					/>
 				</FormGroup>
@@ -246,7 +259,7 @@ export default function CheckoutPage() {
 						ref={orderAddressRef}
 						defaultValue={user.address}
 						onChange={(e) => setFields({ ...fields, address: e.target.value })}
-						id="address"
+						name="address"
 					/>
 				</FormGroup>
 				{error.address && (
@@ -260,7 +273,7 @@ export default function CheckoutPage() {
 						ref={orderPostalCodeRef}
 						defaultValue={user.postalCode}
 						onChange={(e) => setFields({ ...fields, postalCode: e.target.value })}
-						id="postalCode"
+						name="postalCode"
 					/>
 				</FormGroup>
 				{error.postalCode && (
