@@ -46,7 +46,6 @@ export default function DeleteProfile() {
 		return Object.keys(errorDisplay).length === 0;
 	};
 
-	//TODO: Make an axios call
 	async function submitHandler(event) {
 		event.preventDefault();
 

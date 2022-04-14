@@ -14,6 +14,79 @@ import {UserContext} from "../../UserContext";
 import {Navigate, useParams, useNavigate} from "react-router-dom";
 
 
+const [fields, setFields] = useState({
+    name: "",
+    price: "",
+    category: "",
+    image: "",
+    description:"",
+    available: "",
+    quantity: "",
+    volume: "",
+    weight:""
+});
+
+const [error, setError] = useState({});
+
+const [show, setShow] = useState(false);
+if (show) {
+    return (
+        <Alert variant="success" onClose={() => setShow(false)} dismissible>
+            <Alert.Heading>Your item is added!</Alert.Heading>
+            <p>
+                you can now edit or view your item in the table
+            </p>
+        </Alert>
+    );
+}
+
+const validation = () => {
+    let errorDisplay={};
+
+    if (!fields.name) {
+        errorDisplay.name = "￮ Specify the name of item";
+    }
+
+
+    if (!fields.price) {
+        errorDisplay.price = "￮ Specify the price of item";
+    }
+
+    if (!fields.category){
+        errorDisplay.category= "￮ Select a category of item"
+    }
+    if (!fields.image){
+        errorDisplay.image= "￮ Input an image related to the item"
+    }
+
+    if (!fields.description){
+        errorDisplay.description= "￮ Provide a description for the item"
+    }
+
+    if (!fields.available){
+        errorDisplay.available= "￮ Specify if this item is available or not"
+    }
+
+    if (!fields.quantity){
+        errorDisplay.quantity= "￮ Specify the quantity available in stock for this item"
+    }
+
+    if (!fields.weight){
+        errorDisplay.weight= "￮ Specify the weight in kilograms for this item"
+    }
+
+
+    setError(errorDisplay);
+    if (Object.keys(errorDisplay).length===0){
+        return true;
+    }else {
+        return false;
+    }
+
+
+};
+
+
 
 export default function AddItem(props) {
     //sets CategoryList to a copy of categoryjson
@@ -88,6 +161,13 @@ export default function AddItem(props) {
     function submitHandler(event) {
 		// prevent default form submit page reload
         event.preventDefault();
+
+
+        if (validation(fields)){
+            setShow(true);
+        } else {
+            setShow(false);
+        }
 
         // close the modal TODO: MOVE TO POST SUCESS
         props.handleClose();
@@ -169,14 +249,23 @@ export default function AddItem(props) {
                     type="text"
                     placeholder="Enter Item Name"
                     ref={itemNameRef}
+                    value={fields.name}
                 />
+
+                {error.name &&
+                    <p className="text-danger"> {error.name}</p>
+                }
             </FormGroup>
 
             <Form.Group controlId="formFileMultiple" className="mb-3">
                 <Form.Label>Item Images</Form.Label>
                 <Form.Control type="file"
                 multiple
-                ref={imageRef}/>
+                ref={imageRef} value={fields.image}/>
+
+                {error.image &&
+                    <p className="text-danger"> {error.image}</p>
+                }
             </Form.Group>
 
             <FormGroup className="mb-3" controlId="formItemDescription">
@@ -186,7 +275,11 @@ export default function AddItem(props) {
                     rows="3"
                     placeholder="Enter Item Description"
                     ref={itemDescriptionRef}
+                    value={fields.description}
                 />
+                {error.description &&
+                    <p className="text-danger"> {error.description}</p>
+                }
             </FormGroup>
 
             
@@ -217,13 +310,19 @@ export default function AddItem(props) {
                     isClearable
                     required
                     ref={itemCategoryRef}
+                    value={fields.category}
                 />
-
+                {error.category &&
+                    <p className="text-danger"> {error.category}</p>
+                }
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="formItemAvailable">
                 <Form.Label>Available</Form.Label>
-                <Form.Check type="switch" ref={itemAvailableRef}/>
+                <Form.Check type="switch" ref={itemAvailableRef} value={fields.available}/>
+                {error.available &&
+                    <p className="text-danger"> {error.available}</p>
+                }
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="formItemPrice">
@@ -232,8 +331,11 @@ export default function AddItem(props) {
                     <InputGroup.Text>$</InputGroup.Text>
                     <Form.Control
                         aria-label="Amount (to the nearest dollar)"
-                        ref={itemPriceRef}
+                        ref={itemPriceRef} value={fields.price}
                     />
+                    {error.price &&
+                        <p className="text-danger"> {error.price}</p>
+                    }
                 </InputGroup>
             </FormGroup>
 
@@ -243,8 +345,11 @@ export default function AddItem(props) {
                     type="number"
                     min="0"
                     placeholder="Enter Item Quantity"
-                    ref={itemQuantityRef}
+                    ref={itemQuantityRef} value={fields.quantity}
                 />
+                {error.quantity &&
+                    <p className="text-danger"> {error.quantity}</p>
+                }
             </FormGroup>
 
             <FormGroup className="mb-3" controlId="formItemWeight">
@@ -253,8 +358,11 @@ export default function AddItem(props) {
                 <Form.Control
                     type="number"
                     placeholder="Enter Item Weight"
-                    ref={itemWeightRef}
+                    ref={itemWeightRef} value={fields.weight}
                 />
+                    {error.weight &&
+                        <p className="text-danger"> {error.weight}</p>
+                    }
                 <InputGroup.Text>kg</InputGroup.Text>
                 </InputGroup>
             </FormGroup>
@@ -265,8 +373,11 @@ export default function AddItem(props) {
                     type="number"
                     min="0"
                     placeholder="Enter Item Volume"
-                    ref={itemVolumeRef}
+                    ref={itemVolumeRef} value={fields.volume}
                 />
+                {error.volume &&
+                    <p className="text-danger"> {error.volume}</p>
+                }
             </FormGroup>
 
             <Button type="submit" className="btn btn-success">
