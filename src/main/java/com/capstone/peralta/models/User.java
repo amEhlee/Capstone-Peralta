@@ -38,7 +38,7 @@ public class User {
     private String phoneNumber;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> userOrders;
 
 
