@@ -41,7 +41,7 @@ export default function App() {
 				}}
 			</UserContext.Consumer>
 			<Routes>
-				{/*TODO Change path to be under /home or smth*/}
+
 				<Route path="/" element={<Layout />}>
 					<Route index element={<HomePage />} />
 					<Route path="/cart" element={<CartPage />} />

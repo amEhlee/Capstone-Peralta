@@ -10,7 +10,7 @@ import { UserContext } from "../../UserContext";
 import { validateEmail } from "../validation/FormValidation";
 
 
-// TODO: revise neccessity
+
 export default function LoginForm() {
 	// initalize form refrences
 	const emailRef = useRef();
