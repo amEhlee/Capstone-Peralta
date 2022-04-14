@@ -1,6 +1,7 @@
 package com.capstone.peralta.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -35,7 +36,7 @@ public class Order {
     )
     private List<Item> itemList;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name="user_Id", referencedColumnName = "user_Id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;

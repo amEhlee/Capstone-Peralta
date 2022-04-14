@@ -7,12 +7,7 @@ import axios from "axios";
 import {
 	Form,
 	FormGroup,
-	InputGroup,
 	Button,
-	FormControl,
-	Col,
-	Row,
-	Modal,
 	Alert,
 } from "react-bootstrap";
 import { UserContext } from "../../UserContext";
@@ -27,9 +22,6 @@ export default function DeleteProfile() {
     const [show, setShow] = useState(false);
 	const [fields, setFields] = useState({password: "",});
 	const navigate = useNavigate();
-
-
-	//todo: check if the password is the same as the login creds donno how
 
 	if (show) {
 		return (
@@ -51,17 +43,12 @@ export default function DeleteProfile() {
 		}
 
 		setError(errorDisplay);
-		if (Object.keys(errorDisplay).length === 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return Object.keys(errorDisplay).length === 0;
 	};
 
 	//TODO: Make an axios call
 	async function submitHandler(event) {
 		event.preventDefault();
-		console.log("we are here!");
 
 		if (validate(fields)) {
 			async function attemptDelete() {
@@ -101,7 +88,7 @@ export default function DeleteProfile() {
 					setError((prevError) => {
 						return {
 							...prevError,
-							currentPass: "￮ This password is inavlid",
+							password: "￮ This password is inavlid",
 						};
 					});
 				}

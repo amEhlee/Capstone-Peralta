@@ -6,14 +6,18 @@
  *
  */
 // import dependencies
-import React, { useContext, useRef, useState } from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import emailjs from "emailjs-com";
+import {
+	validateEmail,
+	validatePostalCode,
+} from "../components/validation/FormValidation.js";
 
 // Import Components
 import { Form, FormGroup, Button, Alert } from "react-bootstrap";
 import { UserContext } from "../UserContext";
-import Style from "../assets/styles/UserSide.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function CheckoutPage() {
 	// setup refs for the form
@@ -23,27 +27,41 @@ export default function CheckoutPage() {
 	const orderAddressRef = useRef();
 	const orderPostalCodeRef = useRef();
 
+	const navigate = useNavigate();
+
 	// instansiate user cart and user object
 	const cart = useContext(UserContext).contextData.cart;
 	let user = useContext(UserContext).contextData.user;
 
+
 	const [fields, setFields] = useState({
 		firstName: "",
 		lastName: "",
-		password: "",
-		confirmPass: "",
+		email: "",
 		address: "",
 		postalCode: "",
-		phoneNumber: "",
 	});
 
-	const [error, setError] = useState({});
+	let emailToggle = false;
 
+
+	function emptyRedirect() {
+		if (cart.length === 0) {
+			navigate("/");
+			return;
+		}
+	}
+
+	useEffect(() => {
+		emptyRedirect();
+	}, []);
+
+	const [error, setError] = useState({});
 	const [work, setWork] = useState(false);
 	function conditionalAlertRender() {
 		if (work) {
 			return (
-				<Alert variant="success" onClose={() => setWork(false)} dismissible>
+				<Alert variant="success" onClose={() => navigate("/order")} dismissible>
 					<Alert.Heading>Successfully ordered</Alert.Heading>
 					<p>An email has been sent to you regarding your info!</p>
 				</Alert>
@@ -54,54 +72,34 @@ export default function CheckoutPage() {
 	function validation() {
 		let errorDisplay = {};
 
-		if (!fields.firstName) {
-			errorDisplay.firstName = "￮ You need to input your first name";
+		if (!orderFirstNameRef.current.value) {
+			errorDisplay.firstName = "￮ You need to enter your first name";
 		}
 
-		if (!fields.lastName) {
-			errorDisplay.lastName = "￮ You need to input your last name";
+		if (!orderLastNameRef.current.value) {
+			errorDisplay.lastName = "￮ You need to enter your last name";
 		}
 
-		if (!fields.password) {
-			errorDisplay.password = "￮ You need to input your Password";
+		if (!orderEmailRef.current.value) {
+			errorDisplay.email = "￮ You need to enter your email";
+		}
+		else if (!validateEmail(orderEmailRef.current.value) && !emailToggle) {
+			errorDisplay.email = "￮ Invalid Email";
 		}
 
-		if (!/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/.test(fields.password)) {
-			errorDisplay.password = "￮ your password is invalid";
-		}
-		//TODO: have to check for the password matching donno how yet
-		if (!fields.address) {
-			errorDisplay.address = "￮ You need to input your address";
+		if (!orderAddressRef.current.value) {
+			errorDisplay.address = "￮ You need to enter your address";
 		}
 
-		if (!fields.postalCode) {
-			errorDisplay.postalCode = "￮ You need to input your postal code";
-		} else if (
-			!/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(
-				fields.postalCode
-			)
-		) {
-			errorDisplay.postalCode =
-				"￮ your postal code format should be like this A1A A1A";
+		if (!orderPostalCodeRef.current.value) {
+			errorDisplay.postalCode = "￮ You need to enter your postal code";
 		}
-
-		if (!fields.phoneNumber) {
-			errorDisplay.phoneNumber = "￮ You need to input your phone number";
-		}
-		if (
-			!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(
-				fields.phoneNumber
-			)
-		) {
-			errorDisplay.postalCode = "￮ your phone number is invalid";
+		else if (!validatePostalCode(orderPostalCodeRef.current.value)) {
+			errorDisplay.postalCode = "￮ Your postal code format should follow A1A A1A";
 		}
 
 		setError(errorDisplay);
-		if (Object.keys(errorDisplay).length === 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return Object.keys(errorDisplay).length === 0;
 	}
 
 	let orderDetails = "";
@@ -133,82 +131,74 @@ export default function CheckoutPage() {
 	// set blank user if information is null
 	if (user === null) {
 		user = {
-			userId: null,
+			userId: 1,
 			firstName: "",
 			lastName: "",
-			password: null,
+			password: "",
 			email: "",
 			address: "",
 			postalCode: "",
 			phoneNumber: "",
 		};
 	}
+	else {
+		emailToggle = true;
+	}
 
 	function submitHandler(event) {
 		// prevent default submit behaviour
 		event.preventDefault();
 
-		validation(fields);
+		if (validation()) {
+			// will hold later items
+			const formattedCart = [];
 
-		// will hold later items
-		const formattedCart = [];
+			// set appropriate user information
+			user.firstName = orderFirstNameRef.current.value;
+			user.lastName = orderLastNameRef.current.value;
+			user.email = orderEmailRef.current.value;
+			user.address = orderAddressRef.current.value;
+			user.postalCode = orderPostalCodeRef.current.value;
 
-		// set appropriate user information
-		user.firstName = orderFirstNameRef.current.value;
-		user.lastName = orderLastNameRef.current.value;
-		user.email = orderEmailRef.current.value;
-		user.address = orderAddressRef.current.value;
-		user.postalCode = orderPostalCodeRef.current.value;
-
-		// add itemIds to cart
-		for (let i = 0; i < cart.length; i++) {
-			for (let j = 0; j < cart[i].quantity; j++) {
-				formattedCart.push(cart[i].item);
-			}
-		}
-
-		// format order object to be sent
-		let orderObject;
-
-		orderObject = {
-			orderId: null, // should be done on backend
-			orderTotal: null, // should be done on backend
-			orderStatus: null,
-			itemAmount: null, // should be done on backend
-			orderDate: null, // should be done on backend
-			address: user.address,
-			email: user.email,
-			itemList: formattedCart,
-			user: user,
-		};
-
-		console.log(orderObject);
-
-		// TODO Uncomment when you want to test!
-		const POST_URL = "http://localhost:8080/order/add"; // fetch url
-		axios.post(POST_URL, orderObject).then((res) => {
-			console.log(res);
-		});
-
-		emailjs
-			.sendForm(
-				"service_4u1fh14",
-				"template_d489nzh",
-				event.target,
-				"QitERWWr6H0DNKr-1"
-			)
-			.then(
-				(result) => {
-					console.log(result.text);
-				},
-				(error) => {
-					console.log(error.text);
+			console.log(user.email);
+			// add itemIds to cart
+			for (let i = 0; i < cart.length; i++) {
+				for (let j = 0; j < cart[i].quantity; j++) {
+					formattedCart.push(cart[i].item);
 				}
-			);
-		event.target.reset();
+			}
 
-        // if everything was successful render the alert
-        setWork(true);
+			// format order object to be sent
+			let orderObject;
+			orderObject = {
+				orderId: null, // should be done on backend
+				orderTotal: null, // should be done on backend
+				orderStatus: null,
+				itemAmount: null, // should be done on backend
+				orderDate: null, // should be done on backend
+				address: user.address,
+				email: user.email,
+				itemList: formattedCart,
+				user: user,
+			};
+
+			console.log(orderObject);
+
+			const POST_URL = "http://localhost:8080/order/add"; // fetch url
+			axios.post(POST_URL, orderObject).then((res) => {
+				console.log(res);
+			});
+
+			emailjs.sendForm("service_4u1fh14", "template_d489nzh", event.target, "QitERWWr6H0DNKr-1")
+				.then((result) => {
+					console.log(result.text);
+				}, (error) => {
+					console.log(error.text);
+				});
+			event.target.reset()
+			// if everything was successful render the alert
+			setWork(true);
+		}
 	}
 
 	return (
@@ -224,10 +214,13 @@ export default function CheckoutPage() {
 						placeholder="John"
 						ref={orderFirstNameRef}
 						defaultValue={user.firstName}
+						onChange={(e) => setFields({ ...fields, firstName: e.target.value })}
 						name="firstName"
 					/>
 				</FormGroup>
-
+				{error.firstName && (
+					<p className="text-danger"> {error.firstName}</p>
+				)}
 				<FormGroup>
 					<Form.Label> Last Name: </Form.Label>
 					<Form.Control
@@ -235,10 +228,13 @@ export default function CheckoutPage() {
 						placeholder="Doe"
 						ref={orderLastNameRef}
 						defaultValue={user.lastName}
+						onChange={(e) => setFields({ ...fields, lastName: e.target.value })}
 						name="lastName"
 					/>
 				</FormGroup>
-
+				{error.lastName && (
+					<p className="text-danger"> {error.lastName}</p>
+				)}
 				<FormGroup>
 					<Form.Label> Email: </Form.Label>
 					<Form.Control
@@ -246,10 +242,14 @@ export default function CheckoutPage() {
 						placeholder="johnDoe@example.com"
 						ref={orderEmailRef}
 						defaultValue={user.email}
+						onChange={(e) => setFields({ ...fields, email: e.target.value })}
 						name="email"
+						readOnly={emailToggle}
 					/>
 				</FormGroup>
-
+				{error.email && (
+					<p className="text-danger"> {error.email}</p>
+				)}
 				<h3> Shipping Info </h3>
 				<FormGroup>
 					<Form.Label> Address: </Form.Label>
@@ -258,10 +258,13 @@ export default function CheckoutPage() {
 						placeholder="12 Street NE"
 						ref={orderAddressRef}
 						defaultValue={user.address}
+						onChange={(e) => setFields({ ...fields, address: e.target.value })}
 						name="address"
 					/>
 				</FormGroup>
-
+				{error.address && (
+					<p className="text-danger"> {error.address}</p>
+				)}
 				<FormGroup>
 					<Form.Label> Postal Code: </Form.Label>
 					<Form.Control
@@ -269,24 +272,13 @@ export default function CheckoutPage() {
 						placeholder="A1B1C1"
 						ref={orderPostalCodeRef}
 						defaultValue={user.postalCode}
+						onChange={(e) => setFields({ ...fields, postalCode: e.target.value })}
 						name="postalCode"
 					/>
 				</FormGroup>
-
-				<FormGroup>
-					<Form.Label> Country: </Form.Label>
-					<Form.Control type="text" placeholder="Canada" />
-				</FormGroup>
-
-				<FormGroup>
-					<Form.Label> City: </Form.Label>
-					<Form.Control type="text" placeholder="Calgary" name="city" />
-				</FormGroup>
-
-				<FormGroup>
-					<Form.Label> Province: </Form.Label>
-					<Form.Control type="text" placeholder="Alberta" name="province" />
-				</FormGroup>
+				{error.postalCode && (
+					<p className="text-danger"> {error.postalCode}</p>
+				)}
 
 				<FormGroup>
 					<Form.Control type="hidden" name="orderItems" value={orderHTML}/>

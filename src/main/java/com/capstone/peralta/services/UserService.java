@@ -2,6 +2,7 @@ package com.capstone.peralta.services;
 
 import ch.qos.logback.core.CoreConstants;
 import com.capstone.peralta.exceptions.EmailNotFoundException;
+import com.capstone.peralta.exceptions.UserDisabledException;
 import com.capstone.peralta.models.Role;
 import com.capstone.peralta.models.Item;
 import com.capstone.peralta.models.User;
@@ -74,7 +75,8 @@ public class UserService implements UserDetailsService {
      * @param user user to delete
      */
     public void deleteUser(User user) {
-        User deletedUser = new User(user.getUserId());
+        User deletedUser = new User(user.getUserId(), user.getEmail());
+        deletedUser.setRoles(user.getRoles());
         userRepo.save(deletedUser);
     }
 
@@ -163,6 +165,7 @@ public class UserService implements UserDetailsService {
      */
     public List<User> addMultiple(List<User> userList) { return userRepo.saveAll(userList); }
 
+
     /**
      * Gets a user based on their identifier in this case email
      * @param email email of user to find
@@ -174,6 +177,10 @@ public class UserService implements UserDetailsService {
         if (userDbResult == null) {
             log.info("Email does not exist in database");
             throw new EmailNotFoundException("Email does not exist in database");
+        }
+        else if (userDbResult.getPassword() == null) {
+            log.info("User Disabled");
+            throw new UserDisabledException("User is Disabled");
         }
         else {
             log.info("User Loaded!");

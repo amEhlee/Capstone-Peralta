@@ -1,6 +1,6 @@
 // Import Dependencies
 import React, { useRef, useState } from "react";
-import { Form, FormGroup, Button } from "react-bootstrap";
+import { Form, FormGroup, Button , Alert} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import {
 	validateEmail,
@@ -42,6 +42,16 @@ export default function SignUpUserPage() {
 		phoneNumber: "",
 	});
 
+	const [work, setWork] = useState(false);
+	function conditionalAlertRender() {	if (work) {
+		return (
+			<Alert variant="success" onClose={() => navigate("/")} dismissible>
+				<Alert.Heading>Your changes have been saved!</Alert.Heading>
+				<p>you can view your updated profile</p>
+			</Alert>
+		);
+	}}
+
 
 	function validation() {
 		let errorDisplay = {};
@@ -80,7 +90,6 @@ export default function SignUpUserPage() {
 			errorDisplay.confirmPass = "￮ Password does not match";
 		}
 
-		//TODO: have to check for the password matching donno how yet
 		if (!fields.address) {
 			errorDisplay.address = "￮ You need to enter your address";
 		}
@@ -156,7 +165,7 @@ export default function SignUpUserPage() {
 					});
 
 					// on success navigtate back to login
-					navigate("/login");
+					setWork(true);
 				}
 				else {
 					setError((prevError) => {
@@ -195,7 +204,10 @@ export default function SignUpUserPage() {
 			</video>
 
 
+			{conditionalAlertRender()}
+
 			<Form className={userStyle.centrize} onSubmit={submitHandler}>
+
 				<FormGroup className="mb-3" controlId="firstnameForm">
 					<Form.Label>First Name: </Form.Label>
 					<Form.Control

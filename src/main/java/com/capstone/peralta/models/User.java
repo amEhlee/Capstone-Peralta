@@ -38,7 +38,7 @@ public class User {
     private String phoneNumber;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> userOrders;
 
 
@@ -101,8 +101,9 @@ public class User {
      *
      * @param userId the user id
      */
-    public User(Integer userId) {
+    public User(Integer userId, String email) {
         this.userId = userId;
+        this.email = email;
     }
 
     /**

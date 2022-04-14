@@ -22,6 +22,19 @@ export default function NavBar() {
 	const context = useContext(UserContext).contextData;
 	const user = context.user; // get user object from
 
+	function renderOrderButton() {
+		if (user) {
+			return <Nav>
+				<Link to="/order">
+					<Button variant="light">
+						{BsBagCheck()}
+						<div>Orders</div>
+					</Button>
+				</Link>
+			</Nav>
+		}
+	}
+
 	function manageProfileButton() {
 		if (user) {
 			//If user is an admin allow them to access admin page
@@ -91,14 +104,7 @@ export default function NavBar() {
 							<BsSearch onClick={() => {navigate('/search/' + searchQuery)}}/>
 						</div>
 
-						<Nav>
-							<Link to="/order">
-                                <Button variant="light">
-                                    {BsBagCheck()}
-                                    <div>Orders</div>
-                                </Button>
-                            </Link>
-						</Nav>
+						{renderOrderButton()}
 
 						<Nav>
                             {manageProfileButton()}
