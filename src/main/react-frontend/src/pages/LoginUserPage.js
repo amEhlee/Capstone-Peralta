@@ -30,7 +30,7 @@ export default function  LoginUserPage() {
         </video>
 
         <div id="loginbox" className={userStyle.centrize}>
-            <LoginForm/>
+            <LoginForm/>{/* TODO POSSIBLE MOVE THE ENTIRE FORM HERE removes need for extra component*/}
         </div>
 
 

@@ -82,7 +82,7 @@ export default function ManageUsersPage() {
 		return (
 			<>
 				<div className={style.manageOrders}>
-
+					{/* TODO Password is still sent in the request this is a backend problem and im not sure if it should be changed*/}
 					<h1>Manage Orders</h1>
 					<div className={style.searchwrapper}>
 						<input
