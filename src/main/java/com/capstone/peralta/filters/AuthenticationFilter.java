@@ -26,15 +26,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * AuthenticationFilter Class that will check and authenticate the user
+ * on pages they are only allowed to access if they are logged in
+ * @author: Elie Kabengele
+ * @author: Don Laliberte
+ */
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Constructor for the AuthenticationFilter class
+     * @param authenticationManager the authentication manager
+     */
     public AuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * Override the attemptAuthentication method to check the credentials
+     * @param request associated request
+     * @param response associated response
+     * @return the result of the attempt to authenticate
+     */
     //Method is called on every request sent to server from login
     @CrossOrigin(origins = "http://localhost:3000")
     @Override
@@ -49,7 +65,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         return authenticationManager.authenticate(authenticationToken); //Authenticates token Note: at the end of the method it will call successfulAuthentication()
     }
 
-    //On successful authentication Note: See above
+    /**
+     * What to do on successful authentication
+     * @param request associated request
+     * @param response associated response
+     * @param chain the filter chain
+     * @param authResult result of attempt to authenticate
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         User user = (User)authResult.getPrincipal(); //Accesses the User that is authenticated

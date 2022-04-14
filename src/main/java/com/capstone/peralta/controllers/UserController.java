@@ -40,6 +40,12 @@ import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
+/**
+ * Controller class Basic User Objects. Contains all the REST endpoints for users
+ * also contains general configuration information and security via tokens for users
+ * @author Don Laliberte
+ * @author Elie Kabengele
+ */
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = "3000")
@@ -54,7 +60,10 @@ public class UserController {
 
     }
 
-    //Refreshes the users authentication token
+    /**
+     * Refreshes the current users authentication token
+     * @return new access token and matching refresh token
+     */
     @GetMapping("/auth/refreshtoken")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -98,6 +107,11 @@ public class UserController {
         }
     }
 
+    /**
+     * Creates a new user
+     * @param user User object to be created
+     * @return ResponseEntity with the created user
+     */
     //Saves User to java object from React (Used for signup)
     @PostMapping("/signup")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
@@ -117,6 +131,11 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.addUser(user));
     }
 
+    /**
+     * Checks if user already exists
+     * @param user User object to be checked
+     * @return boolean indicating if the user exists in database or not
+     */
     @PostMapping("/userCheck")
     public boolean userCheck(@RequestBody User user) {
         user.setEmail(user.getEmail().toLowerCase());
@@ -129,7 +148,12 @@ public class UserController {
         }
         return false;
     }
-
+    
+    /**
+     * A seperate check done at login to check to see if the user is trying to access an account that was disabled
+     * @param user User object to be verified
+     * @return user information
+     */
     @PostMapping("/disableCheck")
     public boolean disableCheck(@RequestBody User user) {
         log.info(user.toString());
@@ -139,14 +163,21 @@ public class UserController {
         return dbUser.getPassword() == null;
     }
 
+    /**
+     * Verify the users password
+     * @param user User object to be verified
+     * @return boolean indicating if the user's password is correct or not
+     */
     @PostMapping("/verify")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public boolean verify(@RequestBody User user) {
         return verifyPassword(user.getEmail(), user.getPassword());
     }
 
-    /*
-    Updates the user after verifying the old password
+    /**
+     * Updates the user's information after verifying password
+     * @param user User object to be updated
+     * @return ResponseEntity with the updated user
      */
     @PutMapping("/update")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
@@ -155,7 +186,11 @@ public class UserController {
         return true; // return a true on success
     }
 
-
+    /**
+     * Deletes the user from the database
+     * @param user User object to be deleted
+     * @return ResponseEntity with the deleted user
+     */
     @DeleteMapping("/delete")
     @RolesAllowed({"ROLE_USER"})
     void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -178,7 +213,12 @@ public class UserController {
         }
     }
 
-
+    /**
+     * Loads the user from the database
+     * @param request associated request
+     * @param response associated response
+     * @return access and refresh tokens granted to successful users
+     */
     @GetMapping("/load")
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public User getByToken (HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -207,8 +247,12 @@ public class UserController {
         return null;
     }
 
-    /*
-        Verifies a password from our DB
+
+    /**
+     * Method to verify users password
+     * @param email email of user to be verified
+     * @param password password of user to be verified
+     * @return boolean indicating if the user's password is correct or not
      */
     public boolean verifyPassword (String email, String rawPassword) {
         email = email.toLowerCase();
@@ -218,8 +262,11 @@ public class UserController {
         return userService.getPasswordEncoder().matches(rawPassword, encryptedPassword);
     }
 
-    /*
-    Method loads a user using a token by getting the subject. The subject key has the users email.
+    /**
+     * Method to load user from the database using users token
+     * @param authorizationHeader authorization header of user
+     * @param token token of user
+     * @param algorithm hashing algorithm
      */
     @RolesAllowed({"ROLE_USER", "ROLE_ADMIN", "ROLE_OWNER"})
     public User loadUser( String authorizationHeader, String token, Algorithm algorithm) throws IOException {
