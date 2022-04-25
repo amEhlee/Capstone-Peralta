@@ -1,9 +1,4 @@
 # Capstone Peralta 
-Elie Tested and Fork/Branch Created ✅ <br>
-Sana Tested and Fork Created ✅ <br>
-Jared Tested and Fork Created ✅ <br>
-Don Tested and Fork Created ✅ <br>
-Jeric Tested and Fork Created ✅ <br>
 
 ## LEGEND 
 ✅ Completed <br>
@@ -13,11 +8,10 @@ Jeric Tested and Fork Created ✅ <br>
 
 ## Things we need to do ##
 ## Frontend - General
-- ➖ UI is largely implemented but UX still needs work ( error messages, responses after pressing buttons etc) - Nick, Sana, Don
+- ✅ UI is largely implemented but UX still needs work ( error messages, responses after pressing buttons etc) - Nick, Sana, Don
 - ✅ Homepage navbar working 
-- 🟨 search for items - Nick, Jeric, Elie
-- 🟨 Better token storage and token reloading - Elie
-- 🟨 User session loading / Save details like cart/token over refresh - Elie ( Might Need Help )
+- ✅ search for items - Nick, Jeric, Elie
+- ✅ Better token storage and token reloading - Elie
 - ✅ Prevent modals from page reload - Elie 
 - ✅ Cart add, delete - Elie
 - ✅ Signup / Register Account - Don
@@ -25,20 +19,13 @@ Jeric Tested and Fork Created ✅ <br>
 
 ## Frontend - Checkout and Ordering
 - ✅ Checkout Cart / Place Order - Sana, Elie
-- 🟨 Order history - Sana, Nick
-- ➖ View Order / View Order Status ( User ) - Nick, Sana
-- ➖ View Order / View Order Status / Change Order Details ( Admin ) - Nick, Sana
+- ✅ Order history - Sana, Nick
+- ✅ View Order / View Order Status ( User ) - Nick, Sana
+- ✅ View Order / View Order Status / Change Order Details ( Admin ) - Nick, Sana
 
 ## Backend
-- ➖ User session loading / Save details like cart/token over refresh - Elie ( Might Need Help )
-- 🟨 Cart Persistence in database / Cookies - Elie
 - ✅ Item Description added to model and rendered on frontend - Jared
-- ✅ Delete or deactivate functionality for users - Jared
-- 🟨 Delete or deactivate functionality for items - Jared
-- 🟥 Delete or deactivate functionality for categories - Jared
-- ➖ Cancel functionality for orders - Jared
 - ✅ Persist orders - Jared
 - ✅ Update order model - Jared
-- ➖ Change order status - Jared
-- ➖ Report Generation - Jared
-- 🟨 Backend category implementation, search on category - Jared, Nick
+- ✅ Report Generation - Jared
+- ✅Backend category implementation, search on category - Jared, Nick
