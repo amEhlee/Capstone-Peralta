@@ -1,31 +1,18 @@
 # Capstone Peralta 
+<p>Our Capstone focused on building a sample ecommerce page for our client Jane, Like any other page it would have the ability to view items, place orders and alter the status of each page and what is shown on that page.</p> 
 
-## LEGEND 
-✅ Completed <br>
-🟨 In Progress <br>
-🟥 No Indication Of Progress / Requires Additional Group Feedback <br>
-➖ Not Started / Not Assigned <br>
+# Tech Stack
+This application was built using the following:
+- React.Js as our frontend ui framework
+- Bootstrap for general styling and responsive design 
+- Spring Boot as our backend server
+- MySql for peristence and as our primary database connection
 
-## Things we need to do ##
-## Frontend - General
-- ✅ UI is largely implemented but UX still needs work ( error messages, responses after pressing buttons etc) - Nick, Sana, Don
-- ✅ Homepage navbar working 
-- ✅ search for items - Nick, Jeric, Elie
-- ✅ Better token storage and token reloading - Elie
-- ✅ Prevent modals from page reload - Elie 
-- ✅ Cart add, delete - Elie
-- ✅ Signup / Register Account - Don
-- ✅ Logout - Elie
+# Installation
+1. Load sample data located in the react-frontend/src/assets folder to your MySQL database ( may have to create a new schema)
+2. Register proper information to application.properties including database username and password
+3. Run the backend server through use of ./mvn spring-boot:run at root
+4. Run a fresh npm install to gather all needed dependencies this should be done in /react-frontend
+5. Run the react server by running at /react-frontend
 
-## Frontend - Checkout and Ordering
-- ✅ Checkout Cart / Place Order - Sana, Elie
-- ✅ Order history - Sana, Nick
-- ✅ View Order / View Order Status ( User ) - Nick, Sana
-- ✅ View Order / View Order Status / Change Order Details ( Admin ) - Nick, Sana
-
-## Backend
-- ✅ Item Description added to model and rendered on frontend - Jared
-- ✅ Persist orders - Jared
-- ✅ Update order model - Jared
-- ✅ Report Generation - Jared
-- ✅Backend category implementation, search on category - Jared, Nick
+ 
