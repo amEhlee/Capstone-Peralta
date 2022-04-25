@@ -6,7 +6,7 @@ Npm or Yarn as an alternative should be installed. Java should be installed for 
 
 # Tech Stack
 <h3>React.js</h3>
-Frontend ui framework
+Used to simplify our Frontend with component based layouts
 <h3>Bootstrap</h3> 
 General styling and responsive design 
 <h3>Spring Boot</h3>
